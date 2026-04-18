@@ -2,6 +2,13 @@
 
 React + TypeScript application. Consumes the backend through DTOs imported from `@brainstorm/core`.
 
+## Landing surface
+
+- **Main dashboard - public discussions feed.** The app's entry point. Lists all publicly created debates; any visitor (logged-in or anonymous) can open one. Logged-in users may participate fully - create debates, add Pro/Against arguments, vote. Anonymous visitors see the same content in read-only mode; the read-only state must be visually explicit (disabled action controls with a "sign in to participate" affordance), not silently no-op.
+- **Private groups - dedicated view, not on the dashboard.** A separate route that lists the user's groups. Groups the user is a member of are openable. If the UI also surfaces groups the user is not a member of (e.g. for discoverability), those must render as visibly locked (lock icon / muted styling) with a hint that access requires an invitation from the group owner - do not hide them, and do not let the UI pretend they are openable and then fail on the API call. Membership status comes from the backend; never infer it client-side.
+- **Inviting users to a group is a user search, not an email input.** The invite control in the group view must be a search over registered accounts that resolves to an internal user id. Do not offer an "invite by email" field or an invitation link - a user has to exist in the system before they can be invited.
+- **Invitations are pending until the invitee accepts.** Sending an invite does not grant access - it creates a pending invitation on the invitee's side. The invitee has a personal panel (e.g. a notifications / invitations inbox) where they can **accept** or **decline**; only acceptance turns the invite into a membership. The group owner's view must reflect invite state honestly (pending / accepted / declined) and must not show an invited-but-not-yet-accepted user as a full member. A user with only a pending invite still sees the group as locked in the private-groups view.
+
 ## Rules specific to the frontend
 
 - **Contracts come from `@brainstorm/core`.** Never re-declare a DTO, enum, or interface locally. If a shape is missing, add it in `packages/core` first and consume it here.

@@ -11,4 +11,12 @@ NestJS application. Owns the database, the AI integrations, and every API contra
   - Default queries (list, read) MUST filter out rows where `archivedOn IS NOT NULL`. Centralize this in a repository helper / query scope so individual endpoints can't forget.
   - Analytics and admin paths may opt in to reading archived rows explicitly.
   - Cascading: archiving a parent (e.g. a debate) should archive its children in the same transaction, with the same timestamp, so the tree is consistent.
-- **Groups and sharing are authorization boundaries.** Debate trees are restricted to group members; public read-only links are a separate, explicit code path. Every endpoint that returns debate data - even a single field - must enforce group membership. Do not add "shortcut" endpoints that skip this check because the data seems harmless.
+- **Debate visibility has two modes and is an authorization boundary.**
+  - **Public debates:** readable by anyone (including anonymous visitors). Writes (create debate, add argument, vote, etc.) require an authenticated user, but no further gating - any logged-in user may participate.
+  - **Private group debates:** both reads and writes require membership in the owning group. Every endpoint returning group-debate data - even a single field - must enforce membership. Do not add "shortcut" endpoints that skip this check because the data seems harmless.
+  - Visibility mode is set at debate creation and is load-bearing. Centralize the mode check in a single guard / policy helper so every controller uses the same logic - do not re-implement it per endpoint.
+- **Group invitations are system-internal and require invitee acceptance.** Model invitation and membership as two separate entities:
+  - A group owner creates an **invitation** by searching the registered user directory and targeting an account id (never an email). No email flow, no invite tokens, no external signup links - the invitee must already exist in the system.
+  - The invitation is **pending** until the invitee acts on it from their own panel. Acceptance promotes it to a **membership**; decline closes it. Only the invitee can accept or decline their own invitation - an owner cannot self-accept on behalf of a user.
+  - Authorization reads group membership, **not** pending invitations. A user with only a pending invitation has no access to group data; endpoints enforcing group membership must check the membership table, not the invitation table.
+  - Endpoints that add a membership accept a user id; endpoints that list a user's pending invitations are scoped to the caller.
