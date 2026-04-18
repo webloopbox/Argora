@@ -23,3 +23,18 @@ React + TypeScript application. Consumes the backend through DTOs imported from 
 - **Tailwind CSS** for utility-class styling.
 - **HeroUI** (`@heroui/react`) for UI components - installed as an npm dependency, not copied into the workspace. Import components from `@heroui/react` directly; do not re-implement what HeroUI already provides.
 - Pro/Against colors (green/red) must be defined as named tokens in `tailwind.config.ts` under `theme.extend.colors` (e.g. `pro` and `against`). Use them via utility classes (`bg-pro`, `text-against`, etc.) - never hardcode `green-500` or `red-500` directly in components.
+
+## Language (UI copy)
+
+- **Polish only.** Every user-visible string in the app - navigation, buttons, labels, headings, empty states, toasts, form validation messages, tooltips, dialog copy, skeleton placeholders - must be in Polish. No mixing English and Polish strings in the same UI. Source-code identifiers, file names, commit messages and comments stay in English; translation is applied only at the rendering boundary.
+- **Centralise reusable strings.** Strings that repeat (standard CTA labels, error toasts, validation messages, common empty states) live in `src/texts/` so rewording stays consistent. Inline strings are acceptable for one-off headings/body inside a single component, but never for actions or messages that appear in multiple places.
+
+## Design bar
+
+The product must read as a current, premium tool from the first frame. Hitting this bar is not optional polish - it is part of feature-complete.
+
+- **Modern UI** Visual language tracks current product trends: generous whitespace, balanced type scale, subtle depth (soft shadows, layered surfaces) over heavy borders, consistently rounded interactive surfaces, dark-mode-aware palette. Treat HeroUI defaults as a floor, not a ceiling - tune spacing, type, and contrast until the screen feels contemporary.
+- **Visual hierarchy is load-bearing.** One primary action per view (visually strongest); secondary actions quieter; destructive actions visibly distinct. A clear type scale (display / heading / body / caption) is used consistently. No two elements should compete for the same level of attention on the same screen.
+- **Micro-interactions matter.** Hover, focus, press, and enter/exit transitions must be present and feel smooth - never abrupt state flips. Use `framer-motion` (already installed) for non-trivial transitions: list items animating in, panels sliding, state changes, dialog open/close. Keep motion under ~250ms and respect `prefers-reduced-motion`.
+- **"Wow factor" is explicit.** First impression - landing on the public dashboard, opening a debate graph - must feel polished and prestigious: considered imagery or illustration where appropriate, elegant empty states (not bare "No data"), deliberate whitespace, crisp graph canvas background. Every new feature gets a first-impression review before being called done: would a decision-maker see this as a high-end product?
+- **Accessibility is part of the bar, not a trade-off.** Focus states are visible and styled (never the browser default ring on top of a custom button), color contrast meets WCAG AA, every interactive element is keyboard-reachable. A "pretty" UI that breaks keyboard flow does not meet the design bar.

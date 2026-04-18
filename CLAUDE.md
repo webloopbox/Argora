@@ -32,6 +32,7 @@
   - The AI service must use a provider-agnostic Strategy Pattern to support multiple LLM vendors. Do not hard-code a single vendor in domain logic.
 - **Data flow:** all data from the backend must be archived in PostgreSQL for later analysis.
 - **UI/UX:** maintain strict visual coding - green for support, red for opposition. This mapping is load-bearing and must not be reused for other semantics.
+- **Localization - Polish only.** The system's sole supported UI language is Polish. Every user-visible string across the product - buttons, labels, headings, toasts, validation errors, empty states, email templates, placeholder text - must be Polish and stay consistent across screens. Internal artefacts (source code, identifiers, commit messages, comments, README, CLAUDE.md files) stay in English; only the user-facing surface is translated. If a backend-authored error message is rendered verbatim to the user, treat it as user-facing and author it in Polish; otherwise translate at the UI boundary.
 
 ## Directory Map
 
