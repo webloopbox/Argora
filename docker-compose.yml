@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: brainstorm-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: brainstorm
+      POSTGRES_PASSWORD: brainstorm
+      POSTGRES_DB: brainstorm
+    ports:
+      - "5432:5432"
+    volumes:
+      - brainstorm-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U brainstorm -d brainstorm"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  brainstorm-pg:

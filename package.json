@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev:web": "pnpm --filter \"./apps/web\" dev",
-    "dev:api": "pnpm --filter \"./apps/api\" start:dev",
+    "dev:api": "pnpm --filter \"./apps/api\" dev",
     "build:core": "pnpm --filter \"./packages/core\" build",
     "build": "pnpm -r build"
   },
