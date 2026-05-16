@@ -1,9 +1,15 @@
 import { createContext, useContext } from "react";
+import type { LoginDto, RegisterDto, UserDto } from "@brainstorm/core";
+
+export type AuthStatus = "idle" | "loading" | "ready";
 
 export interface AuthState {
+  status: AuthStatus;
+  user: UserDto | null;
   isAuthenticated: boolean;
   displayName: string | null;
-  signIn: () => void;
+  login: (input: LoginDto) => Promise<void>;
+  register: (input: RegisterDto) => Promise<void>;
   signOut: () => void;
 }
 

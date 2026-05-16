@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, Button } from "@heroui/react";
 import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
@@ -7,10 +7,21 @@ import { useAuth } from "../app-config/auth-context";
 import { ui } from "../texts/ui";
 
 export function TopBar() {
-  const { isAuthenticated, displayName, signIn, signOut } = useAuth();
+  const { isAuthenticated, displayName, signOut } = useAuth();
+  const navigate = useNavigate();
   const visibleNav = navItems.filter(
     (item) => !item.requiresAuth || isAuthenticated,
   );
+
+  function initialsFor(name: string | null): string {
+    if (!name) return "";
+    return name
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((p) => p[0]!.toUpperCase())
+      .slice(0, 2)
+      .join("");
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-default-100 bg-white/70 backdrop-blur-xl">
@@ -59,13 +70,7 @@ export function TopBar() {
             <>
               <div className="hidden items-center gap-2 sm:flex">
                 <Avatar size="sm">
-                  <AvatarFallback>
-                    {(displayName ?? "")
-                      .split(" ")
-                      .map((p) => p[0])
-                      .join("")
-                      .slice(0, 2)}
-                  </AvatarFallback>
+                  <AvatarFallback>{initialsFor(displayName)}</AvatarFallback>
                 </Avatar>
                 <span className="text-sm text-default-700">{displayName}</span>
               </div>
@@ -74,7 +79,11 @@ export function TopBar() {
               </Button>
             </>
           ) : (
-            <Button size="sm" variant="primary" onPress={signIn}>
+            <Button
+              size="sm"
+              variant="primary"
+              onPress={() => navigate("/logowanie")}
+            >
               {ui.auth.signIn}
             </Button>
           )}

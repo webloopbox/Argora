@@ -15,7 +15,7 @@ const gridVariants = {
 };
 
 export function DashboardPage() {
-  const { isAuthenticated, signIn } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [filter, setFilter] = useState<DebateFilter>("hottest");
 
@@ -39,8 +39,8 @@ export function DashboardPage() {
     <div className="pb-16">
       <HeroSection
         isAuthenticated={isAuthenticated}
-        onSignIn={signIn}
-        onCreateDebate={() => navigate("/dyskusje/nowa")}
+        onSignIn={() => navigate("/logowanie")}
+        onCreateDebate={() => navigate("/dyskusje/utworz")}
       />
 
       <StatsStrip />
