@@ -1,13 +1,40 @@
 import { Button } from "@heroui/react";
 import { ArrowRight, Eye } from "lucide-react";
 import { motion } from "framer-motion";
+import type { DebatePreviewDto } from "@brainstorm/core";
 import { ui } from "../../texts/ui";
-import type { PublicDebatePreview } from "./mock-debates";
 
 interface DebateCardProps {
-  debate: PublicDebatePreview;
+  debate: DebatePreviewDto;
   canParticipate: boolean;
   onOpen: (id: string) => void;
+}
+
+const relativeFormatter = new Intl.RelativeTimeFormat("pl-PL", {
+  numeric: "auto",
+});
+
+function relativeLabel(iso: string): string {
+  const created = new Date(iso).getTime();
+  const diffSeconds = Math.round((created - Date.now()) / 1000);
+  const abs = Math.abs(diffSeconds);
+  if (abs < 60) return relativeFormatter.format(diffSeconds, "second");
+  if (abs < 3600)
+    return relativeFormatter.format(Math.round(diffSeconds / 60), "minute");
+  if (abs < 86_400)
+    return relativeFormatter.format(Math.round(diffSeconds / 3600), "hour");
+  if (abs < 604_800)
+    return relativeFormatter.format(Math.round(diffSeconds / 86_400), "day");
+  return relativeFormatter.format(Math.round(diffSeconds / 604_800), "week");
+}
+
+function initialsFor(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((p) => p[0]!.toUpperCase())
+    .slice(0, 2)
+    .join("");
 }
 
 export function DebateCard({ debate, canParticipate, onOpen }: DebateCardProps) {
@@ -31,15 +58,13 @@ export function DebateCard({ debate, canParticipate, onOpen }: DebateCardProps) 
 
       <div className="flex items-center gap-2 text-xs text-default-500">
         <span className="grid h-6 w-6 place-items-center rounded-full bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-[10px] font-semibold text-violet-700">
-          {debate.authorName
-            .split(" ")
-            .map((p) => p[0])
-            .join("")
-            .slice(0, 2)}
+          {initialsFor(debate.author.displayName)}
         </span>
-        <span className="font-medium text-default-700">{debate.authorName}</span>
+        <span className="font-medium text-default-700">
+          {debate.author.displayName}
+        </span>
         <span>·</span>
-        <span>{debate.updatedLabel}</span>
+        <span>{relativeLabel(debate.createdAt)}</span>
       </div>
 
       <h3 className="mt-3 text-base font-semibold leading-snug text-default-900 sm:text-lg">

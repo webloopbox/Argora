@@ -4,6 +4,8 @@ import { AuthLayout } from "./features/auth/AuthLayout";
 import { LoginPage } from "./features/auth/LoginPage";
 import { RegisterPage } from "./features/auth/RegisterPage";
 import { DashboardPage } from "./features/dashboard/DashboardPage";
+import { CreateDebatePage } from "./features/debates/CreateDebatePage";
+import { DebatePage } from "./features/debates/DebatePage";
 import { GroupsPage } from "./features/groups/GroupsPage";
 import { InvitationsPage } from "./features/invitations/InvitationsPage";
 import { AppShell } from "./layout/AppShell";
@@ -18,6 +20,15 @@ function App() {
 
       <Route element={<AppShell />}>
         <Route path="/" element={<DashboardPage />} />
+        <Route
+          path="/dyskusje/utworz"
+          element={
+            <PrivateRoute>
+              <CreateDebatePage />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/dyskusje/:id" element={<DebatePage />} />
         <Route
           path="/grupy"
           element={

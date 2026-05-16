@@ -10,4 +10,15 @@ export default defineConfig({
     babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
   ],
+  // @brainstorm/core is a linked workspace package emitted as CommonJS
+  // (the API consumes it via NestJS' CJS runtime). The browser can't
+  // statically resolve named imports from CJS, so Vite must pre-bundle
+  // it through esbuild to expose proper ESM bindings (DebateVisibility,
+  // ArgumentSide, etc.).
+  optimizeDeps: {
+    include: ["@brainstorm/core"],
+  },
+  ssr: {
+    noExternal: ["@brainstorm/core"],
+  },
 });

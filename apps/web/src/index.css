@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@heroui/react/styles";
+@import "@xyflow/react/dist/style.css";
 
 @theme {
   --color-pro-50: #f0fdf4;

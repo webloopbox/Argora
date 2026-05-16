@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { Flame, MessageSquareQuote, ThumbsUp, Users } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { ui } from "../../texts/ui";
-import { dashboardStats } from "./mock-debates";
 
 interface StatEntry {
   label: string;
@@ -12,11 +11,35 @@ interface StatEntry {
 
 const nfmt = new Intl.NumberFormat("pl-PL");
 
+// Placeholder figures until Partia 9 introduces /stats endpoint.
+const PLACEHOLDER_STATS = {
+  activeDebates: 1247,
+  participants: 18_930,
+  arguments: 58_412,
+  votes: 182_301,
+};
+
 const entries: StatEntry[] = [
-  { label: ui.dashboard.stats.activeDebates, value: dashboardStats.activeDebates, icon: Flame },
-  { label: ui.dashboard.stats.participants, value: dashboardStats.participants, icon: Users },
-  { label: ui.dashboard.stats.arguments, value: dashboardStats.arguments, icon: MessageSquareQuote },
-  { label: ui.dashboard.stats.votes, value: dashboardStats.votes, icon: ThumbsUp },
+  {
+    label: ui.dashboard.stats.activeDebates,
+    value: PLACEHOLDER_STATS.activeDebates,
+    icon: Flame,
+  },
+  {
+    label: ui.dashboard.stats.participants,
+    value: PLACEHOLDER_STATS.participants,
+    icon: Users,
+  },
+  {
+    label: ui.dashboard.stats.arguments,
+    value: PLACEHOLDER_STATS.arguments,
+    icon: MessageSquareQuote,
+  },
+  {
+    label: ui.dashboard.stats.votes,
+    value: PLACEHOLDER_STATS.votes,
+    icon: ThumbsUp,
+  },
 ];
 
 export function StatsStrip() {
