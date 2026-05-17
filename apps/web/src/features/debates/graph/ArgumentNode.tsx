@@ -3,6 +3,7 @@ import type { NodeProps } from "@xyflow/react";
 import { Bot, ThumbsDown, ThumbsUp } from "lucide-react";
 import { ArgumentSide } from "@brainstorm/core";
 import type { ArgumentNodeData } from "./useDebateGraph";
+import { VoteControls } from "./VoteControls";
 import { ui } from "../../../texts/ui";
 
 interface ArgumentNodeProps extends NodeProps {
@@ -43,14 +44,14 @@ function ArgumentNodeBase({ data, selected }: ArgumentNodeProps) {
       tabIndex={0}
       role="article"
       aria-label={`${sideAccent.sideLabel}: ${argument.content}`}
-      className={`group relative w-[280px] rounded-2xl border bg-gradient-to-br p-4 shadow-sm backdrop-blur transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 hover:shadow-md ${sideAccent.bg} ${sideAccent.border} ring-1 ${sideAccent.ring}`}
+      className={`group relative w-[300px] rounded-2xl border bg-gradient-to-br p-4 shadow-sm backdrop-blur transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 hover:shadow-md ${sideAccent.bg} ${sideAccent.border} ring-1 ${sideAccent.ring}`}
     >
       <Handle
         type="target"
         position={Position.Top}
         className={`!h-2 !w-2 !border-none ${sideAccent.handleColor}`}
       />
-      <div className="flex items-center justify-between text-xs">
+      <div className="flex items-center justify-between gap-2 text-xs">
         <span
           className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 font-medium ${sideAccent.badgeBg} ${sideAccent.badgeText}`}
         >
@@ -67,10 +68,11 @@ function ArgumentNodeBase({ data, selected }: ArgumentNodeProps) {
       <p className="mt-2 line-clamp-5 text-sm leading-snug text-default-900">
         {argument.content}
       </p>
-      <div className="mt-3 flex items-center gap-2 text-[11px] text-default-500">
-        <span className="font-medium text-default-700">
+      <div className="mt-3 flex items-center justify-between gap-2 text-[11px] text-default-500">
+        <span className="truncate font-medium text-default-700">
           {argument.author.displayName}
         </span>
+        <VoteControls argument={argument} />
       </div>
       <Handle
         type="source"

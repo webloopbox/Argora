@@ -20,6 +20,7 @@ import { useAuth } from "../../app-config/auth-context";
 import { ui } from "../../texts/ui";
 import { AddArgumentPanel } from "./graph/AddArgumentPanel";
 import { ArgumentGraph } from "./graph/ArgumentGraph";
+import { DebateGraphContext } from "./graph/debate-graph-context";
 import { useDebateGraph } from "./graph/useDebateGraph";
 
 type LoadState =
@@ -156,8 +157,18 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
     setSelectedArgumentId(null);
   }
 
+  const graphCtx = useMemo(
+    () => ({
+      isAuthenticated,
+      onArgumentUpdated: upsertArgument,
+      onSignInClick: () => navigate("/logowanie"),
+    }),
+    [isAuthenticated, upsertArgument, navigate],
+  );
+
   return (
     <FullBleedShell>
+      <DebateGraphContext.Provider value={graphCtx}>
       {graphState.status === "loading" ? (
         <div className="grid h-full place-items-center text-sm text-default-500">
           {ui.debates.detail.graphLoading}
@@ -213,6 +224,7 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
         isOpen={drawerOpen}
         onClose={handleDrawerClose}
       />
+      </DebateGraphContext.Provider>
     </FullBleedShell>
   );
 }

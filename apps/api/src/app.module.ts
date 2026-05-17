@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { DebatesModule } from './debates/debates.module';
 import { GroupsModule } from './groups/groups.module';
 import { UsersModule } from './users/users.module';
+import { VotesModule } from './votes/votes.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UsersModule } from './users/users.module';
     GroupsModule,
     DebatesModule,
     ArgumentsModule,
+    VotesModule,
   ],
 })
 export class AppModule {}

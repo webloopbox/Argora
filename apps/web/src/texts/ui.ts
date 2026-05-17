@@ -92,13 +92,16 @@ export const ui = {
       thesisLabel: "Teza",
       thesisPlaceholder:
         "np. Praca zdalna na stałe zwiększa produktywność zespołów inżynieryjnych.",
-      thesisHint: "Od 8 do 280 znaków. Sformułuj jako jedno, klarowne stwierdzenie.",
+      thesisHint:
+        "Od 8 do 280 znaków. Sformułuj jako jedno, klarowne stwierdzenie.",
       visibilityLabel: "Widoczność",
       visibilityPublic: "Publiczna",
-      visibilityPublicHint: "Dyskusja widoczna dla wszystkich, uczestniczyć mogą zalogowani.",
+      visibilityPublicHint:
+        "Dyskusja widoczna dla wszystkich, uczestniczyć mogą zalogowani.",
       visibilityPrivate: "Prywatna",
       visibilityPrivateHint: "Dostępna tylko dla wybranej grupy.",
-      visibilityPrivateLocked: "Dostępne po utworzeniu lub dołączeniu do grupy (już wkrótce).",
+      visibilityPrivateLocked:
+        "Dostępne po utworzeniu lub dołączeniu do grupy (już wkrótce).",
       submit: "Utwórz dyskusję",
       submitting: "Tworzę dyskusję…",
       cancel: "Anuluj",
@@ -146,6 +149,20 @@ export const ui = {
       replyingToEyebrow: "Odpowiadasz na",
       changeParent: "Zmień",
       attachToThesis: "Wróć do tezy",
+      sentimentPro: "Za przeważa",
+      sentimentAgainst: "Przeciw przeważa",
+      sentimentControversy: "Sporne",
+      sentimentNeutral: "Brak głosów",
+      weightAriaLabel: "waga",
+      voteWidgetAriaLabel: "Głosy i waga argumentu",
+      voteProActive: "Cofnij głos Za",
+      voteProInactive: "Zagłosuj Za",
+      voteAgainstActive: "Cofnij głos Przeciw",
+      voteAgainstInactive: "Zagłosuj Przeciw",
+      voteRequiresLogin: "Zaloguj się, aby głosować.",
+      voteFailed: "Nie udało się oddać głosu.",
+      weightTooltip:
+        "Waga argumentu = głosy Za + głosy Przeciw. Każda reakcja zwiększa widoczność - niezależnie od kierunku. Kolor pokazuje dominujący sentyment.",
     },
     argumentForm: {
       panelTitle: "Dodaj argument",

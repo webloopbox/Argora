@@ -35,8 +35,11 @@ export class ArgumentsController {
 
   @Get()
   @UseGuards(OptionalJwtAuthGuard, VisibilityGuard)
-  list(@Req() req: RequestWithDebate): Promise<ArgumentDto[]> {
-    return this.args.listForDebate(req.debate!);
+  list(
+    @Req() req: RequestWithDebate,
+    @CurrentUser() user: User | undefined,
+  ): Promise<ArgumentDto[]> {
+    return this.args.listForDebate(req.debate!, user);
   }
 }
 

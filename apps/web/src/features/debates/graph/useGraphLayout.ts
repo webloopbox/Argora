@@ -12,8 +12,8 @@ interface LayoutOptions {
 }
 
 const DEFAULTS = {
-  nodeWidth: 280,
-  nodeHeight: 140,
+  nodeWidth: 300,
+  nodeHeight: 150,
   thesisWidth: 360,
   thesisHeight: 160,
   rankSep: 90,
@@ -80,5 +80,14 @@ export function useGraphLayout(
     });
 
     return { nodes: positionedNodes, edges: sortedEdges };
-  }, [nodes, edges, settings.nodeWidth, settings.nodeHeight, settings.thesisWidth, settings.thesisHeight, settings.rankSep, settings.nodeSep]);
+  }, [
+    nodes,
+    edges,
+    settings.nodeWidth,
+    settings.nodeHeight,
+    settings.thesisWidth,
+    settings.thesisHeight,
+    settings.rankSep,
+    settings.nodeSep,
+  ]);
 }

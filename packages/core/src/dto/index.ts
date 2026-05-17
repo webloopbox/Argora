@@ -5,3 +5,4 @@ export * from './argument.dto';
 export * from './group.dto';
 export * from './invitation.dto';
 export * from './user-search.dto';
+export * from './vote.dto';

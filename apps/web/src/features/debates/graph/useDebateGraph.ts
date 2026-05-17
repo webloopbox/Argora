@@ -109,7 +109,8 @@ export function useDebateGraph(debate: DebateDetailDto): {
   }, [debate]);
 
   // Optimistic insert / replace: keeps the graph in sync after a successful
-  // POST without paying a round-trip for a fresh GET.
+  // POST or vote without paying a round-trip for a fresh GET. Vote callers
+  // pass the server echo here as their authoritative source of truth.
   const upsertArgument = useCallback(
     (next: ArgumentDto) => {
       setState((prev) => {

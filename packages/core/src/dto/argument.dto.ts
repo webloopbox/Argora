@@ -47,10 +47,14 @@ export interface ArgumentDto {
   isAiGenerated: boolean;
   createdAt: string;
 
-  // Filled by Partia 8 (voting). Kept optional so Partia 2 - 7 can ignore them.
-  forCount?: number;
-  againstCount?: number;
-  weight?: number;
-  sentiment?: ArgumentSentiment;
-  userVote?: 1 | -1 | null;
+  // Voting summary attached server-side by ArgumentsService. `weight` is the
+  // absolute sum (|forCount| + |againstCount|), not a net score - per
+  // CLAUDE.md every reaction increases visibility regardless of direction.
+  // `userVote` is null for anonymous callers or authenticated users who
+  // haven't voted.
+  forCount: number;
+  againstCount: number;
+  weight: number;
+  sentiment: ArgumentSentiment;
+  userVote: 1 | -1 | null;
 }

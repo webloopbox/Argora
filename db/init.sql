@@ -13,3 +13,10 @@ CREATE EXTENSION IF NOT EXISTS vector;
 CREATE UNIQUE INDEX IF NOT EXISTS group_invitations_one_pending_per_pair
   ON group_invitations (group_id, invitee_id)
   WHERE status = 'pending' AND archived_on IS NULL;
+
+-- Partial unique index for "one active vote per (argument, user)". Retracted
+-- votes set archived_on, so a user can have multiple historical rows but
+-- only one active row per argument at any given moment.
+CREATE UNIQUE INDEX IF NOT EXISTS votes_one_active_per_pair
+  ON votes (argument_id, user_id)
+  WHERE archived_on IS NULL;
