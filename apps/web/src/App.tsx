@@ -6,6 +6,7 @@ import { RegisterPage } from "./features/auth/RegisterPage";
 import { DashboardPage } from "./features/dashboard/DashboardPage";
 import { CreateDebatePage } from "./features/debates/CreateDebatePage";
 import { DebatePage } from "./features/debates/DebatePage";
+import { GroupDetailPage } from "./features/groups/GroupDetailPage";
 import { GroupsPage } from "./features/groups/GroupsPage";
 import { InvitationsPage } from "./features/invitations/InvitationsPage";
 import { AppShell } from "./layout/AppShell";
@@ -34,6 +35,14 @@ function App() {
           element={
             <PrivateRoute>
               <GroupsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/grupy/:id"
+          element={
+            <PrivateRoute>
+              <GroupDetailPage />
             </PrivateRoute>
           }
         />

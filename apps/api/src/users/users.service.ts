@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import type { UserSearchResultDto } from '@brainstorm/core';
 import * as bcrypt from 'bcrypt';
 import { IsNull, Repository } from 'typeorm';
 import { User } from './user.entity';
@@ -43,5 +44,35 @@ export class UsersService {
 
   verifyPassword(password: string, passwordHash: string): Promise<boolean> {
     return bcrypt.compare(password, passwordHash);
+  }
+
+  // Used by the invite picker — case-insensitive prefix match against
+  // displayName and email, excludes the caller, caps at 10. The trimmed
+  // query must be at least 2 chars to keep the result set focused.
+  async search(
+    query: string,
+    excludeUserId: string,
+  ): Promise<UserSearchResultDto[]> {
+    const trimmed = query.trim();
+    if (trimmed.length < 2) return [];
+
+    const pattern = `%${trimmed.replace(/[%_]/g, '\\$&')}%`;
+    const rows = await this.users
+      .createQueryBuilder('u')
+      .where('u.archived_on IS NULL')
+      .andWhere('u.id <> :selfId', { selfId: excludeUserId })
+      .andWhere(
+        '(u.display_name ILIKE :pattern OR u.email ILIKE :pattern)',
+        { pattern },
+      )
+      .orderBy('u.display_name', 'ASC')
+      .limit(10)
+      .getMany();
+
+    return rows.map((u) => ({
+      id: u.id,
+      displayName: u.displayName,
+      email: u.email,
+    }));
   }
 }

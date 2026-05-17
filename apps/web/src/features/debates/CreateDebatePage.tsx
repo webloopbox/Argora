@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Button,
   FieldError,
@@ -14,9 +14,11 @@ import {
   TextField,
 } from "@heroui/react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Lock, Sparkles } from "lucide-react";
+import { ArrowLeft, Lock, Sparkles, Users } from "lucide-react";
+import type { CreateDebateDto, GroupDetailDto } from "@brainstorm/core";
 import { DebateVisibility } from "@brainstorm/core";
 import { createDebate } from "../../api/debates.api";
+import { fetchGroupDetail } from "../../api/groups.api";
 import { ui } from "../../texts/ui";
 
 const THESIS_MIN = 8;
@@ -30,11 +32,46 @@ interface FieldErrors {
 
 export function CreateDebatePage() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const groupIdParam = params.get("grupa");
+
   const [thesis, setThesis] = useState("");
-  const [visibility, setVisibility] = useState<VisibilityValue>("public");
+  const [visibility, setVisibility] = useState<VisibilityValue>(
+    groupIdParam ? "private" : "public",
+  );
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  const [group, setGroup] = useState<GroupDetailDto | null>(null);
+  const [groupLoading, setGroupLoading] = useState(false);
+  const [groupError, setGroupError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!groupIdParam) {
+      setGroup(null);
+      setGroupError(null);
+      return;
+    }
+    let cancelled = false;
+    setGroupLoading(true);
+    setGroupError(null);
+    fetchGroupDetail(groupIdParam)
+      .then((g) => {
+        if (cancelled) return;
+        setGroup(g);
+        setGroupLoading(false);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setGroup(null);
+        setGroupError(ui.debates.create.groupContextFailed);
+        setGroupLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [groupIdParam]);
 
   function validate(): FieldErrors {
     const next: FieldErrors = {};
@@ -53,13 +90,26 @@ export function CreateDebatePage() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
+    if (visibility === "private" && !group) {
+      setFormError(ui.debates.create.privateNeedsGroup);
+      return;
+    }
+
     setSubmitting(true);
     setFormError(null);
     try {
-      const debate = await createDebate({
-        thesis: thesis.trim(),
-        visibility: DebateVisibility.Public,
-      });
+      const payload: CreateDebateDto =
+        visibility === "private" && group
+          ? {
+              thesis: thesis.trim(),
+              visibility: DebateVisibility.Private,
+              groupId: group.id,
+            }
+          : {
+              thesis: thesis.trim(),
+              visibility: DebateVisibility.Public,
+            };
+      const debate = await createDebate(payload);
       navigate(`/dyskusje/${debate.id}`, { replace: true });
     } catch {
       setFormError(ui.debates.create.genericError);
@@ -69,16 +119,24 @@ export function CreateDebatePage() {
   }
 
   const charsLeft = THESIS_MAX - thesis.length;
+  const privateAvailable = Boolean(group);
+
+  const backTarget = useMemo(
+    () => (group ? `/grupy/${group.id}` : "/"),
+    [group],
+  );
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
       <button
         type="button"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate(backTarget)}
         className="mb-6 inline-flex items-center gap-2 text-sm text-default-500 transition-colors hover:text-default-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded-md"
       >
         <ArrowLeft size={14} />
-        {ui.debates.detail.backToFeed}
+        {group
+          ? ui.debates.create.backToGroup
+          : ui.debates.detail.backToFeed}
       </button>
 
       <motion.div
@@ -99,6 +157,34 @@ export function CreateDebatePage() {
             {ui.debates.create.subtitle}
           </p>
         </header>
+
+        {group ? (
+          <div className="mt-6 flex items-start gap-3 rounded-2xl border border-violet-200 bg-violet-50/60 px-4 py-3">
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-violet-500/15 text-violet-700">
+              <Users size={14} />
+            </span>
+            <div className="text-sm">
+              <p className="font-medium text-default-900">
+                {ui.debates.create.inGroupEyebrow}
+              </p>
+              <p className="text-xs text-default-600">
+                {ui.debates.create.inGroupHint} <strong>{group.name}</strong>.
+              </p>
+            </div>
+          </div>
+        ) : groupLoading ? (
+          <div
+            aria-hidden
+            className="mt-6 h-12 animate-pulse rounded-2xl bg-default-100"
+          />
+        ) : groupError ? (
+          <div
+            role="alert"
+            className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+          >
+            {groupError}
+          </div>
+        ) : null}
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-7" noValidate>
           <TextField
@@ -159,8 +245,12 @@ export function CreateDebatePage() {
 
               <Radio
                 value="private"
-                isDisabled
-                className="group relative flex cursor-not-allowed items-start gap-3 rounded-2xl border border-default-100 bg-default-50/40 p-4 opacity-60"
+                isDisabled={!privateAvailable}
+                className={
+                  privateAvailable
+                    ? "group relative flex cursor-pointer items-start gap-3 rounded-2xl border border-default-100 bg-default-50/60 p-4 transition-colors hover:border-violet-300 data-[selected]:border-violet-400 data-[selected]:bg-violet-50/60"
+                    : "group relative flex cursor-not-allowed items-start gap-3 rounded-2xl border border-default-100 bg-default-50/40 p-4 opacity-60"
+                }
               >
                 <RadioControl className="mt-0.5">
                   <RadioIndicator />
@@ -171,7 +261,9 @@ export function CreateDebatePage() {
                     {ui.debates.create.visibilityPrivate}
                   </span>
                   <span className="text-xs text-default-500">
-                    {ui.debates.create.visibilityPrivateLocked}
+                    {privateAvailable
+                      ? ui.debates.create.visibilityPrivateHint
+                      : ui.debates.create.visibilityPrivateLocked}
                   </span>
                 </RadioContent>
               </Radio>
@@ -192,7 +284,7 @@ export function CreateDebatePage() {
               type="button"
               variant="outline"
               size="lg"
-              onPress={() => navigate(-1)}
+              onPress={() => navigate(backTarget)}
               isDisabled={submitting}
             >
               {ui.debates.create.cancel}

@@ -105,6 +105,13 @@ export const ui = {
       genericError: "Nie udało się utworzyć dyskusji. Spróbuj ponownie.",
       thesisTooShort: "Teza musi mieć co najmniej 8 znaków.",
       thesisTooLong: "Teza nie może przekraczać 280 znaków.",
+      backToGroup: "Wróć do grupy",
+      inGroupEyebrow: "Dyskusja w grupie prywatnej",
+      inGroupHint: "Zostanie dodana do",
+      groupContextFailed:
+        "Nie udało się wczytać grupy. Możesz utworzyć dyskusję publiczną albo wrócić i spróbować ponownie.",
+      privateNeedsGroup:
+        "Dyskusję prywatną można utworzyć tylko z poziomu wybranej grupy.",
     },
     detail: {
       backToFeed: "Wróć do listy dyskusji",
@@ -165,10 +172,68 @@ export const ui = {
   groups: {
     pageTitle: "Grupy prywatne",
     pageSubtitle:
-      "Dyskusje zamknięte w gronie zaproszonych osób. Wejdź do grupy, do której należysz, albo poproś właściciela o zaproszenie.",
+      "Dyskusje zamknięte w gronie zaproszonych osób. Wejdź do grupy, do której należysz, albo utwórz własną.",
+    createCta: "Utwórz grupę",
+    createFirst: "Utwórz pierwszą grupę",
+    ownerBadge: "Właściciel",
+    ownerEyebrow: "Właściciel:",
+    membersShort: "członków",
+    debatesShort: "dyskusji",
+    openCta: "Otwórz",
+    loading: "Wczytuję grupy…",
+    loadFailed:
+      "Nie udało się wczytać grup. Odśwież stronę albo spróbuj ponownie za chwilę.",
     emptyTitle: "Nie należysz jeszcze do żadnej grupy",
     emptyBody:
-      "Poproś znajomego właściciela grupy, aby dodał Twoje konto. Zaproszenie pojawi się w zakładce Zaproszenia.",
+      "Utwórz własną grupę albo poczekaj na zaproszenie — pojawi się w zakładce Zaproszenia.",
+    create: {
+      title: "Nowa grupa",
+      subtitle:
+        "Krótka nazwa pomoże członkom rozpoznać grupę na liście dyskusji.",
+      nameLabel: "Nazwa grupy",
+      namePlaceholder: "np. Zespół projektowy 2026",
+      submit: "Utwórz grupę",
+      submitting: "Tworzę grupę…",
+      nameTooShort: "Nazwa musi mieć co najmniej 3 znaki.",
+      nameTooLong: "Nazwa nie może przekraczać 64 znaków.",
+      genericError: "Nie udało się utworzyć grupy. Spróbuj ponownie.",
+    },
+    detail: {
+      eyebrow: "Grupa prywatna",
+      backToList: "Wróć do listy grup",
+      ownedBy: "Założyciel:",
+      createdAt: "Utworzono:",
+      createDebate: "Utwórz dyskusję w grupie",
+      archive: "Usuń grupę",
+      confirmArchive:
+        "Usunąć grupę? Wszystkie dyskusje wewnątrz zostaną zarchiwizowane.",
+      archiveFailed: "Nie udało się usunąć grupy. Spróbuj ponownie.",
+      loading: "Wczytuję grupę…",
+      notFoundTitle: "Grupa nie istnieje",
+      notFoundBody:
+        "Grupa mogła zostać usunięta przez właściciela albo nigdy nie istniała.",
+      forbiddenTitle: "Brak dostępu",
+      forbiddenBody:
+        "Nie należysz do tej grupy. Aby zobaczyć jej dyskusje, poproś właściciela o zaproszenie.",
+      errorTitle: "Coś poszło nie tak",
+      errorBody: "Nie udało się wczytać grupy. Spróbuj odświeżyć stronę.",
+      membersTitle: "Członkowie",
+      debatesTitle: "Dyskusje w grupie",
+      debatesEmpty:
+        "W tej grupie nie ma jeszcze dyskusji. Rozpocznij pierwszą i zaproś członków do polemiki.",
+      argumentsShort: "argumentów",
+      invitationsTitle: "Zaproś użytkownika",
+      invitationsSubtitle:
+        "Wyszukaj konto po nazwie lub adresie e-mail. Zaproszenie czeka, aż osoba je przyjmie.",
+      invitationsListTitle: "Wysłane zaproszenia",
+      invitationsListEmpty: "Brak wysłanych zaproszeń.",
+      inviteSubmit: "Wyślij zaproszenie",
+      inviteSubmitting: "Wysyłam…",
+      inviteConflict:
+        "Ta osoba ma już oczekujące zaproszenie albo jest członkiem grupy.",
+      inviteNoUser: "Wybrane konto nie istnieje.",
+      inviteFailed: "Nie udało się wysłać zaproszenia. Spróbuj ponownie.",
+    },
   },
   invitations: {
     pageTitle: "Zaproszenia",
@@ -177,8 +242,32 @@ export const ui = {
     emptyTitle: "Brak oczekujących zaproszeń",
     emptyBody:
       "Gdy ktoś zaprosi Cię do prywatnej grupy, pojawi się to w tym miejscu.",
+    goToGroups: "Zobacz moje grupy",
+    fromEyebrow: "Zaproszenie do grupy",
+    accept: "Przyjmij",
+    decline: "Odrzuć",
+    responding: "Przetwarzam…",
+    respondError:
+      "Nie udało się odpowiedzieć na zaproszenie. Spróbuj ponownie.",
+    loading: "Wczytuję zaproszenia…",
+    loadFailed:
+      "Nie udało się wczytać zaproszeń. Odśwież stronę albo spróbuj ponownie za chwilę.",
+    status: {
+      pending: "Oczekuje",
+      accepted: "Przyjęte",
+      declined: "Odrzucone",
+    },
+  },
+  users: {
+    searchPlaceholder: "Szukaj po nazwie lub adresie e-mail (min. 2 znaki)",
+    searching: "Szukam…",
+    noResults: "Brak pasujących użytkowników.",
+    searchError: "Nie udało się wyszukać użytkowników. Spróbuj ponownie.",
+    clearSelection: "Wyczyść wybór",
   },
   common: {
     comingSoon: "W przygotowaniu",
+    cancel: "Anuluj",
+    close: "Zamknij",
   },
 } as const;

@@ -4,3 +4,12 @@
 -- statement here requires `docker compose down -v` to take effect.
 
 CREATE EXTENSION IF NOT EXISTS vector;
+
+-- Partial unique index to enforce "one pending invitation per (group, invitee)"
+-- at the DB level. We can't express this through TypeORM's @Unique because
+-- it must be conditional on status='pending' (closed/declined invitations
+-- may exist alongside a new pending one). Created idempotently here so the
+-- index is in place from first migration.
+CREATE UNIQUE INDEX IF NOT EXISTS group_invitations_one_pending_per_pair
+  ON group_invitations (group_id, invitee_id)
+  WHERE status = 'pending' AND archived_on IS NULL;
