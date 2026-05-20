@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import {
   Button,
@@ -12,7 +12,8 @@ import {
   TextArea,
   TextField,
 } from "@heroui/react";
-import { Bot, CornerUpRight, Sparkles, ThumbsDown, ThumbsUp } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Bot, ChevronDown, CornerUpRight, Sparkles, ThumbsDown, ThumbsUp } from "lucide-react";
 import type { ArgumentDto, CreateArgumentDto, LlmProviderDto } from "@brainstorm/core";
 import { ArgumentSide } from "@brainstorm/core";
 import { createArgument } from "../../../api/arguments.api";
@@ -160,21 +161,21 @@ export function AddArgumentForm({
     <>
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>
         {parent ? (
-          <div className="rounded-2xl border border-violet-200 bg-violet-50/60 p-3 text-xs">
+          <div className="rounded-2xl border border-violet-200 bg-violet-50/60 p-3 text-xs dark:border-violet-800 dark:bg-violet-900/20">
             <div className="flex items-center justify-between gap-2">
-              <span className="inline-flex items-center gap-1.5 font-medium text-violet-700">
+              <span className="inline-flex items-center gap-1.5 font-medium text-violet-700 dark:text-violet-300">
                 <CornerUpRight size={12} />
                 {ui.debates.graph.replyingToEyebrow}
               </span>
               <button
                 type="button"
                 onClick={onClearParent}
-                className="rounded-md text-violet-700 underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+                className="rounded-md text-violet-700 underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:text-violet-400"
               >
                 {ui.debates.graph.attachToThesis}
               </button>
             </div>
-            <p className="mt-1.5 line-clamp-3 text-sm text-default-700">
+            <p className="mt-1.5 line-clamp-3 text-sm text-default-700 dark:text-zinc-300">
               {parent.content}
             </p>
           </div>
@@ -197,25 +198,25 @@ export function AddArgumentForm({
           <div className="grid grid-cols-2 gap-2">
             <Radio
               value="pro"
-              className="group relative flex cursor-pointer items-center gap-2 rounded-2xl border border-default-100 bg-default-50/60 p-3 text-sm leading-none transition-colors hover:border-pro-300 data-[selected]:border-pro-400 data-[selected]:bg-pro-50/70"
+              className="group relative flex cursor-pointer items-center gap-2 rounded-2xl border border-default-100 bg-default-50/60 p-3 text-sm leading-none transition-colors hover:border-pro-300 data-[selected]:border-pro-400 data-[selected]:bg-pro-50/70 dark:border-zinc-700 dark:bg-zinc-800/60 dark:hover:border-pro-600 dark:data-[selected]:border-pro-500 dark:data-[selected]:bg-pro-900/30"
             >
               <RadioControl className="shrink-0 self-center">
                 <RadioIndicator />
               </RadioControl>
-              <RadioContent className="flex items-center gap-1.5 font-semibold leading-none text-default-900">
-                <ThumbsUp size={12} className="text-pro-600" />
+              <RadioContent className="flex items-center gap-1.5 font-semibold leading-none text-default-900 dark:text-zinc-100">
+                <ThumbsUp size={12} className="text-pro-600 dark:text-pro-400" />
                 <span>{ui.debates.argumentForm.sidePro}</span>
               </RadioContent>
             </Radio>
             <Radio
               value="against"
-              className="group relative flex cursor-pointer items-center gap-2 rounded-2xl border border-default-100 bg-default-50/60 p-3 text-sm leading-none transition-colors hover:border-against-300 data-[selected]:border-against-400 data-[selected]:bg-against-50/70"
+              className="group relative flex cursor-pointer items-center gap-2 rounded-2xl border border-default-100 bg-default-50/60 p-3 text-sm leading-none transition-colors hover:border-against-300 data-[selected]:border-against-400 data-[selected]:bg-against-50/70 dark:border-zinc-700 dark:bg-zinc-800/60 dark:hover:border-against-600 dark:data-[selected]:border-against-500 dark:data-[selected]:bg-against-900/30"
             >
               <RadioControl className="shrink-0 self-center">
                 <RadioIndicator />
               </RadioControl>
-              <RadioContent className="flex items-center gap-1.5 font-semibold leading-none text-default-900">
-                <ThumbsDown size={12} className="text-against-600" />
+              <RadioContent className="flex items-center gap-1.5 font-semibold leading-none text-default-900 dark:text-zinc-100">
+                <ThumbsDown size={12} className="text-against-600 dark:text-against-400" />
                 <span>{ui.debates.argumentForm.sideAgainst}</span>
               </RadioContent>
             </Radio>
@@ -223,8 +224,8 @@ export function AddArgumentForm({
         </RadioGroup>
 
         {/* AI generation section */}
-        <div className="rounded-2xl border border-default-100 bg-default-50/40 p-3">
-          <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-default-700">
+        <div className="rounded-2xl border border-default-100 bg-default-50/40 p-3 dark:border-zinc-700 dark:bg-zinc-800/40">
+          <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-default-700 dark:text-zinc-300">
             <input
               type="checkbox"
               checked={aiMode}
@@ -234,34 +235,24 @@ export function AddArgumentForm({
               }}
               className="rounded accent-violet-600"
             />
-            <Bot size={12} className="text-violet-600" />
+            <Bot size={12} className="text-violet-600 dark:text-violet-400" />
             {ui.debates.argumentForm.aiToggleLabel}
           </label>
 
           {aiMode ? (
             <div className="mt-3 space-y-2">
               <div className="flex gap-2">
-                <select
+                <ModelPicker
+                  providers={providers}
                   value={modelId}
-                  onChange={(e) => setModelId(e.target.value)}
-                  disabled={generating || providers.length === 0}
-                  className="flex-1 rounded-xl border border-default-200 bg-white px-2.5 py-1.5 text-xs text-default-900 focus:outline-none focus:ring-2 focus:ring-violet-400 disabled:opacity-50"
-                >
-                  {providers.length === 0 ? (
-                    <option value="">{ui.debates.argumentForm.aiNoProviders}</option>
-                  ) : (
-                    providers.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.name}
-                      </option>
-                    ))
-                  )}
-                </select>
+                  onChange={setModelId}
+                  disabled={generating}
+                />
                 <button
                   type="button"
                   onClick={() => void handleGenerate()}
                   disabled={generating || !modelId}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-700 transition-colors hover:bg-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-700 transition-colors hover:bg-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-violet-700 dark:bg-violet-900/30 dark:text-violet-300 dark:hover:bg-violet-900/50"
                 >
                   <Sparkles size={11} />
                   {generating
@@ -270,7 +261,7 @@ export function AddArgumentForm({
                 </button>
               </div>
               {aiError ? (
-                <p className="text-[11px] text-red-600">{aiError}</p>
+                <p className="text-[11px] text-red-600 dark:text-red-400">{aiError}</p>
               ) : null}
             </div>
           ) : null}
@@ -313,7 +304,7 @@ export function AddArgumentForm({
           {onCancel ? (
             <Button
               type="button"
-              variant="outline"
+              variant="bordered"
               size="md"
               isDisabled={submitting || generating}
               onPress={onCancel}
@@ -323,7 +314,7 @@ export function AddArgumentForm({
           ) : null}
           <Button
             type="submit"
-            variant="primary"
+            color="primary"
             size="md"
             isDisabled={submitting || generating}
           >
@@ -359,5 +350,79 @@ export function AddArgumentForm({
         />
       ) : null}
     </>
+  );
+}
+
+interface ModelPickerProps {
+  providers: LlmProviderDto[];
+  value: string;
+  onChange: (id: string) => void;
+  disabled: boolean;
+}
+
+function ModelPicker({ providers, value, onChange, disabled }: ModelPickerProps) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  const selected = providers.find((p) => p.id === value);
+
+  return (
+    <div ref={ref} className="relative flex-1">
+      <button
+        type="button"
+        onClick={() => !disabled && providers.length > 0 && setOpen((v) => !v)}
+        disabled={disabled || providers.length === 0}
+        className="flex w-full items-center justify-between gap-2 rounded-xl border border-default-200 bg-default-50 px-2.5 py-1.5 text-xs text-default-900 transition-colors hover:bg-default-100 focus:outline-none focus:ring-2 focus:ring-violet-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+      >
+        <span>
+          {providers.length === 0
+            ? ui.debates.argumentForm.aiNoProviders
+            : (selected?.name ?? "—")}
+        </span>
+        <ChevronDown
+          size={12}
+          className={`shrink-0 transition-transform duration-150 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      <AnimatePresence>
+        {open && providers.length > 0 ? (
+          <motion.ul
+            initial={{ opacity: 0, y: -4, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -4, scale: 0.97 }}
+            transition={{ duration: 0.12 }}
+            className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-xl border border-default-200 bg-white shadow-xl shadow-black/10 dark:border-zinc-700 dark:bg-zinc-800"
+          >
+            {providers.map((p) => (
+              <li key={p.id}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onChange(p.id);
+                    setOpen(false);
+                  }}
+                  className={`w-full px-3 py-2 text-left text-xs transition-colors hover:bg-default-50 dark:hover:bg-zinc-700 ${
+                    value === p.id
+                      ? "font-semibold text-violet-700 dark:text-violet-400"
+                      : "text-default-800 dark:text-zinc-200"
+                  }`}
+                >
+                  {p.name}
+                </button>
+              </li>
+            ))}
+          </motion.ul>
+        ) : null}
+      </AnimatePresence>
+    </div>
   );
 }

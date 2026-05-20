@@ -118,7 +118,7 @@ export function LoginPage() {
 
         <Button
           type="submit"
-          variant="primary"
+          color="primary"
           size="lg"
           fullWidth
           isDisabled={submitting}

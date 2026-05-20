@@ -147,7 +147,7 @@ export function RegisterPage() {
 
         <Button
           type="submit"
-          variant="primary"
+          color="primary"
           size="lg"
           fullWidth
           isDisabled={submitting}

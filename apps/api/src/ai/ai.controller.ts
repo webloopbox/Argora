@@ -9,7 +9,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { VisibilityGuard } from '../common/guards/visibility.guard';
 import { User } from '../users/user.entity';
-import type {
+import {
   CheckDuplicateDto,
   GenerateArgumentDto,
   SynthesizeDto,
