@@ -1,0 +1,75 @@
+import {
+  IsArray,
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MinLength,
+} from 'class-validator';
+import { ArgumentSide } from '../enums/debate.enums';
+import type { ArgumentDto } from './argument.dto';
+
+export class LlmProviderDto {
+  id!: string;
+  name!: string;
+  vendor!: string;
+}
+
+export class GenerateArgumentDto {
+  @IsUUID()
+  debateId!: string;
+
+  @IsEnum(ArgumentSide)
+  side!: ArgumentSide;
+
+  @IsString()
+  @MinLength(8)
+  thesis!: string;
+
+  @IsString()
+  modelId!: string;
+
+  @IsOptional()
+  @IsString()
+  parentContent?: string;
+}
+
+export class GeneratedArgumentDto {
+  content!: string;
+  modelId!: string;
+}
+
+export class CheckDuplicateDto {
+  @IsUUID()
+  debateId!: string;
+
+  @IsEnum(ArgumentSide)
+  side!: ArgumentSide;
+
+  @IsString()
+  @MinLength(4)
+  content!: string;
+}
+
+export interface DuplicateCheckResultDto {
+  duplicateOf?: ArgumentDto;
+  similarity: number;
+  threshold: number;
+}
+
+export class SynthesizeDto {
+  @IsUUID()
+  debateId!: string;
+
+  @IsArray()
+  @IsUUID(undefined, { each: true })
+  argumentIds!: string[];
+
+  @IsString()
+  modelId!: string;
+}
+
+export class SynthesisResultDto {
+  text!: string;
+  modelId!: string;
+}

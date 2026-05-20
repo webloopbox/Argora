@@ -10,16 +10,22 @@ import type { Edge, Node, NodeMouseHandler, NodeTypes } from "@xyflow/react";
 import { AgainstNode, ProNode } from "./ArgumentNode";
 import { ThesisNode } from "./ThesisNode";
 import { useGraphLayout } from "./useGraphLayout";
+import { LassoOverlay } from "./LassoOverlay";
+import type { UseLassoSelection } from "./useLassoSelection";
 
 interface ArgumentGraphProps {
   nodes: Node[];
   edges: Edge[];
   onArgumentSelect?: (argumentId: string | null) => void;
   selectedArgumentId?: string | null;
+  lassoMode?: boolean;
+  lassoHandlers?: Pick<
+    UseLassoSelection,
+    "containerRef" | "lasso" | "onPointerDown" | "onPointerMove" | "onPointerUp"
+  >;
 }
 
-// Node types and edge types are declared module-level (not inside the
-// component) because React Flow throws when they're recreated each render.
+// Node types declared module-level — React Flow throws if recreated each render.
 const nodeTypes: NodeTypes = {
   thesis: ThesisNode,
   pro: ProNode,
@@ -31,6 +37,8 @@ export function ArgumentGraph({
   edges,
   onArgumentSelect,
   selectedArgumentId,
+  lassoMode = false,
+  lassoHandlers,
 }: ArgumentGraphProps) {
   const layout = useGraphLayout(nodes, edges);
 
@@ -44,6 +52,7 @@ export function ArgumentGraph({
   );
 
   const handleNodeClick: NodeMouseHandler = (_event, node) => {
+    if (lassoMode) return;
     if (node.type === "thesis") {
       onArgumentSelect?.(null);
       return;
@@ -51,10 +60,19 @@ export function ArgumentGraph({
     onArgumentSelect?.(node.id);
   };
 
-  const handlePaneClick = () => onArgumentSelect?.(null);
+  const handlePaneClick = () => {
+    if (!lassoMode) onArgumentSelect?.(null);
+  };
 
   return (
-    <div className="h-full w-full bg-gradient-to-br from-white via-default-50 to-violet-50/30">
+    <div
+      ref={lassoHandlers?.containerRef}
+      className="relative h-full w-full bg-gradient-to-br from-white via-default-50 to-violet-50/30"
+      style={{ touchAction: lassoMode ? "none" : undefined }}
+      onPointerDown={lassoMode ? lassoHandlers?.onPointerDown : undefined}
+      onPointerMove={lassoMode ? lassoHandlers?.onPointerMove : undefined}
+      onPointerUp={lassoMode ? lassoHandlers?.onPointerUp : undefined}
+    >
       <ReactFlow
         nodes={decoratedNodes}
         edges={layout.edges}
@@ -62,6 +80,8 @@ export function ArgumentGraph({
         nodesDraggable={false}
         nodesConnectable={false}
         edgesFocusable={false}
+        panOnDrag={!lassoMode}
+        zoomOnScroll={!lassoMode}
         fitView
         fitViewOptions={{ padding: 0.25, includeHiddenNodes: false }}
         proOptions={{ hideAttribution: true }}
@@ -91,6 +111,14 @@ export function ArgumentGraph({
           }}
         />
       </ReactFlow>
+
+      {lassoMode && lassoHandlers ? (
+        <LassoOverlay lasso={lassoHandlers.lasso} />
+      ) : null}
+
+      {lassoMode ? (
+        <div className="pointer-events-none absolute inset-0 z-[5] cursor-crosshair" />
+      ) : null}
     </div>
   );
 }

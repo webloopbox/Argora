@@ -10,6 +10,7 @@ import { ui } from "../../../texts/ui";
 
 interface AddArgumentPanelProps {
   debateId: string;
+  thesis: string;
   isAuthenticated: boolean;
   parent: ArgumentDto | null;
   defaultSide?: ArgumentSide;
@@ -24,6 +25,7 @@ interface AddArgumentPanelProps {
 // drawer is closed; while open we trap pointer focus via the backdrop.
 export function AddArgumentPanel({
   debateId,
+  thesis,
   isAuthenticated,
   parent,
   defaultSide,
@@ -74,6 +76,7 @@ export function AddArgumentPanel({
             >
               <PanelBody
                 debateId={debateId}
+                thesis={thesis}
                 isAuthenticated={isAuthenticated}
                 parent={parent}
                 defaultSide={defaultSide}
@@ -98,6 +101,7 @@ export function AddArgumentPanel({
             >
               <PanelBody
                 debateId={debateId}
+                thesis={thesis}
                 isAuthenticated={isAuthenticated}
                 parent={parent}
                 defaultSide={defaultSide}
@@ -118,6 +122,7 @@ export function AddArgumentPanel({
 
 interface PanelBodyProps {
   debateId: string;
+  thesis: string;
   isAuthenticated: boolean;
   parent: ArgumentDto | null;
   defaultSide?: ArgumentSide;
@@ -128,6 +133,7 @@ interface PanelBodyProps {
 
 function PanelBody({
   debateId,
+  thesis,
   isAuthenticated,
   parent,
   defaultSide,
@@ -161,6 +167,7 @@ function PanelBody({
         {isAuthenticated ? (
           <AddArgumentForm
             debateId={debateId}
+            thesis={thesis}
             parent={parent}
             defaultSide={defaultSide}
             onClearParent={onClearParent}

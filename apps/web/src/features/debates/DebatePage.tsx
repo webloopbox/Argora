@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@heroui/react";
 import { AxiosError } from "axios";
@@ -7,12 +7,15 @@ import {
   ArrowLeft,
   ChevronDown,
   ChevronUp,
+  Lasso,
   Lock,
   MessageSquareQuote,
   Sparkles,
   ThumbsDown,
   ThumbsUp,
+  X,
 } from "lucide-react";
+import { ReactFlowProvider } from "@xyflow/react";
 import type { ArgumentDto, DebateDetailDto } from "@brainstorm/core";
 import { ArgumentSide, DebateVisibility } from "@brainstorm/core";
 import { fetchDebateDetail } from "../../api/debates.api";
@@ -22,6 +25,8 @@ import { AddArgumentPanel } from "./graph/AddArgumentPanel";
 import { ArgumentGraph } from "./graph/ArgumentGraph";
 import { DebateGraphContext } from "./graph/debate-graph-context";
 import { useDebateGraph } from "./graph/useDebateGraph";
+import { useLassoSelection } from "./graph/useLassoSelection";
+import { SynthesisPanel } from "./graph/SynthesisPanel";
 
 type LoadState =
   | { kind: "loading" }
@@ -51,7 +56,13 @@ export function DebatePage() {
       />
     );
   }
-  return <DebatePageBody key={params.id} debateId={params.id} />;
+  // Wrap the body in ReactFlowProvider so hooks like useReactFlow/useViewport
+  // work in sibling components (lasso selection) outside <ReactFlow>.
+  return (
+    <ReactFlowProvider>
+      <DebatePageBody key={params.id} debateId={params.id} />
+    </ReactFlowProvider>
+  );
 }
 
 function DebatePageBody({ debateId }: { debateId: string }) {
@@ -132,6 +143,17 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
   );
   const [defaultSide, setDefaultSide] = useState<ArgumentSide>(ArgumentSide.Pro);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [lassoMode, setLassoMode] = useState(false);
+  const [lassoIds, setLassoIds] = useState<string[]>([]);
+  const [synthesisPanelOpen, setSynthesisPanelOpen] = useState(false);
+
+  const handleLassoComplete = useCallback((ids: string[]) => {
+    setLassoIds(ids);
+    setLassoMode(false);
+    if (ids.length > 0) setSynthesisPanelOpen(true);
+  }, []);
+
+  const lassoHandlers = useLassoSelection(handleLassoComplete);
 
   const parentArgument = useMemo<ArgumentDto | null>(() => {
     if (!selectedArgumentId) return null;
@@ -186,6 +208,8 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
           edges={graphState.edges}
           selectedArgumentId={selectedArgumentId}
           onArgumentSelect={handleArgumentSelect}
+          lassoMode={lassoMode}
+          lassoHandlers={lassoHandlers}
         />
       )}
 
@@ -197,6 +221,13 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
           onAddAgainst={() => openDrawerWithSide(ArgumentSide.Against)}
           parent={parentArgument}
           onClearParent={() => setSelectedArgumentId(null)}
+          lassoMode={lassoMode}
+          onLassoToggle={() => {
+            setLassoMode((v) => !v);
+            lassoHandlers.reset();
+          }}
+          lassoIds={lassoIds}
+          onSynthesizeClick={() => setSynthesisPanelOpen(true)}
         />
       ) : null}
 
@@ -213,6 +244,7 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
 
       <AddArgumentPanel
         debateId={debate.id}
+        thesis={debate.thesis}
         isAuthenticated={isAuthenticated}
         parent={parentArgument}
         defaultSide={defaultSide}
@@ -223,6 +255,16 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
         }}
         isOpen={drawerOpen}
         onClose={handleDrawerClose}
+      />
+
+      <SynthesisPanel
+        debateId={debate.id}
+        selectedArgumentIds={lassoIds}
+        isOpen={synthesisPanelOpen}
+        onClose={() => {
+          setSynthesisPanelOpen(false);
+          setLassoIds([]);
+        }}
       />
       </DebateGraphContext.Provider>
     </FullBleedShell>
@@ -340,11 +382,19 @@ function FloatingActionToolbar({
   onAddAgainst,
   parent,
   onClearParent,
+  lassoMode,
+  onLassoToggle,
+  lassoIds,
+  onSynthesizeClick,
 }: {
   onAddPro: () => void;
   onAddAgainst: () => void;
   parent: ArgumentDto | null;
   onClearParent: () => void;
+  lassoMode: boolean;
+  onLassoToggle: () => void;
+  lassoIds: string[];
+  onSynthesizeClick: () => void;
 }) {
   return (
     <motion.div
@@ -354,7 +404,7 @@ function FloatingActionToolbar({
       className="pointer-events-auto absolute bottom-6 right-4 z-30 flex flex-col items-end gap-2 sm:bottom-auto sm:top-4"
     >
       <AnimatePresence>
-        {parent ? (
+        {parent && !lassoMode ? (
           <motion.button
             type="button"
             onClick={onClearParent}
@@ -367,26 +417,58 @@ function FloatingActionToolbar({
             {ui.debates.graph.replyingToEyebrow}: {parent.content}
           </motion.button>
         ) : null}
+        {lassoIds.length > 0 && !lassoMode ? (
+          <motion.button
+            type="button"
+            onClick={onSynthesizeClick}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 6 }}
+            transition={{ duration: 0.2 }}
+            className="inline-flex items-center gap-1.5 rounded-full border border-violet-200 bg-violet-600 px-3 py-1.5 text-[11px] font-semibold text-white shadow-sm backdrop-blur transition-colors hover:bg-violet-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+          >
+            <Sparkles size={11} />
+            {ui.debates.ai.synthesizeButton} ({lassoIds.length})
+          </motion.button>
+        ) : null}
       </AnimatePresence>
 
       <div className="flex items-center gap-2 rounded-full border border-default-100 bg-white/95 p-1.5 shadow-xl shadow-violet-500/10 backdrop-blur-xl">
+        {!lassoMode ? (
+          <>
+            <button
+              type="button"
+              onClick={onAddPro}
+              className="inline-flex items-center gap-1.5 rounded-full bg-pro-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-pro-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pro-400"
+            >
+              <ThumbsUp size={13} />
+              <span className="hidden sm:inline">{ui.debates.graph.addPro}</span>
+              <span className="sm:hidden">{ui.sides.pro}</span>
+            </button>
+            <button
+              type="button"
+              onClick={onAddAgainst}
+              className="inline-flex items-center gap-1.5 rounded-full bg-against-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-against-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-against-400"
+            >
+              <ThumbsDown size={13} />
+              <span className="hidden sm:inline">{ui.debates.graph.addAgainst}</span>
+              <span className="sm:hidden">{ui.sides.against}</span>
+            </button>
+          </>
+        ) : null}
         <button
           type="button"
-          onClick={onAddPro}
-          className="inline-flex items-center gap-1.5 rounded-full bg-pro-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-pro-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pro-400"
+          onClick={onLassoToggle}
+          className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 ${
+            lassoMode
+              ? "bg-violet-100 text-violet-700 hover:bg-violet-200"
+              : "bg-default-100 text-default-700 hover:bg-default-200"
+          }`}
         >
-          <ThumbsUp size={13} />
-          <span className="hidden sm:inline">{ui.debates.graph.addPro}</span>
-          <span className="sm:hidden">{ui.sides.pro}</span>
-        </button>
-        <button
-          type="button"
-          onClick={onAddAgainst}
-          className="inline-flex items-center gap-1.5 rounded-full bg-against-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-against-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-against-400"
-        >
-          <ThumbsDown size={13} />
-          <span className="hidden sm:inline">{ui.debates.graph.addAgainst}</span>
-          <span className="sm:hidden">{ui.sides.against}</span>
+          {lassoMode ? <X size={13} /> : <Lasso size={13} />}
+          <span className="hidden sm:inline">
+            {lassoMode ? ui.debates.ai.lassoCancel : ui.debates.ai.lassoToggle}
+          </span>
         </button>
       </div>
     </motion.div>

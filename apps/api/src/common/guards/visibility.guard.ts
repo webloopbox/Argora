@@ -16,8 +16,9 @@ import { activeWhere } from '../repository/soft-delete';
 
 // Centralises read/write access to a single debate. Every controller that
 // touches debate-scoped data must wrap its handler in this guard - never
-// re-check visibility inline. The route must expose either a `:debateId`
-// or `:id` param (treated identically).
+// re-check visibility inline. The debate id is looked up from the route
+// params (`:debateId` or `:id`) and, as a fallback, from the request body
+// (`debateId`) so AI endpoints carrying the id in the body share the gate.
 //
 // Decision matrix:
 //   public debate   + anonymous caller     -> allow (read)
@@ -83,6 +84,8 @@ export class VisibilityGuard implements CanActivate {
 
   private resolveDebateId(req: RequestWithDebate): string | undefined {
     const params = req.params as Record<string, string | undefined>;
-    return params.debateId ?? params.id;
+    if (params.debateId ?? params.id) return params.debateId ?? params.id;
+    const body = req.body as { debateId?: string } | undefined;
+    return body?.debateId;
   }
 }

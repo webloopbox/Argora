@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,6 +12,7 @@ import {
 } from '@brainstorm/core';
 import { In, Repository } from 'typeorm';
 import { activeWhere } from '../common/repository/soft-delete';
+import { EmbeddingService } from '../ai/embedding.service';
 import { Debate } from '../debates/debate.entity';
 import { User } from '../users/user.entity';
 import { Vote } from '../votes/vote.entity';
@@ -30,6 +32,8 @@ interface VoteCountRow {
 
 @Injectable()
 export class ArgumentsService {
+  private readonly logger = new Logger(ArgumentsService.name);
+
   constructor(
     @InjectRepository(Argument)
     private readonly args: Repository<Argument>,
@@ -37,6 +41,7 @@ export class ArgumentsService {
     private readonly users: Repository<User>,
     @InjectRepository(Vote)
     private readonly votes: Repository<Vote>,
+    private readonly embedding: EmbeddingService,
   ) {}
 
   async create(
@@ -68,7 +73,10 @@ export class ArgumentsService {
       archivedOn: null,
     });
     const saved = await this.args.save(created);
-    // Fresh argument has no votes yet - skip the aggregate query.
+    // Fire-and-forget: compute and store the embedding asynchronously so the
+    // HTTP response is not blocked. Failures are logged but not retried.
+    this.embedAsync(saved.id, saved.content);
+    // Fresh argument has no votes yet — skip the aggregate query.
     return this.toDto(saved, author, { for: 0, against: 0 }, null);
   }
 
@@ -218,5 +226,17 @@ export class ArgumentsService {
     const balanceRatio = Math.abs(forCount - againstCount) / weight;
     if (balanceRatio < CONTROVERSY_MAX_RATIO) return 'controversy';
     return forCount >= againstCount ? 'pro' : 'against';
+  }
+
+  private embedAsync(argumentId: string, content: string): void {
+    this.embedding
+      .embed(content)
+      .then(async (vec) => {
+        if (!vec) return;
+        await this.args.update({ id: argumentId }, { embedding: vec });
+      })
+      .catch((err: unknown) => {
+        this.logger.error(`Embedding failed for argument ${argumentId}`, err);
+      });
   }
 }

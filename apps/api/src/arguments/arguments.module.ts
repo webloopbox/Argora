@@ -6,6 +6,7 @@ import { GroupsModule } from '../groups/groups.module';
 import { UsersModule } from '../users/users.module';
 import { User } from '../users/user.entity';
 import { Vote } from '../votes/vote.entity';
+import { EmbeddingModule } from '../ai/embedding.module';
 import { Argument } from './argument.entity';
 import {
   ArgumentItemController,
@@ -18,6 +19,7 @@ import { ArgumentsService } from './arguments.service';
     TypeOrmModule.forFeature([Argument, Debate, User, Vote]),
     GroupsModule,
     UsersModule,
+    EmbeddingModule,
   ],
   controllers: [ArgumentsController, ArgumentItemController],
   providers: [ArgumentsService, VisibilityGuard],

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
+import { AiModule } from './ai/ai.module';
 import { ArgumentsModule } from './arguments/arguments.module';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
@@ -25,6 +26,7 @@ import { VotesModule } from './votes/votes.module';
     DebatesModule,
     ArgumentsModule,
     VotesModule,
+    AiModule,
   ],
 })
 export class AppModule {}
