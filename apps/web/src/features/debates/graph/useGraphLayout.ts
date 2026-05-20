@@ -76,6 +76,8 @@ export function useGraphLayout(
           x: dn.x - width / 2,
           y: dn.y - height / 2,
         },
+        width,
+        height,
       };
     });
 

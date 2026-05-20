@@ -6,6 +6,7 @@ import { PlusCircle, Sparkles } from "lucide-react";
 import type { DebatePreviewDto } from "@brainstorm/core";
 import { listPublicDebates } from "../../api/debates.api";
 import { useAuth } from "../../app-config/auth-context";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { ui } from "../../texts/ui";
 import { DebateCard } from "./DebateCard";
 import { FiltersBar, type DebateFilter } from "./FiltersBar";
@@ -23,6 +24,7 @@ const gridVariants = {
 };
 
 export function DashboardPage() {
+  useDocumentTitle(ui.dashboard.heroEyebrow);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [filter, setFilter] = useState<DebateFilter>("hottest");
@@ -137,7 +139,7 @@ function DashboardLoading() {
         <div
           key={idx}
           aria-hidden
-          className="h-52 animate-pulse rounded-2xl border border-default-100 bg-white/60"
+          className="h-52 animate-pulse rounded-2xl border border-default-100 bg-white/60 dark:border-zinc-800 dark:bg-zinc-900/60"
         />
       ))}
       <span className="sr-only">{ui.dashboard.loading}</span>
@@ -157,14 +159,14 @@ function DashboardEmpty({
   onSignIn,
 }: DashboardEmptyProps) {
   return (
-    <div className="flex flex-col items-center gap-4 rounded-3xl border border-dashed border-default-200 bg-white/60 px-6 py-16 text-center">
+    <div className="flex flex-col items-center gap-4 rounded-3xl border border-dashed border-default-200 bg-white/60 px-6 py-16 text-center dark:border-zinc-700 dark:bg-zinc-900/60">
       <div className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-violet-700">
         <Sparkles size={22} />
       </div>
-      <h3 className="text-lg font-semibold tracking-tight">
+      <h3 className="text-lg font-semibold tracking-tight dark:text-zinc-100">
         {ui.dashboard.emptyTitle}
       </h3>
-      <p className="max-w-md text-sm text-default-500">
+      <p className="max-w-md text-sm text-default-500 dark:text-zinc-400">
         {ui.dashboard.emptyBody}
       </p>
       {isAuthenticated ? (

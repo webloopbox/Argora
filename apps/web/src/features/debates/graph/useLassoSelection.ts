@@ -27,7 +27,6 @@ export interface LassoSelectionState {
 }
 
 export interface UseLassoSelection {
-  containerRef: React.RefObject<HTMLDivElement | null>;
   lasso: LassoSelectionState;
   onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => void;
   onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
@@ -36,15 +35,20 @@ export interface UseLassoSelection {
 }
 
 export function useLassoSelection(
+  containerRef: React.RefObject<HTMLDivElement | null>,
   onComplete: (argumentIds: string[]) => void,
 ): UseLassoSelection {
-  const containerRef = useRef<HTMLDivElement>(null);
   const { getNodes } = useReactFlow();
   const viewport = useViewport();
   const [lasso, setLasso] = useState<LassoSelectionState>({
     drawing: false,
     polygon: [],
   });
+
+  // Latest viewport mirrored in a ref so the pointerUp callback can read it
+  // without forcing re-creation of the handler each viewport change.
+  const viewportRef = useRef(viewport);
+  viewportRef.current = viewport;
 
   const getRelativePoint = useCallback(
     (e: React.PointerEvent<HTMLDivElement>): Point => {
@@ -54,7 +58,7 @@ export function useLassoSelection(
         y: e.clientY - (rect?.top ?? 0),
       };
     },
-    [],
+    [containerRef],
   );
 
   const onPointerDown = useCallback(
@@ -68,51 +72,59 @@ export function useLassoSelection(
 
   const onPointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
-      if (!lasso.drawing) return;
-      const pt = getRelativePoint(e);
-      setLasso((prev) => ({
-        ...prev,
-        polygon: [...prev.polygon, pt],
-      }));
+      setLasso((prev) => {
+        if (!prev.drawing) return prev;
+        const pt = {
+          x: e.clientX - (containerRef.current?.getBoundingClientRect().left ?? 0),
+          y: e.clientY - (containerRef.current?.getBoundingClientRect().top ?? 0),
+        };
+        return { ...prev, polygon: [...prev.polygon, pt] };
+      });
     },
-    [lasso.drawing, getRelativePoint],
+    [containerRef],
   );
 
   const onPointerUp = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
-      if (!lasso.drawing) return;
-      (e.currentTarget as HTMLDivElement).releasePointerCapture(e.pointerId);
+      try {
+        (e.currentTarget as HTMLDivElement).releasePointerCapture(e.pointerId);
+      } catch {
+        /* ignore — capture may already be released */
+      }
 
-      // Container-relative coords → flow coords
-      const { x: vpX, y: vpY, zoom } = viewport;
-      const flowPolygon = lasso.polygon.map((p) => ({
-        x: (p.x - vpX) / zoom,
-        y: (p.y - vpY) / zoom,
-      }));
+      setLasso((prev) => {
+        if (!prev.drawing) return prev;
 
-      const NODE_W = 300;
-      const NODE_H = 150;
+        const { x: vpX, y: vpY, zoom } = viewportRef.current;
+        const flowPolygon = prev.polygon.map((p) => ({
+          x: (p.x - vpX) / zoom,
+          y: (p.y - vpY) / zoom,
+        }));
 
-      const selectedIds = getNodes()
-        .filter((n) => n.type !== "thesis")
-        .filter((n) => {
-          const center = {
-            x: n.position.x + NODE_W / 2,
-            y: n.position.y + NODE_H / 2,
-          };
-          return pointInPolygon(center, flowPolygon);
-        })
-        .map((n) => n.id);
+        const NODE_W = 300;
+        const NODE_H = 150;
 
-      setLasso({ drawing: false, polygon: [] });
-      onComplete(selectedIds);
+        const selectedIds = getNodes()
+          .filter((n) => n.type !== "thesis")
+          .filter((n) => {
+            const center = {
+              x: n.position.x + NODE_W / 2,
+              y: n.position.y + NODE_H / 2,
+            };
+            return pointInPolygon(center, flowPolygon);
+          })
+          .map((n) => n.id);
+
+        onComplete(selectedIds);
+        return { drawing: false, polygon: [] };
+      });
     },
-    [lasso, viewport, getNodes, onComplete],
+    [getNodes, onComplete],
   );
 
   const reset = useCallback(() => {
     setLasso({ drawing: false, polygon: [] });
   }, []);
 
-  return { containerRef, lasso, onPointerDown, onPointerMove, onPointerUp, reset };
+  return { lasso, onPointerDown, onPointerMove, onPointerUp, reset };
 }

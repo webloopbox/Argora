@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import type { GroupDetailDto, GroupSummaryDto } from "@brainstorm/core";
 import { listMyGroups } from "../../api/groups.api";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { ui } from "../../texts/ui";
 import { CreateGroupDialog } from "./CreateGroupDialog";
 
@@ -24,6 +25,7 @@ const gridVariants = {
 };
 
 export function GroupsPage() {
+  useDocumentTitle(ui.groups.pageTitle);
   const navigate = useNavigate();
   const [state, setState] = useState<LoadState>({ kind: "loading" });
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -56,10 +58,12 @@ export function GroupsPage() {
         className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
       >
         <div className="max-w-3xl">
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl dark:text-zinc-100">
             {ui.groups.pageTitle}
           </h1>
-          <p className="mt-3 text-default-600">{ui.groups.pageSubtitle}</p>
+          <p className="mt-3 text-default-600 dark:text-zinc-400">
+            {ui.groups.pageSubtitle}
+          </p>
         </div>
         <Button
           variant="primary"
@@ -76,7 +80,7 @@ export function GroupsPage() {
       ) : state.kind === "error" ? (
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 px-4 py-6 text-center text-sm text-red-700"
+          className="rounded-2xl border border-red-200 bg-red-50 px-4 py-6 text-center text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300"
         >
           {ui.groups.loadFailed}
         </div>
@@ -117,31 +121,31 @@ function GroupCard({ group }: GroupCardProps) {
   return (
     <motion.article
       variants={cardVariants}
-      className="group flex flex-col rounded-3xl border border-default-100 bg-white/80 p-5 shadow-sm transition-shadow hover:shadow-md"
+      className="group flex flex-col rounded-3xl border border-default-100 bg-white/80 p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/80"
     >
       <div className="flex items-center justify-between">
-        <span className="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-violet-700">
+        <span className="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-violet-700 dark:text-violet-300">
           <Users size={18} />
         </span>
         {group.isOwner ? (
-          <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-800">
+          <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-800 dark:border-amber-700/40 dark:bg-amber-900/30 dark:text-amber-200">
             <Crown size={10} />
             {ui.groups.ownerBadge}
           </span>
         ) : null}
       </div>
 
-      <h3 className="mt-4 line-clamp-2 text-lg font-semibold tracking-tight">
+      <h3 className="mt-4 line-clamp-2 text-lg font-semibold tracking-tight dark:text-zinc-100">
         {group.name}
       </h3>
-      <p className="mt-1 text-xs text-default-500">
+      <p className="mt-1 text-xs text-default-500 dark:text-zinc-400">
         {ui.groups.ownerEyebrow}{" "}
-        <span className="font-medium text-default-700">
+        <span className="font-medium text-default-700 dark:text-zinc-200">
           {group.ownerDisplayName}
         </span>
       </p>
 
-      <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-default-500">
+      <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-default-500 dark:text-zinc-400">
         <span className="inline-flex items-center gap-1">
           <Users size={12} />
           {group.memberCount} {ui.groups.membersShort}
@@ -155,7 +159,7 @@ function GroupCard({ group }: GroupCardProps) {
       <div className="mt-5">
         <Link
           to={`/grupy/${group.id}`}
-          className="inline-flex items-center justify-center rounded-xl border border-default-200 bg-white px-3 py-1.5 text-sm font-medium text-default-800 transition-colors hover:border-violet-300 hover:text-violet-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+          className="inline-flex items-center justify-center rounded-xl border border-default-200 bg-white px-3 py-1.5 text-sm font-medium text-default-800 transition-colors hover:border-violet-300 hover:text-violet-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-violet-500 dark:hover:text-violet-300"
         >
           {ui.groups.openCta}
         </Link>
@@ -171,7 +175,7 @@ function GroupsLoading() {
         <div
           key={idx}
           aria-hidden
-          className="h-48 animate-pulse rounded-3xl border border-default-100 bg-white/60"
+          className="h-48 animate-pulse rounded-3xl border border-default-100 bg-white/60 dark:border-zinc-800 dark:bg-zinc-900/60"
         />
       ))}
       <span className="sr-only">{ui.groups.loading}</span>
@@ -185,13 +189,15 @@ function GroupsEmpty({ onCreate }: { onCreate: () => void }) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: 0.05, ease: "easeOut" }}
-      className="flex flex-col items-center rounded-3xl border border-default-100 bg-white/70 px-6 py-16 text-center shadow-sm backdrop-blur"
+      className="flex flex-col items-center rounded-3xl border border-default-100 bg-white/70 px-6 py-16 text-center shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70"
     >
-      <div className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500/10 to-fuchsia-500/10 text-violet-700">
+      <div className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500/10 to-fuchsia-500/10 text-violet-700 dark:text-violet-300">
         <Users size={26} />
       </div>
-      <h2 className="mt-5 text-lg font-semibold">{ui.groups.emptyTitle}</h2>
-      <p className="mt-2 max-w-md text-sm text-default-600">
+      <h2 className="mt-5 text-lg font-semibold dark:text-zinc-100">
+        {ui.groups.emptyTitle}
+      </h2>
+      <p className="mt-2 max-w-md text-sm text-default-600 dark:text-zinc-400">
         {ui.groups.emptyBody}
       </p>
       <Button variant="primary" size="md" className="mt-6" onPress={onCreate}>

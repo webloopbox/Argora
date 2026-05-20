@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { DebatesModule } from './debates/debates.module';
 import { GroupsModule } from './groups/groups.module';
+import { StatsModule } from './stats/stats.module';
 import { UsersModule } from './users/users.module';
 import { VotesModule } from './votes/votes.module';
 
@@ -27,6 +28,7 @@ import { VotesModule } from './votes/votes.module';
     ArgumentsModule,
     VotesModule,
     AiModule,
+    StatsModule,
   ],
 })
 export class AppModule {}

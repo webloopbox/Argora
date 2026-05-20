@@ -15,17 +15,16 @@ import {
   ThumbsUp,
   X,
 } from "lucide-react";
-import { ReactFlowProvider } from "@xyflow/react";
 import type { ArgumentDto, DebateDetailDto } from "@brainstorm/core";
 import { ArgumentSide, DebateVisibility } from "@brainstorm/core";
 import { fetchDebateDetail } from "../../api/debates.api";
 import { useAuth } from "../../app-config/auth-context";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { ui } from "../../texts/ui";
 import { AddArgumentPanel } from "./graph/AddArgumentPanel";
 import { ArgumentGraph } from "./graph/ArgumentGraph";
 import { DebateGraphContext } from "./graph/debate-graph-context";
 import { useDebateGraph } from "./graph/useDebateGraph";
-import { useLassoSelection } from "./graph/useLassoSelection";
 import { SynthesisPanel } from "./graph/SynthesisPanel";
 
 type LoadState =
@@ -56,13 +55,7 @@ export function DebatePage() {
       />
     );
   }
-  // Wrap the body in ReactFlowProvider so hooks like useReactFlow/useViewport
-  // work in sibling components (lasso selection) outside <ReactFlow>.
-  return (
-    <ReactFlowProvider>
-      <DebatePageBody key={params.id} debateId={params.id} />
-    </ReactFlowProvider>
-  );
+  return <DebatePageBody key={params.id} debateId={params.id} />;
 }
 
 function DebatePageBody({ debateId }: { debateId: string }) {
@@ -135,6 +128,7 @@ function FullBleedShell({ children }: { children: React.ReactNode }) {
 }
 
 function DebateReady({ debate }: { debate: DebateDetailDto }) {
+  useDocumentTitle(debate.thesis);
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { state: graphState, upsertArgument } = useDebateGraph(debate);
@@ -152,8 +146,6 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
     setLassoMode(false);
     if (ids.length > 0) setSynthesisPanelOpen(true);
   }, []);
-
-  const lassoHandlers = useLassoSelection(handleLassoComplete);
 
   const parentArgument = useMemo<ArgumentDto | null>(() => {
     if (!selectedArgumentId) return null;
@@ -209,7 +201,7 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
           selectedArgumentId={selectedArgumentId}
           onArgumentSelect={handleArgumentSelect}
           lassoMode={lassoMode}
-          lassoHandlers={lassoHandlers}
+          onLassoComplete={handleLassoComplete}
         />
       )}
 
@@ -222,10 +214,7 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
           parent={parentArgument}
           onClearParent={() => setSelectedArgumentId(null)}
           lassoMode={lassoMode}
-          onLassoToggle={() => {
-            setLassoMode((v) => !v);
-            lassoHandlers.reset();
-          }}
+          onLassoToggle={() => setLassoMode((v) => !v)}
           lassoIds={lassoIds}
           onSynthesizeClick={() => setSynthesisPanelOpen(true)}
         />
@@ -287,14 +276,14 @@ function FloatingThesisCard({
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="pointer-events-auto absolute left-4 top-4 z-30 w-[min(380px,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-default-100 bg-white/90 shadow-xl shadow-violet-500/10 backdrop-blur-xl"
+      className="pointer-events-auto absolute left-4 top-4 z-30 w-[min(380px,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-default-100 bg-white/90 shadow-xl shadow-violet-500/10 backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/90"
     >
       <div className="flex items-start gap-2 px-4 pt-3.5">
         <button
           type="button"
           onClick={onBack}
           aria-label={ui.debates.detail.backToFeed}
-          className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-default-100/80 text-default-700 transition-colors hover:bg-default-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-default-100/80 text-default-700 transition-colors hover:bg-default-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
         >
           <ArrowLeft size={14} />
         </button>
@@ -303,8 +292,8 @@ function FloatingThesisCard({
             <span
               className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-medium ${
                 isPrivate
-                  ? "border border-default-200 bg-default-50 text-default-700"
-                  : "border border-violet-200 bg-violet-50 text-violet-700"
+                  ? "border border-default-200 bg-default-50 text-default-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+                  : "border border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-700/40 dark:bg-violet-900/30 dark:text-violet-300"
               }`}
             >
               {isPrivate ? <Lock size={9} /> : <Sparkles size={9} />}
@@ -312,8 +301,8 @@ function FloatingThesisCard({
                 ? ui.debates.detail.privateBadge
                 : ui.debates.detail.publicBadge}
             </span>
-            <span className="text-default-400">·</span>
-            <span className="text-default-500">
+            <span className="text-default-400 dark:text-zinc-600">·</span>
+            <span className="text-default-500 dark:text-zinc-400">
               {dateFormatter.format(new Date(debate.createdAt))}
             </span>
           </div>
@@ -322,14 +311,14 @@ function FloatingThesisCard({
           type="button"
           onClick={() => setExpanded((v) => !v)}
           aria-label={expanded ? "Zwiń" : "Rozwiń"}
-          className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-default-500 transition-colors hover:bg-default-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-default-500 transition-colors hover:bg-default-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:text-zinc-400 dark:hover:bg-zinc-800"
         >
           {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
         </button>
       </div>
 
       <h1
-        className={`px-4 pt-1 text-sm font-semibold leading-snug tracking-tight text-default-900 ${
+        className={`px-4 pt-1 text-sm font-semibold leading-snug tracking-tight text-default-900 dark:text-zinc-100 ${
           expanded ? "" : "line-clamp-2"
         }`}
       >
@@ -351,20 +340,20 @@ function FloatingThesisCard({
                 <span className="grid h-6 w-6 place-items-center rounded-full bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-[10px] font-semibold text-violet-700">
                   {initialsFor(debate.author.displayName)}
                 </span>
-                <span className="font-medium text-default-700">
+                <span className="font-medium text-default-700 dark:text-zinc-300">
                   {debate.author.displayName}
                 </span>
               </div>
-              <span className="text-default-300">·</span>
-              <span className="inline-flex items-center gap-1 font-medium text-pro-700">
+              <span className="text-default-300 dark:text-zinc-600">·</span>
+              <span className="inline-flex items-center gap-1 font-medium text-pro-700 dark:text-pro-300">
                 <span className="h-1.5 w-1.5 rounded-full bg-pro-500" />
                 {debate.proCount}
               </span>
-              <span className="inline-flex items-center gap-1 font-medium text-against-700">
+              <span className="inline-flex items-center gap-1 font-medium text-against-700 dark:text-against-300">
                 <span className="h-1.5 w-1.5 rounded-full bg-against-500" />
                 {debate.againstCount}
               </span>
-              <span className="inline-flex items-center gap-1 text-default-500">
+              <span className="inline-flex items-center gap-1 text-default-500 dark:text-zinc-400">
                 <MessageSquareQuote size={11} />
                 {debate.argumentCount}
               </span>
@@ -433,7 +422,7 @@ function FloatingActionToolbar({
         ) : null}
       </AnimatePresence>
 
-      <div className="flex items-center gap-2 rounded-full border border-default-100 bg-white/95 p-1.5 shadow-xl shadow-violet-500/10 backdrop-blur-xl">
+      <div className="flex items-center gap-2 rounded-full border border-default-100 bg-white/95 p-1.5 shadow-xl shadow-violet-500/10 backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/95">
         {!lassoMode ? (
           <>
             <button
@@ -461,8 +450,8 @@ function FloatingActionToolbar({
           onClick={onLassoToggle}
           className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 ${
             lassoMode
-              ? "bg-violet-100 text-violet-700 hover:bg-violet-200"
-              : "bg-default-100 text-default-700 hover:bg-default-200"
+              ? "bg-violet-100 text-violet-700 hover:bg-violet-200 dark:bg-violet-900/40 dark:text-violet-200 dark:hover:bg-violet-900/60"
+              : "bg-default-100 text-default-700 hover:bg-default-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
           }`}
         >
           {lassoMode ? <X size={13} /> : <Lasso size={13} />}
@@ -508,15 +497,15 @@ function FloatingEmptyHint({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.35, delay: 0.2, ease: "easeOut" }}
-      className="pointer-events-auto absolute bottom-24 left-1/2 z-20 w-[min(380px,calc(100vw-2rem))] -translate-x-1/2 rounded-3xl border border-default-100 bg-white/95 px-5 py-4 text-center shadow-xl shadow-violet-500/10 backdrop-blur-xl"
+      className="pointer-events-auto absolute bottom-24 left-1/2 z-20 w-[min(380px,calc(100vw-2rem))] -translate-x-1/2 rounded-3xl border border-default-100 bg-white/95 px-5 py-4 text-center shadow-xl shadow-violet-500/10 backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/95"
     >
       <div className="mx-auto grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-violet-700">
         <Sparkles size={16} />
       </div>
-      <h2 className="mt-2 text-sm font-semibold tracking-tight text-default-900">
+      <h2 className="mt-2 text-sm font-semibold tracking-tight text-default-900 dark:text-zinc-100">
         {ui.debates.detail.graphEmptyTitle}
       </h2>
-      <p className="mt-1 text-xs text-default-500">
+      <p className="mt-1 text-xs text-default-500 dark:text-zinc-400">
         {ui.debates.detail.graphEmptyBody}
       </p>
       {isAuthenticated ? (

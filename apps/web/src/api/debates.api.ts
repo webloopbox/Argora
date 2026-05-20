@@ -6,7 +6,9 @@ import type {
 import { httpClient } from "./http-client";
 
 export async function listPublicDebates(): Promise<DebatePreviewDto[]> {
-  const { data } = await httpClient.get<DebatePreviewDto[]>("/debates");
+  const { data } = await httpClient.get<DebatePreviewDto[]>("/debates", {
+    silent: true,
+  });
   return data;
 }
 
@@ -15,12 +17,17 @@ export async function listGroupDebates(
 ): Promise<DebatePreviewDto[]> {
   const { data } = await httpClient.get<DebatePreviewDto[]>("/debates", {
     params: { groupId },
+    silent: true,
   });
   return data;
 }
 
+// Detail page handles 404/403/error states with dedicated UI — toast would
+// be noise on top.
 export async function fetchDebateDetail(id: string): Promise<DebateDetailDto> {
-  const { data } = await httpClient.get<DebateDetailDto>(`/debates/${id}`);
+  const { data } = await httpClient.get<DebateDetailDto>(`/debates/${id}`, {
+    silent: true,
+  });
   return data;
 }
 

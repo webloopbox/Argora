@@ -72,7 +72,7 @@ export function AddArgumentPanel({
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 320, damping: 34 }}
-              className="fixed right-4 top-20 z-50 hidden h-[calc(100dvh-6rem)] w-[400px] overflow-hidden rounded-3xl border border-default-100 bg-white/95 shadow-2xl shadow-violet-500/10 backdrop-blur lg:block"
+              className="fixed right-4 top-20 z-50 hidden h-[calc(100dvh-6rem)] w-[400px] overflow-hidden rounded-3xl border border-default-100 bg-white/95 shadow-2xl shadow-violet-500/10 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/95 lg:block"
             >
               <PanelBody
                 debateId={debateId}
@@ -97,7 +97,7 @@ export function AddArgumentPanel({
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", stiffness: 320, damping: 34 }}
-              className="fixed inset-x-0 bottom-0 z-50 max-h-[88dvh] overflow-hidden rounded-t-3xl border border-default-100 bg-white shadow-2xl lg:hidden"
+              className="fixed inset-x-0 bottom-0 z-50 max-h-[88dvh] overflow-hidden rounded-t-3xl border border-default-100 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 lg:hidden"
             >
               <PanelBody
                 debateId={debateId}
@@ -144,13 +144,13 @@ function PanelBody({
   const navigate = useNavigate();
   return (
     <div className="flex h-full flex-col">
-      <header className="flex items-start justify-between gap-3 border-b border-default-100 px-5 py-4">
+      <header className="flex items-start justify-between gap-3 border-b border-default-100 px-5 py-4 dark:border-zinc-800">
         <div>
-          <div className="flex items-center gap-2 text-xs font-medium text-violet-700">
+          <div className="flex items-center gap-2 text-xs font-medium text-violet-700 dark:text-violet-300">
             <MessageCircle size={12} />
             <span>{ui.debates.argumentForm.panelTitle}</span>
           </div>
-          <p className="mt-1 text-xs text-default-500">
+          <p className="mt-1 text-xs text-default-500 dark:text-zinc-400">
             {ui.debates.argumentForm.panelSubtitle}
           </p>
         </div>
@@ -158,7 +158,7 @@ function PanelBody({
           type="button"
           onClick={onClose}
           aria-label={ui.debates.argumentForm.cancel}
-          className="rounded-full p-1.5 text-default-500 transition-colors hover:bg-default-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+          className="rounded-full p-1.5 text-default-500 transition-colors hover:bg-default-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:text-zinc-400 dark:hover:bg-zinc-800"
         >
           <X size={16} />
         </button>

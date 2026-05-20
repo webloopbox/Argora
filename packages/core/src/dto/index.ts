@@ -7,3 +7,4 @@ export * from './invitation.dto';
 export * from './user-search.dto';
 export * from './vote.dto';
 export * from './ai.dto';
+export * from './stats.dto';

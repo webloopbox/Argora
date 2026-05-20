@@ -19,20 +19,24 @@ function ArgumentNodeBase({ data, selected }: ArgumentNodeProps) {
   const sideAccent = isPro
     ? {
         ring: selected ? "ring-pro-300/60" : "ring-pro-200/40",
-        border: selected ? "border-pro-400" : "border-pro-200",
-        bg: "from-pro-50/80 to-white",
-        badgeBg: "bg-pro-100",
-        badgeText: "text-pro-700",
+        border: selected
+          ? "border-pro-400 dark:border-pro-500"
+          : "border-pro-200 dark:border-pro-700/50",
+        bg: "from-pro-50/80 to-white dark:from-pro-900/30 dark:to-zinc-900",
+        badgeBg: "bg-pro-100 dark:bg-pro-900/40",
+        badgeText: "text-pro-700 dark:text-pro-300",
         Icon: ThumbsUp,
         sideLabel: ui.sides.pro,
         handleColor: "!bg-pro-400",
       }
     : {
         ring: selected ? "ring-against-300/60" : "ring-against-200/40",
-        border: selected ? "border-against-400" : "border-against-200",
-        bg: "from-against-50/80 to-white",
-        badgeBg: "bg-against-100",
-        badgeText: "text-against-700",
+        border: selected
+          ? "border-against-400 dark:border-against-500"
+          : "border-against-200 dark:border-against-700/50",
+        bg: "from-against-50/80 to-white dark:from-against-900/30 dark:to-zinc-900",
+        badgeBg: "bg-against-100 dark:bg-against-900/40",
+        badgeText: "text-against-700 dark:text-against-300",
         Icon: ThumbsDown,
         sideLabel: ui.sides.against,
         handleColor: "!bg-against-400",
@@ -65,11 +69,11 @@ function ArgumentNodeBase({ data, selected }: ArgumentNodeProps) {
           </span>
         ) : null}
       </div>
-      <p className="mt-2 line-clamp-5 text-sm leading-snug text-default-900">
+      <p className="mt-2 line-clamp-5 text-sm leading-snug text-default-900 dark:text-zinc-100">
         {argument.content}
       </p>
-      <div className="mt-3 flex items-center justify-between gap-2 text-[11px] text-default-500">
-        <span className="truncate font-medium text-default-700">
+      <div className="mt-3 flex items-center justify-between gap-2 text-[11px] text-default-500 dark:text-zinc-400">
+        <span className="truncate font-medium text-default-700 dark:text-zinc-300">
           {argument.author.displayName}
         </span>
         <VoteControls argument={argument} />

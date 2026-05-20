@@ -89,18 +89,18 @@ export function CreateGroupDialog({
             transition={{ duration: 0.2, ease: "easeOut" }}
             role="dialog"
             aria-label={ui.groups.create.title}
-            className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-3xl border border-default-100 bg-white shadow-2xl shadow-violet-500/10"
+            className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-3xl border border-default-100 bg-white shadow-2xl shadow-violet-500/10 dark:border-zinc-800 dark:bg-zinc-900"
           >
-            <header className="flex items-start justify-between gap-3 border-b border-default-100 px-5 py-4">
+            <header className="flex items-start justify-between gap-3 border-b border-default-100 px-5 py-4 dark:border-zinc-800">
               <div className="flex items-center gap-2">
-                <span className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-violet-700">
+                <span className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-violet-700 dark:text-violet-300">
                   <Users size={14} />
                 </span>
                 <div>
-                  <h2 className="text-base font-semibold tracking-tight">
+                  <h2 className="text-base font-semibold tracking-tight dark:text-zinc-100">
                     {ui.groups.create.title}
                   </h2>
-                  <p className="text-xs text-default-500">
+                  <p className="text-xs text-default-500 dark:text-zinc-400">
                     {ui.groups.create.subtitle}
                   </p>
                 </div>
@@ -109,7 +109,7 @@ export function CreateGroupDialog({
                 type="button"
                 onClick={onClose}
                 aria-label={ui.common.close}
-                className="rounded-full p-1.5 text-default-500 transition-colors hover:bg-default-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+                className="rounded-full p-1.5 text-default-500 transition-colors hover:bg-default-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:text-zinc-400 dark:hover:bg-zinc-800"
               >
                 <X size={16} />
               </button>
@@ -139,7 +139,7 @@ export function CreateGroupDialog({
               {formError ? (
                 <div
                   role="alert"
-                  className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"
+                  className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300"
                 >
                   {formError}
                 </div>

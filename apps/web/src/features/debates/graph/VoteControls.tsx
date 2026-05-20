@@ -70,7 +70,7 @@ export function VoteControls({ argument }: VoteControlsProps) {
       <div
         role="group"
         aria-label={ui.debates.graph.voteWidgetAriaLabel}
-        className="inline-flex items-center gap-0.5 rounded-xl border border-default-200 bg-white p-0.5 shadow-sm"
+        className="inline-flex items-center gap-0.5 rounded-xl border border-default-200 bg-white p-0.5 shadow-sm dark:border-zinc-700 dark:bg-zinc-900"
       >
         <VoteButton
           side="pro"
@@ -148,8 +148,8 @@ function VoteButton({
       : "bg-against-500 text-white shadow-sm";
   const idleClass =
     side === "pro"
-      ? "text-default-500 hover:bg-pro-50 hover:text-pro-600"
-      : "text-default-500 hover:bg-against-50 hover:text-against-600";
+      ? "text-default-500 hover:bg-pro-50 hover:text-pro-600 dark:text-zinc-400 dark:hover:bg-pro-900/30 dark:hover:text-pro-300"
+      : "text-default-500 hover:bg-against-50 hover:text-against-600 dark:text-zinc-400 dark:hover:bg-against-900/30 dark:hover:text-against-300";
   return (
     <button
       type="button"

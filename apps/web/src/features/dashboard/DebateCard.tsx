@@ -49,25 +49,25 @@ export function DebateCard({ debate, canParticipate, onOpen }: DebateCardProps) 
       }}
       whileHover={{ y: -4 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-default-100 bg-white/80 p-5 shadow-sm backdrop-blur transition-shadow hover:shadow-xl hover:shadow-violet-500/5"
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-default-100 bg-white/80 p-5 shadow-sm backdrop-blur transition-shadow hover:shadow-xl hover:shadow-violet-500/5 dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:shadow-violet-500/10"
     >
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-violet-400/70 to-transparent opacity-0 transition-opacity group-hover:opacity-100"
       />
 
-      <div className="flex items-center gap-2 text-xs text-default-500">
-        <span className="grid h-6 w-6 place-items-center rounded-full bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-[10px] font-semibold text-violet-700">
+      <div className="flex items-center gap-2 text-xs text-default-500 dark:text-zinc-400">
+        <span className="grid h-6 w-6 place-items-center rounded-full bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-[10px] font-semibold text-violet-700 dark:text-violet-300">
           {initialsFor(debate.author.displayName)}
         </span>
-        <span className="font-medium text-default-700">
+        <span className="font-medium text-default-700 dark:text-zinc-200">
           {debate.author.displayName}
         </span>
         <span>·</span>
         <span>{relativeLabel(debate.createdAt)}</span>
       </div>
 
-      <h3 className="mt-3 text-base font-semibold leading-snug text-default-900 sm:text-lg">
+      <h3 className="mt-3 text-base font-semibold leading-snug text-default-900 sm:text-lg dark:text-zinc-100">
         {debate.thesis}
       </h3>
 
@@ -85,7 +85,7 @@ export function DebateCard({ debate, canParticipate, onOpen }: DebateCardProps) 
         <div
           role="img"
           aria-label={`${proPct}% ${ui.sides.pro}, ${100 - proPct}% ${ui.sides.against}`}
-          className="relative h-1.5 w-full overflow-hidden rounded-full bg-against-100"
+          className="relative h-1.5 w-full overflow-hidden rounded-full bg-against-100 dark:bg-against-900/50"
         >
           <div
             className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-pro-500 to-pro-400"

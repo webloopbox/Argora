@@ -6,6 +6,7 @@ export async function listArgumentsForDebate(
 ): Promise<ArgumentDto[]> {
   const { data } = await httpClient.get<ArgumentDto[]>(
     `/debates/${debateId}/arguments`,
+    { silent: true },
   );
   return data;
 }

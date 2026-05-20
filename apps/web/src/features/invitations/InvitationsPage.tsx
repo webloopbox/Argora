@@ -9,6 +9,7 @@ import {
   declineInvitation,
   listMyInvitations,
 } from "../../api/invitations.api";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { ui } from "../../texts/ui";
 
 type LoadState =
@@ -23,6 +24,7 @@ const dateFormatter = new Intl.DateTimeFormat("pl-PL", {
 });
 
 export function InvitationsPage() {
+  useDocumentTitle(ui.invitations.pageTitle);
   const navigate = useNavigate();
   const [state, setState] = useState<LoadState>({ kind: "loading" });
   const [respondingId, setRespondingId] = useState<string | null>(null);
@@ -95,10 +97,12 @@ export function InvitationsPage() {
         transition={{ duration: 0.3, ease: "easeOut" }}
         className="mb-8 max-w-3xl"
       >
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl dark:text-zinc-100">
           {ui.invitations.pageTitle}
         </h1>
-        <p className="mt-3 text-default-600">{ui.invitations.pageSubtitle}</p>
+        <p className="mt-3 text-default-600 dark:text-zinc-400">
+          {ui.invitations.pageSubtitle}
+        </p>
       </motion.header>
 
       {state.kind === "loading" ? (
@@ -106,7 +110,7 @@ export function InvitationsPage() {
       ) : state.kind === "error" ? (
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 px-4 py-6 text-center text-sm text-red-700"
+          className="rounded-2xl border border-red-200 bg-red-50 px-4 py-6 text-center text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300"
         >
           {ui.invitations.loadFailed}
         </div>
@@ -154,21 +158,21 @@ function InvitationRow({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -12 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="rounded-3xl border border-default-100 bg-white/80 p-5 shadow-sm backdrop-blur"
+      className="rounded-3xl border border-default-100 bg-white/80 p-5 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/80"
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex min-w-0 items-start gap-3">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-violet-700">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-violet-700 dark:text-violet-300">
             <Mail size={18} />
           </span>
           <div className="min-w-0">
-            <p className="text-xs uppercase tracking-wider text-default-500">
+            <p className="text-xs uppercase tracking-wider text-default-500 dark:text-zinc-400">
               {ui.invitations.fromEyebrow}
             </p>
-            <p className="mt-0.5 truncate text-base font-semibold tracking-tight text-default-900">
+            <p className="mt-0.5 truncate text-base font-semibold tracking-tight text-default-900 dark:text-zinc-100">
               {invitation.group.name}
             </p>
-            <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-default-500">
+            <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-default-500 dark:text-zinc-400">
               <span className="inline-flex items-center gap-1">
                 <UserIcon size={11} />
                 {invitation.inviter.displayName}
@@ -210,7 +214,7 @@ function InvitationRow({
       {hasError ? (
         <div
           role="alert"
-          className="mt-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"
+          className="mt-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300"
         >
           {ui.invitations.respondError}
         </div>
@@ -226,7 +230,7 @@ function InvitationsLoading() {
         <div
           key={idx}
           aria-hidden
-          className="h-24 animate-pulse rounded-3xl border border-default-100 bg-white/60"
+          className="h-24 animate-pulse rounded-3xl border border-default-100 bg-white/60 dark:border-zinc-800 dark:bg-zinc-900/60"
         />
       ))}
       <span className="sr-only">{ui.invitations.loading}</span>
@@ -240,20 +244,20 @@ function InvitationsEmpty() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: 0.05, ease: "easeOut" }}
-      className="flex flex-col items-center rounded-3xl border border-default-100 bg-white/70 px-6 py-16 text-center shadow-sm backdrop-blur"
+      className="flex flex-col items-center rounded-3xl border border-default-100 bg-white/70 px-6 py-16 text-center shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70"
     >
-      <div className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500/10 to-fuchsia-500/10 text-violet-700">
+      <div className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500/10 to-fuchsia-500/10 text-violet-700 dark:text-violet-300">
         <Mail size={26} />
       </div>
-      <h2 className="mt-5 text-lg font-semibold">
+      <h2 className="mt-5 text-lg font-semibold dark:text-zinc-100">
         {ui.invitations.emptyTitle}
       </h2>
-      <p className="mt-2 max-w-md text-sm text-default-600">
+      <p className="mt-2 max-w-md text-sm text-default-600 dark:text-zinc-400">
         {ui.invitations.emptyBody}
       </p>
       <Link
         to="/grupy"
-        className="mt-6 inline-flex items-center gap-2 rounded-xl border border-default-200 bg-white px-4 py-2 text-sm font-medium text-default-800 transition-colors hover:border-violet-300 hover:text-violet-700"
+        className="mt-6 inline-flex items-center gap-2 rounded-xl border border-default-200 bg-white px-4 py-2 text-sm font-medium text-default-800 transition-colors hover:border-violet-300 hover:text-violet-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-violet-500 dark:hover:text-violet-300"
       >
         {ui.invitations.goToGroups}
       </Link>

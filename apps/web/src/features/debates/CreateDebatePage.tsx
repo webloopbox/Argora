@@ -19,6 +19,7 @@ import type { CreateDebateDto, GroupDetailDto } from "@brainstorm/core";
 import { DebateVisibility } from "@brainstorm/core";
 import { createDebate } from "../../api/debates.api";
 import { fetchGroupDetail } from "../../api/groups.api";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { ui } from "../../texts/ui";
 
 const THESIS_MIN = 8;
@@ -31,6 +32,7 @@ interface FieldErrors {
 }
 
 export function CreateDebatePage() {
+  useDocumentTitle(ui.debates.create.title);
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const groupIdParam = params.get("grupa");
@@ -131,7 +133,7 @@ export function CreateDebatePage() {
       <button
         type="button"
         onClick={() => navigate(backTarget)}
-        className="mb-6 inline-flex items-center gap-2 text-sm text-default-500 transition-colors hover:text-default-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded-md"
+        className="mb-6 inline-flex items-center gap-2 text-sm text-default-500 transition-colors hover:text-default-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded-md dark:text-zinc-400 dark:hover:text-zinc-100"
       >
         <ArrowLeft size={14} />
         {group
@@ -143,31 +145,31 @@ export function CreateDebatePage() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: "easeOut" }}
-        className="rounded-3xl border border-default-100 bg-white/80 p-6 shadow-sm backdrop-blur sm:p-8"
+        className="rounded-3xl border border-default-100 bg-white/80 p-6 shadow-sm backdrop-blur sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/80"
       >
         <header className="space-y-2">
-          <span className="inline-flex items-center gap-2 rounded-full border border-default-200 bg-default-50 px-3 py-1 text-xs font-medium text-violet-700">
+          <span className="inline-flex items-center gap-2 rounded-full border border-default-200 bg-default-50 px-3 py-1 text-xs font-medium text-violet-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-violet-300">
             <Sparkles size={12} />
             {ui.dashboard.heroEyebrow}
           </span>
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl dark:text-zinc-100">
             {ui.debates.create.title}
           </h1>
-          <p className="text-sm text-default-500">
+          <p className="text-sm text-default-500 dark:text-zinc-400">
             {ui.debates.create.subtitle}
           </p>
         </header>
 
         {group ? (
-          <div className="mt-6 flex items-start gap-3 rounded-2xl border border-violet-200 bg-violet-50/60 px-4 py-3">
-            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-violet-500/15 text-violet-700">
+          <div className="mt-6 flex items-start gap-3 rounded-2xl border border-violet-200 bg-violet-50/60 px-4 py-3 dark:border-violet-700/40 dark:bg-violet-900/30">
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-violet-500/15 text-violet-700 dark:text-violet-300">
               <Users size={14} />
             </span>
             <div className="text-sm">
-              <p className="font-medium text-default-900">
+              <p className="font-medium text-default-900 dark:text-zinc-100">
                 {ui.debates.create.inGroupEyebrow}
               </p>
-              <p className="text-xs text-default-600">
+              <p className="text-xs text-default-600 dark:text-zinc-400">
                 {ui.debates.create.inGroupHint} <strong>{group.name}</strong>.
               </p>
             </div>
@@ -175,12 +177,12 @@ export function CreateDebatePage() {
         ) : groupLoading ? (
           <div
             aria-hidden
-            className="mt-6 h-12 animate-pulse rounded-2xl bg-default-100"
+            className="mt-6 h-12 animate-pulse rounded-2xl bg-default-100 dark:bg-zinc-800"
           />
         ) : groupError ? (
           <div
             role="alert"
-            className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+            className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-700/40 dark:bg-amber-900/30 dark:text-amber-200"
           >
             {groupError}
           </div>
@@ -209,7 +211,7 @@ export function CreateDebatePage() {
               placeholder={ui.debates.create.thesisPlaceholder}
               autoFocus
             />
-            <p className="mt-2 text-xs text-default-400">
+            <p className="mt-2 text-xs text-default-400 dark:text-zinc-500">
               {ui.debates.create.thesisHint}
             </p>
             {errors.thesis ? <FieldError>{errors.thesis}</FieldError> : null}
@@ -222,22 +224,22 @@ export function CreateDebatePage() {
             aria-label={ui.debates.create.visibilityLabel}
             className="space-y-2"
           >
-            <Label className="text-sm font-medium text-default-800">
+            <Label className="text-sm font-medium text-default-800 dark:text-zinc-200">
               {ui.debates.create.visibilityLabel}
             </Label>
             <div className="grid gap-3 sm:grid-cols-2">
               <Radio
                 value="public"
-                className="group relative flex cursor-pointer items-start gap-3 rounded-2xl border border-default-100 bg-default-50/60 p-4 transition-colors hover:border-violet-300 data-[selected]:border-violet-400 data-[selected]:bg-violet-50/60"
+                className="group relative flex cursor-pointer items-start gap-3 rounded-2xl border border-default-100 bg-default-50/60 p-4 transition-colors hover:border-violet-300 data-[selected]:border-violet-400 data-[selected]:bg-violet-50/60 dark:border-zinc-700 dark:bg-zinc-800/40 dark:hover:border-violet-500 dark:data-[selected]:border-violet-500 dark:data-[selected]:bg-violet-900/30"
               >
                 <RadioControl className="mt-0.5">
                   <RadioIndicator />
                 </RadioControl>
                 <RadioContent className="flex min-w-0 flex-col">
-                  <span className="text-sm font-semibold text-default-900">
+                  <span className="text-sm font-semibold text-default-900 dark:text-zinc-100">
                     {ui.debates.create.visibilityPublic}
                   </span>
-                  <span className="text-xs text-default-500">
+                  <span className="text-xs text-default-500 dark:text-zinc-400">
                     {ui.debates.create.visibilityPublicHint}
                   </span>
                 </RadioContent>
@@ -248,19 +250,19 @@ export function CreateDebatePage() {
                 isDisabled={!privateAvailable}
                 className={
                   privateAvailable
-                    ? "group relative flex cursor-pointer items-start gap-3 rounded-2xl border border-default-100 bg-default-50/60 p-4 transition-colors hover:border-violet-300 data-[selected]:border-violet-400 data-[selected]:bg-violet-50/60"
-                    : "group relative flex cursor-not-allowed items-start gap-3 rounded-2xl border border-default-100 bg-default-50/40 p-4 opacity-60"
+                    ? "group relative flex cursor-pointer items-start gap-3 rounded-2xl border border-default-100 bg-default-50/60 p-4 transition-colors hover:border-violet-300 data-[selected]:border-violet-400 data-[selected]:bg-violet-50/60 dark:border-zinc-700 dark:bg-zinc-800/40 dark:hover:border-violet-500 dark:data-[selected]:border-violet-500 dark:data-[selected]:bg-violet-900/30"
+                    : "group relative flex cursor-not-allowed items-start gap-3 rounded-2xl border border-default-100 bg-default-50/40 p-4 opacity-60 dark:border-zinc-700 dark:bg-zinc-800/40"
                 }
               >
                 <RadioControl className="mt-0.5">
                   <RadioIndicator />
                 </RadioControl>
                 <RadioContent className="flex min-w-0 flex-col">
-                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-default-700">
+                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-default-700 dark:text-zinc-200">
                     <Lock size={12} />
                     {ui.debates.create.visibilityPrivate}
                   </span>
-                  <span className="text-xs text-default-500">
+                  <span className="text-xs text-default-500 dark:text-zinc-400">
                     {privateAvailable
                       ? ui.debates.create.visibilityPrivateHint
                       : ui.debates.create.visibilityPrivateLocked}
@@ -273,7 +275,7 @@ export function CreateDebatePage() {
           {formError ? (
             <div
               role="alert"
-              className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300"
             >
               {formError}
             </div>

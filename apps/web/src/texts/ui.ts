@@ -314,4 +314,22 @@ export const ui = {
     cancel: "Anuluj",
     close: "Zamknij",
   },
+  toast: {
+    networkError: "Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie.",
+    serverError: "Wystąpił błąd serwera. Spróbuj ponownie za chwilę.",
+    forbidden: "Brak dostępu do tego zasobu.",
+    notFound: "Nie znaleziono żądanego zasobu.",
+    validationError: "Niepoprawne dane. Sprawdź formularz i spróbuj ponownie.",
+    rateLimited: "Zbyt wiele żądań. Odczekaj chwilę.",
+    unknownError: "Wystąpił nieoczekiwany błąd.",
+  },
+  theme: {
+    toggle: "Przełącz motyw",
+    light: "Jasny",
+    dark: "Ciemny",
+  },
+  nav_aria: {
+    openMenu: "Otwórz menu",
+    closeMenu: "Zamknij menu",
+  },
 } as const;

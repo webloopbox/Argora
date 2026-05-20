@@ -78,22 +78,22 @@ export function SynthesisPanel({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 320, damping: 34 }}
-            className="fixed right-4 top-20 z-50 flex h-[calc(100dvh-6rem)] w-[420px] flex-col overflow-hidden rounded-3xl border border-default-100 bg-white/95 shadow-2xl shadow-violet-500/10 backdrop-blur"
+            className="fixed right-4 top-20 z-50 flex h-[calc(100dvh-6rem)] w-[420px] flex-col overflow-hidden rounded-3xl border border-default-100 bg-white/95 shadow-2xl shadow-violet-500/10 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/95"
           >
-            <header className="flex items-start justify-between gap-3 border-b border-default-100 px-5 py-4">
+            <header className="flex items-start justify-between gap-3 border-b border-default-100 px-5 py-4 dark:border-zinc-800">
               <div>
-                <div className="flex items-center gap-2 text-xs font-medium text-violet-700">
+                <div className="flex items-center gap-2 text-xs font-medium text-violet-700 dark:text-violet-300">
                   <Sparkles size={12} />
                   <span>{ui.debates.ai.synthesisTitle}</span>
                 </div>
-                <p className="mt-0.5 text-xs text-default-500">
+                <p className="mt-0.5 text-xs text-default-500 dark:text-zinc-400">
                   {selectedArgumentIds.length} argumentów zaznaczonych
                 </p>
               </div>
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-full p-1.5 text-default-500 transition-colors hover:bg-default-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+                className="rounded-full p-1.5 text-default-500 transition-colors hover:bg-default-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:text-zinc-400 dark:hover:bg-zinc-800"
               >
                 <X size={16} />
               </button>
@@ -101,16 +101,16 @@ export function SynthesisPanel({
 
             <div className="flex-1 overflow-y-auto px-5 py-5">
               {selectedArgumentIds.length === 0 ? (
-                <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-default-200 px-4 py-10 text-center">
-                  <Bot size={28} className="text-default-300" />
-                  <p className="text-sm text-default-500">
+                <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-default-200 px-4 py-10 text-center dark:border-zinc-700">
+                  <Bot size={28} className="text-default-300 dark:text-zinc-600" />
+                  <p className="text-sm text-default-500 dark:text-zinc-400">
                     {ui.debates.ai.synthesisEmpty}
                   </p>
                 </div>
               ) : result ? (
                 <div
                   className={
-                    "rounded-2xl border border-violet-100 bg-violet-50/50 px-4 py-4 text-sm leading-relaxed text-default-800 " +
+                    "rounded-2xl border border-violet-100 bg-violet-50/50 px-4 py-4 text-sm leading-relaxed text-default-800 dark:border-violet-900/40 dark:bg-violet-950/30 dark:text-zinc-200 " +
                     "[&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 " +
                     "[&_strong]:font-semibold [&_strong]:text-default-900 " +
                     "[&_em]:italic " +
@@ -133,11 +133,11 @@ export function SynthesisPanel({
             </div>
 
             {selectedArgumentIds.length > 0 && !result ? (
-              <footer className="border-t border-default-100 px-5 py-4">
+              <footer className="border-t border-default-100 px-5 py-4 dark:border-zinc-800">
                 <div className="mb-3 flex flex-col gap-1">
                   <label
                     htmlFor="synthesis-model"
-                    className="text-xs font-medium text-default-700"
+                    className="text-xs font-medium text-default-700 dark:text-zinc-300"
                   >
                     {ui.debates.ai.synthesisModelLabel}
                   </label>
@@ -146,7 +146,7 @@ export function SynthesisPanel({
                     value={modelId}
                     onChange={(e) => setModelId(e.target.value)}
                     disabled={loading || providers.length === 0}
-                    className="w-full rounded-xl border border-default-200 bg-white px-3 py-2 text-sm text-default-900 focus:outline-none focus:ring-2 focus:ring-violet-400 disabled:opacity-50"
+                    className="w-full rounded-xl border border-default-200 bg-white px-3 py-2 text-sm text-default-900 focus:outline-none focus:ring-2 focus:ring-violet-400 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
                   >
                     {providers.length === 0 ? (
                       <option value="">{ui.debates.argumentForm.aiNoProviders}</option>
@@ -173,7 +173,7 @@ export function SynthesisPanel({
                 </Button>
               </footer>
             ) : result ? (
-              <footer className="border-t border-default-100 px-5 py-4">
+              <footer className="border-t border-default-100 px-5 py-4 dark:border-zinc-800">
                 <Button
                   variant="outline"
                   size="md"

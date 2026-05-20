@@ -40,17 +40,17 @@ export function HeroSection({
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="max-w-3xl"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-default-200 bg-white/60 px-3 py-1 text-xs font-medium text-default-600 backdrop-blur">
+          <span className="inline-flex items-center gap-2 rounded-full border border-default-200 bg-white/60 px-3 py-1 text-xs font-medium text-default-600 backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-400">
             <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500" />
             {ui.dashboard.heroEyebrow}
           </span>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
+          <h1 className="mt-4 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl dark:text-zinc-100">
             {titleHead}{" "}
             <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
               {accent}
             </span>
           </h1>
-          <p className="mt-5 max-w-2xl text-base text-default-600 sm:text-lg">
+          <p className="mt-5 max-w-2xl text-base text-default-600 sm:text-lg dark:text-zinc-400">
             {ui.dashboard.heroSubtitle}
           </p>
 

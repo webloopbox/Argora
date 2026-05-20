@@ -2,6 +2,8 @@
 @import "@heroui/react/styles";
 @import "@xyflow/react/dist/style.css";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-pro-50: #f0fdf4;
   --color-pro-100: #dcfce7;
@@ -36,4 +38,44 @@ body {
   margin: 0;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
+}
+
+/* React Flow theming — light by default, dark via .dark ancestor. The
+   library renders raw <button>/<svg> elements outside our Tailwind palette,
+   so we override its CSS vars at the component scope. */
+.rf-controls-themed {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid var(--color-default-200, #e4e4e7) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+.rf-controls-themed button {
+  background: transparent !important;
+  color: #3f3f46 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+.rf-controls-themed button:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+.rf-controls-themed button svg {
+  fill: currentColor !important;
+}
+
+.dark .rf-controls-themed {
+  background: rgba(24, 24, 27, 0.85) !important;
+  border-color: #3f3f46 !important;
+}
+.dark .rf-controls-themed button {
+  color: #d4d4d8 !important;
+  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+}
+.dark .rf-controls-themed button:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.rf-minimap-themed {
+  background: rgba(255, 255, 255, 0.92) !important;
+}
+.dark .rf-minimap-themed {
+  background: rgba(24, 24, 27, 0.85) !important;
 }

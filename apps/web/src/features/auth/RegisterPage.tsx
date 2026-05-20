@@ -10,6 +10,7 @@ import {
 } from "@heroui/react";
 import { AxiosError } from "axios";
 import { useAuth } from "../../app-config/auth-context";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { ui } from "../../texts/ui";
 
 interface FieldErrors {
@@ -19,6 +20,7 @@ interface FieldErrors {
 }
 
 export function RegisterPage() {
+  useDocumentTitle(ui.auth.register.title);
   const { register } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
