@@ -29,7 +29,7 @@ export class OpenAiProvider implements LlmProvider {
 
     const completion = await this.client.chat.completions.create({
       model: MODEL_ID,
-      max_tokens: 512,
+      max_tokens: 2048,
       messages: [
         {
           role: 'user',

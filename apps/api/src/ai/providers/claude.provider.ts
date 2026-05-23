@@ -28,7 +28,7 @@ export class ClaudeProvider implements LlmProvider {
 
     const message = await this.client.messages.create({
       model: MODEL_ID,
-      max_tokens: 512,
+      max_tokens: 2048,
       messages: [
         {
           role: 'user',

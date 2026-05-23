@@ -33,7 +33,7 @@ export class GeminiProvider implements LlmProvider {
         `Wygeneruj jeden zwięzły argument ${sideLabel} tej tezie. ` +
         `Odpowiedź zawiera TYLKO treść argumentu — bez wstępu, numeracji ani cudzysłowów. ` +
         `Maksymalnie 3 zdania. Pisz po polsku.`,
-      config: { maxOutputTokens: 512 },
+      config: { maxOutputTokens: 2048 },
     });
 
     return (response.text ?? '').trim();

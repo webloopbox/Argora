@@ -122,9 +122,10 @@ function DebatePageBody({ debateId }: { debateId: string }) {
 }
 
 function FullBleedShell({ children }: { children: React.ReactNode }) {
-  // TopBar is h-16 (4rem). Use dvh for mobile safe area.
+  // TopBar is exactly h-16 (4rem). We use absolute positioning tied to the 
+  // AppShell (which is relative and min-h-full) to avoid any calc/dvh rounding issues that cause scrollbars.
   return (
-    <div className="relative h-[calc(100dvh-4rem)] w-full overflow-hidden">
+    <div className="absolute inset-x-0 bottom-0 top-16 overflow-hidden">
       {children}
     </div>
   );
