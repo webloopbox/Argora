@@ -5,6 +5,7 @@ import { Button } from "@heroui/react";
 import ReactMarkdown from "react-markdown";
 import type { LlmProviderDto } from "@brainstorm/core";
 import { listProviders, synthesize } from "../../../api/ai.api";
+import { useTypewriter } from "../../../hooks/useTypewriter";
 import { ui } from "../../../texts/ui";
 
 interface SynthesisPanelProps {
@@ -26,8 +27,15 @@ export function SynthesisPanel({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Animate the synthesis text so it feels live-streamed even though the
+  // API returns it in one shot. Adapter wraps the nullable setter.
+  const { animate: animateResult, cancel: cancelTyping } = useTypewriter(
+    (value) => setResult(value),
+  );
+
   useEffect(() => {
     if (!isOpen) return;
+    cancelTyping();
     setResult(null);
     setError(null);
     listProviders()
@@ -44,7 +52,7 @@ export function SynthesisPanel({
     setError(null);
     try {
       const res = await synthesize({ debateId, argumentIds: selectedArgumentIds, modelId });
-      setResult(res.text);
+      animateResult(res.text);
     } catch {
       setError(ui.debates.ai.synthesisError);
     } finally {
@@ -177,10 +185,13 @@ export function SynthesisPanel({
                 <Button
                   variant="outline"
                   size="md"
-                  onPress={() => setResult(null)}
+                  onPress={() => {
+                    cancelTyping();
+                    setResult(null);
+                  }}
                   className="w-full"
                 >
-                  Syntezuj ponownie
+                  {ui.debates.ai.synthesisAgain}
                 </Button>
               </footer>
             ) : null}

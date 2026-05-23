@@ -104,33 +104,43 @@ export class AiService {
     if (argumentIds.length === 0)
       throw new BadRequestException('Brak argumentów do syntezy.');
 
-    const allArgs = await this.args.find({
-      where: activeWhere<Argument>({ debateId }),
-      order: { createdAt: 'ASC' },
-    });
+    // Reuse the enriched-DTO pipeline so the synthesis prompt receives
+    // author display names, vote counts, weight and sentiment — without
+    // duplicating the JOIN/aggregate logic here.
+    const allDtos = await this.argumentsService.listForDebate(debate);
+    const dtoMap = new Map(allDtos.map((d) => [d.id, d]));
 
-    const selected = allArgs.filter((a) => argumentIds.includes(a.id));
+    const requested = new Set(argumentIds);
+    const selected = allDtos.filter((d) => requested.has(d.id));
     if (selected.length === 0)
-      throw new BadRequestException('Żaden z podanych argumentów nie należy do tej debaty.');
-
-    const parentMap = new Map(allArgs.map((a) => [a.id, a.parentArgumentId]));
+      throw new BadRequestException(
+        'Żaden z podanych argumentów nie należy do tej debaty.',
+      );
 
     const getDepth = (id: string): number => {
       let depth = 0;
-      let current: string | null = parentMap.get(id) ?? null;
-      while (current && depth < 20) {
+      let currentId: string | null = dtoMap.get(id)?.parentArgumentId ?? null;
+      while (currentId && depth < 20) {
         depth++;
-        current = parentMap.get(current) ?? null;
+        currentId = dtoMap.get(currentId)?.parentArgumentId ?? null;
       }
       return depth;
     };
 
     const input: SynthesizeInput = {
       thesis: debate.thesis,
-      arguments: selected.map((a) => ({
-        side: a.side as string,
-        content: a.content,
-        depth: getDepth(a.id),
+      arguments: selected.map((d) => ({
+        side: d.side as string,
+        content: d.content,
+        author: d.author.displayName,
+        depth: getDepth(d.id),
+        forCount: d.forCount,
+        againstCount: d.againstCount,
+        weight: d.weight,
+        sentiment: d.sentiment,
+        parentContent: d.parentArgumentId
+          ? (dtoMap.get(d.parentArgumentId)?.content ?? null)
+          : null,
       })),
     };
 

@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import type { LlmProviderDto } from '@brainstorm/core';
 import type { LlmProvider } from './llm-provider.interface';
 import { ClaudeProvider } from './providers/claude.provider';
+import { GeminiProvider } from './providers/gemini.provider';
 import { OpenAiProvider } from './providers/openai.provider';
 
 @Injectable()
@@ -19,6 +20,12 @@ export class LlmRegistry {
     const openaiKey = config.get<string>('OPENAI_API_KEY');
     if (openaiKey) {
       const p = new OpenAiProvider(openaiKey);
+      this.providers.set(p.getModelInfo().id, p);
+    }
+
+    const geminiKey = config.get<string>('GEMINI_API_KEY');
+    if (geminiKey) {
+      const p = new GeminiProvider(geminiKey);
       this.providers.set(p.getModelInfo().id, p);
     }
   }

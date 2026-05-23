@@ -5,6 +5,7 @@ import type {
   LlmProvider,
   SynthesizeInput,
 } from '../llm-provider.interface';
+import { buildSynthesisPrompt } from '../prompts/synthesis.prompt';
 
 const MODEL_ID = 'gpt-4o';
 const EMBEDDING_MODEL = 'text-embedding-3-small';
@@ -45,25 +46,11 @@ export class OpenAiProvider implements LlmProvider {
   }
 
   async synthesize(input: SynthesizeInput): Promise<string> {
-    const argsText = input.arguments
-      .map(
-        (a, i) =>
-          `${i + 1}. [${a.side === 'pro' ? 'ZA' : 'PRZECIW'}]${'  '.repeat(a.depth)} ${a.content}`,
-      )
-      .join('\n');
-
     const completion = await this.client.chat.completions.create({
       model: MODEL_ID,
-      max_tokens: 768,
+      max_tokens: 2048,
       messages: [
-        {
-          role: 'user',
-          content:
-            `Teza debaty: "${input.thesis}"\n\n` +
-            `Wybrane argumenty:\n${argsText}\n\n` +
-            `Napisz syntezę tych argumentów w 3–5 zdaniach po polsku. ` +
-            `Wskaż główne punkty napięcia i wspólny grunt, jeśli istnieje.`,
-        },
+        { role: 'user', content: buildSynthesisPrompt(input) },
       ],
     });
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, Button } from "@heroui/react";
-import { Menu, Moon, Sparkles, Sun } from "lucide-react";
+import { Gavel, Menu, Moon, Sun } from "lucide-react";
 import { motion } from "framer-motion";
 import { navItems } from "./nav-items";
 import { useAuth } from "../app-config/auth-context";
@@ -44,7 +44,7 @@ export function TopBar() {
 
           <NavLink to="/" className="group flex items-center gap-2">
             <div className="relative grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 text-white shadow-md shadow-violet-500/20 transition-transform group-hover:scale-[1.04]">
-              <Sparkles size={18} strokeWidth={2.5} />
+              <Gavel size={18} strokeWidth={2.5} />
             </div>
             <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-lg font-semibold tracking-tight text-transparent">
               {ui.app.name}

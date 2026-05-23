@@ -18,6 +18,7 @@ import type { ArgumentDto, CreateArgumentDto, LlmProviderDto } from "@brainstorm
 import { ArgumentSide } from "@brainstorm/core";
 import { createArgument } from "../../../api/arguments.api";
 import { checkDuplicate, generateArgument, listProviders } from "../../../api/ai.api";
+import { useTypewriter } from "../../../hooks/useTypewriter";
 import { ui } from "../../../texts/ui";
 import { MergeOrNuanceDialog } from "./MergeOrNuanceDialog";
 
@@ -64,6 +65,11 @@ export function AddArgumentForm({
   const [duplicate, setDuplicate] = useState<ArgumentDto | null>(null);
   const [pendingPayload, setPendingPayload] = useState<CreateArgumentDto | null>(null);
 
+  // Typewriter animation for AI-generated content. The textarea stays
+  // disabled (generating=true) while the animation plays so the user
+  // doesn't fight the streaming cursor.
+  const { animate: animateContent } = useTypewriter(setContent);
+
   useEffect(() => {
     if (!aiMode || providers.length > 0) return;
     listProviders()
@@ -93,10 +99,11 @@ export function AddArgumentForm({
         modelId,
         parentContent: parent?.content,
       });
-      setContent(result.content);
+      // Hold `generating` for the typewriter so the textarea stays locked
+      // until the streaming animation completes.
+      animateContent(result.content, () => setGenerating(false));
     } catch {
       setAiError(ui.debates.argumentForm.aiGenerateError);
-    } finally {
       setGenerating(false);
     }
   }

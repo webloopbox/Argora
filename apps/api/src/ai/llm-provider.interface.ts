@@ -6,9 +6,22 @@ export interface GenerateInput {
   parentContent?: string;
 }
 
+export interface SynthesizeArgInput {
+  side: string;
+  content: string;
+  author: string;
+  depth: number;
+  forCount: number;
+  againstCount: number;
+  weight: number;
+  sentiment: string;
+  /** Content of the parent argument (truncated upstream) — `null` for top-level. */
+  parentContent: string | null;
+}
+
 export interface SynthesizeInput {
   thesis: string;
-  arguments: { side: string; content: string; depth: number }[];
+  arguments: SynthesizeArgInput[];
 }
 
 export interface LlmProvider {

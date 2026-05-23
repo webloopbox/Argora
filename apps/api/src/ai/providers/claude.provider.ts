@@ -5,6 +5,7 @@ import type {
   LlmProvider,
   SynthesizeInput,
 } from '../llm-provider.interface';
+import { buildSynthesisPrompt } from '../prompts/synthesis.prompt';
 
 const MODEL_ID = 'claude-sonnet-4-6';
 
@@ -47,26 +48,11 @@ export class ClaudeProvider implements LlmProvider {
   }
 
   async synthesize(input: SynthesizeInput): Promise<string> {
-    const argsText = input.arguments
-      .map(
-        (a, i) =>
-          `${i + 1}. [${a.side === 'pro' ? 'ZA' : 'PRZECIW'}]${'  '.repeat(a.depth)} ${a.content}`,
-      )
-      .join('\n');
-
     const message = await this.client.messages.create({
       model: MODEL_ID,
-      max_tokens: 768,
+      max_tokens: 2048,
       messages: [
-        {
-          role: 'user',
-          content:
-            `Teza debaty: "${input.thesis}"\n\n` +
-            `Poniżej wybrane argumenty z dyskusji:\n${argsText}\n\n` +
-            `Napisz zwięzłą syntezę tych argumentów w 3–5 zdaniach. ` +
-            `Wskaż główne punkty napięcia i, jeśli to możliwe, wspólny grunt. ` +
-            `Pisz w języku polskim.`,
-        },
+        { role: 'user', content: buildSynthesisPrompt(input) },
       ],
     });
 

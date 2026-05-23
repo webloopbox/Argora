@@ -78,7 +78,7 @@ export function DashboardPage() {
 
       {!isAuthenticated && (
         <div className="mx-auto mt-8 w-full max-w-7xl px-4 sm:px-6">
-          <div className="rounded-2xl border border-amber-200/60 bg-amber-50/60 px-4 py-3 text-sm text-amber-900 backdrop-blur">
+          <div className="rounded-2xl border border-amber-200/60 bg-amber-50/60 px-4 py-3 text-sm text-amber-900 backdrop-blur dark:border-amber-700/40 dark:bg-amber-900/20 dark:text-amber-100">
             {ui.dashboard.guestBanner}
           </div>
         </div>
