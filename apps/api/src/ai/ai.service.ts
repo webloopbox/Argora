@@ -46,8 +46,7 @@ export class AiService {
     input: GenerateInput,
   ): Promise<GeneratedArgumentDto> {
     const provider = this.registry.get(modelId);
-    if (!provider)
-      throw new BadRequestException(`Nieznany model: ${modelId}`);
+    if (!provider) throw new BadRequestException(`Nieznany model: ${modelId}`);
     const content = await provider.generate(input);
     return { content, modelId };
   }
@@ -84,7 +83,11 @@ export class AiService {
     }
 
     const duplicateOf = await this.argumentsService.findById(best.id, caller);
-    return { duplicateOf, similarity: best.similarity, threshold: DUPLICATE_THRESHOLD };
+    return {
+      duplicateOf,
+      similarity: best.similarity,
+      threshold: DUPLICATE_THRESHOLD,
+    };
   }
 
   async synthesize(
@@ -93,8 +96,7 @@ export class AiService {
     modelId: string,
   ): Promise<SynthesisResultDto> {
     const provider = this.registry.get(modelId);
-    if (!provider)
-      throw new BadRequestException(`Nieznany model: ${modelId}`);
+    if (!provider) throw new BadRequestException(`Nieznany model: ${modelId}`);
 
     const debate = await this.debates.findOne({
       where: activeWhere<Debate>({ id: debateId }),
