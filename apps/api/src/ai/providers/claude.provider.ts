@@ -41,7 +41,8 @@ export class ClaudeProvider implements LlmProvider {
     });
 
     const block = message.content[0];
-    if (block.type !== 'text') throw new Error('Unexpected Claude response type');
+    if (block.type !== 'text')
+      throw new Error('Unexpected Claude response type');
     return block.text.trim();
   }
 
@@ -49,7 +50,7 @@ export class ClaudeProvider implements LlmProvider {
     const argsText = input.arguments
       .map(
         (a, i) =>
-          `${i + 1}. [${ a.side === 'pro' ? 'ZA' : 'PRZECIW'}]${'  '.repeat(a.depth)} ${a.content}`,
+          `${i + 1}. [${a.side === 'pro' ? 'ZA' : 'PRZECIW'}]${'  '.repeat(a.depth)} ${a.content}`,
       )
       .join('\n');
 
@@ -70,7 +71,8 @@ export class ClaudeProvider implements LlmProvider {
     });
 
     const block = message.content[0];
-    if (block.type !== 'text') throw new Error('Unexpected Claude response type');
+    if (block.type !== 'text')
+      throw new Error('Unexpected Claude response type');
     return block.text.trim();
   }
 }
