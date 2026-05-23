@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { join } from 'path';
 import { AiModule } from './ai/ai.module';
 import { ArgumentsModule } from './arguments/arguments.module';
@@ -20,6 +21,23 @@ import { VotesModule } from './votes/votes.module';
         join(process.cwd(), '..', '..', '.env'),
       ],
     }),
+    ThrottlerModule.forRoot([
+      {
+        name: 'ai-generate',
+        ttl: 60_000,
+        limit: 10,
+      },
+      {
+        name: 'ai-synthesize',
+        ttl: 60_000,
+        limit: 5,
+      },
+      {
+        name: 'ai-duplicate',
+        ttl: 60_000,
+        limit: 20,
+      },
+    ]),
     DatabaseModule,
     UsersModule,
     AuthModule,
