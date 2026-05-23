@@ -37,7 +37,11 @@ function initialsFor(name: string): string {
     .join("");
 }
 
+import { useAuth } from "../../app-config/auth-context";
+
 export function DebateCard({ debate, canParticipate, onOpen }: DebateCardProps) {
+  const { user } = useAuth();
+  const isOwner = user?.id === debate.author.id;
   const total = debate.proCount + debate.againstCount;
   const proPct = total === 0 ? 50 : Math.round((debate.proCount / total) * 100);
 
@@ -57,7 +61,7 @@ export function DebateCard({ debate, canParticipate, onOpen }: DebateCardProps) 
       />
 
       <div className="flex items-center gap-2 text-xs text-default-500 dark:text-zinc-400">
-        <span className="grid h-6 w-6 place-items-center rounded-full bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-[10px] font-semibold text-violet-700 dark:text-violet-300">
+        <span className="grid h-6 w-6 place-items-center rounded-full bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-[10px] font-semibold text-violet-700 dark:from-indigo-400/20 dark:to-fuchsia-400/20 dark:text-violet-300">
           {initialsFor(debate.author.displayName)}
         </span>
         <span className="font-medium text-default-700 dark:text-zinc-200">
@@ -100,7 +104,12 @@ export function DebateCard({ debate, canParticipate, onOpen }: DebateCardProps) 
           variant={canParticipate ? "primary" : "outline"}
           onPress={() => onOpen(debate.id)}
         >
-          {canParticipate ? (
+          {isOwner ? (
+            <>
+              {ui.dashboard.cardManage}
+              <ArrowRight size={14} />
+            </>
+          ) : canParticipate ? (
             <>
               {ui.dashboard.cardOpenParticipate}
               <ArrowRight size={14} />

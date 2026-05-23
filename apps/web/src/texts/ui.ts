@@ -72,6 +72,7 @@ export const ui = {
       mostDivisive: "Najbardziej sporne",
     },
     cardOpenParticipate: "Otwórz i dołącz",
+    cardManage: "Zarządzaj",
     cardViewReadOnly: "Zobacz (tylko odczyt)",
     loading: "Wczytuję dyskusje…",
     loadFailed: "Nie udało się wczytać dyskusji. Spróbuj odświeżyć stronę.",
@@ -137,6 +138,9 @@ export const ui = {
       forbiddenBody:
         "Ta dyskusja jest prywatna. Poproś właściciela grupy o zaproszenie.",
       loadFailed: "Nie udało się wczytać dyskusji.",
+      deleteAriaLabel: "Usuń dyskusję",
+      deleteConfirm: "Na pewno usunąć tę dyskusję? Usunięte zostaną również wszystkie umieszczone w niej argumenty.",
+      deleteFailed: "Nie udało się usunąć dyskusji. Spróbuj ponownie.",
     },
     graph: {
       thesisBadge: "Teza",
@@ -163,6 +167,12 @@ export const ui = {
       voteFailed: "Nie udało się oddać głosu.",
       weightTooltip:
         "Waga argumentu = głosy Za + głosy Przeciw. Każda reakcja zwiększa widoczność - niezależnie od kierunku. Kolor pokazuje dominujący sentyment.",
+      deleteAriaLabel: "Usuń argument",
+      deleteTooltipCan: "Usuń swój argument",
+      deleteTooltipHasChildren:
+        "Nie można usunąć argumentu, który ma już odpowiedzi. Najpierw usuń wszystkie odpowiedzi.",
+      deleteConfirm: "Na pewno usunąć ten argument?",
+      deleteFailed: "Nie udało się usunąć argumentu.",
     },
     argumentForm: {
       panelTitle: "Dodaj argument",

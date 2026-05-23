@@ -48,4 +48,12 @@ export class GeminiProvider implements LlmProvider {
 
     return (response.text ?? '').trim();
   }
+
+  async embed(text: string): Promise<number[]> {
+    const response = await this.client.models.embedContent({
+      model: 'gemini-embedding-001',
+      contents: text,
+    });
+    return response.embeddings?.[0]?.values ?? [];
+  }
 }

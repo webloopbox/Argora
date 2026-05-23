@@ -21,3 +21,7 @@ export async function createArgument(
   );
   return data;
 }
+
+export async function deleteArgument(argumentId: string): Promise<void> {
+  await httpClient.delete(`/arguments/${argumentId}`);
+}

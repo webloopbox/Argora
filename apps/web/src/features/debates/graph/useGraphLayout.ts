@@ -45,12 +45,24 @@ export function useGraphLayout(
     });
     g.setDefaultEdgeLabel(() => ({}));
 
-    const sortedNodes = [...nodes].sort((a, b) =>
-      a.id < b.id ? -1 : a.id > b.id ? 1 : 0,
-    );
-    const sortedEdges = [...edges].sort((a, b) =>
-      a.id < b.id ? -1 : a.id > b.id ? 1 : 0,
-    );
+    // Create a map to quickly look up node timestamps
+    const nodeTimes = new Map<string, number>();
+    for (const node of nodes) {
+      if (node.id === "thesis") {
+        nodeTimes.set(node.id, 0);
+      } else {
+        nodeTimes.set(node.id, new Date((node.data as any).argument.createdAt).getTime());
+      }
+    }
+
+    const sortedNodes = [...nodes].sort((a, b) => {
+      return (nodeTimes.get(a.id) ?? 0) - (nodeTimes.get(b.id) ?? 0);
+    });
+    
+    // Sort edges by the creation time of their target node so Dagre processes them deterministically
+    const sortedEdges = [...edges].sort((a, b) => {
+      return (nodeTimes.get(a.target) ?? 0) - (nodeTimes.get(b.target) ?? 0);
+    });
 
     for (const node of sortedNodes) {
       const isThesis = node.type === "thesis";

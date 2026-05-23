@@ -37,3 +37,7 @@ export async function createDebate(
   const { data } = await httpClient.post<DebateDetailDto>("/debates", payload);
   return data;
 }
+
+export async function deleteDebate(id: string): Promise<void> {
+  await httpClient.delete(`/debates/${id}`);
+}

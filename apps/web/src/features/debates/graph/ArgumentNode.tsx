@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Handle, Position } from "@xyflow/react";
 import type { NodeProps } from "@xyflow/react";
-import { Bot, ThumbsDown, ThumbsUp } from "lucide-react";
+import { Bot, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { ArgumentSide } from "@brainstorm/core";
+import { deleteArgument } from "../../../api/arguments.api";
 import type { ArgumentNodeData } from "./useDebateGraph";
+import { useDebateGraphContext } from "./debate-graph-context";
 import { VoteControls } from "./VoteControls";
 import { ui } from "../../../texts/ui";
 
@@ -15,6 +18,10 @@ interface ArgumentNodeProps extends NodeProps {
 // are tiny wrappers below so React Flow's nodeTypes map stays readable.
 function ArgumentNodeBase({ data, selected }: ArgumentNodeProps) {
   const { argument } = data;
+  const { currentUserId, childCountByArgumentId, onArgumentDeleted } =
+    useDebateGraphContext();
+  const isAuthor = !!currentUserId && currentUserId === argument.author.id;
+  const childCount = childCountByArgumentId.get(argument.id) ?? 0;
   const isPro = argument.side === ArgumentSide.Pro;
   const sideAccent = isPro
     ? {
@@ -62,12 +69,21 @@ function ArgumentNodeBase({ data, selected }: ArgumentNodeProps) {
           <Icon size={11} />
           {sideAccent.sideLabel}
         </span>
-        {argument.isAiGenerated ? (
-          <span className="inline-flex items-center gap-1 rounded-full bg-violet-100/70 px-2 py-0.5 text-[10px] font-medium text-violet-700">
-            <Bot size={10} />
-            {ui.debates.graph.aiBadge}
-          </span>
-        ) : null}
+        <div className="flex items-center gap-1.5">
+          {argument.isAiGenerated ? (
+            <span className="inline-flex items-center gap-1 rounded-full bg-violet-100/70 px-2 py-0.5 text-[10px] font-medium text-violet-700">
+              <Bot size={10} />
+              {ui.debates.graph.aiBadge}
+            </span>
+          ) : null}
+          {isAuthor ? (
+            <DeleteButton
+              argumentId={argument.id}
+              hasChildren={childCount > 0}
+              onDeleted={() => onArgumentDeleted(argument.id)}
+            />
+          ) : null}
+        </div>
       </div>
       <p className="mt-2 line-clamp-5 text-sm leading-snug text-default-900 dark:text-zinc-100">
         {argument.content}
@@ -93,4 +109,78 @@ export function ProNode(props: ArgumentNodeProps) {
 
 export function AgainstNode(props: ArgumentNodeProps) {
   return <ArgumentNodeBase {...props} />;
+}
+
+import { ConfirmDialog } from "../../../components/ConfirmDialog";
+
+// Author-only delete control with a CSS-only tooltip matching the weight
+// badge style (group/hover, dark pill, arrow below). When the argument has
+// children the button is disabled and the tooltip explains why.
+function DeleteButton({
+  argumentId,
+  hasChildren,
+  onDeleted,
+}: {
+  argumentId: string;
+  hasChildren: boolean;
+  onDeleted: () => void;
+}) {
+  const [pending, setPending] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const disabled = hasChildren || pending;
+
+  async function handleConfirm() {
+    setPending(true);
+    try {
+      await deleteArgument(argumentId);
+      onDeleted();
+    } finally {
+      setPending(false);
+      setIsConfirmOpen(false);
+    }
+  }
+
+  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation();
+    if (disabled) return;
+    setIsConfirmOpen(true);
+  }
+
+  return (
+    <>
+      <span className="group/delete relative">
+        <button
+          type="button"
+          onClick={handleClick}
+          disabled={disabled}
+          aria-label={ui.debates.graph.deleteAriaLabel}
+          className={`grid h-6 w-6 place-items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 ${
+            hasChildren
+              ? "cursor-not-allowed text-default-300 dark:text-zinc-600"
+              : "text-default-400 hover:bg-red-50 hover:text-red-600 dark:text-zinc-500 dark:hover:bg-red-950/40 dark:hover:text-red-400"
+          } ${pending ? "opacity-50" : ""}`}
+        >
+          <Trash2 size={12} />
+        </button>
+        <div className="pointer-events-none absolute right-0 top-full z-50 mt-2 w-52 rounded-xl bg-gray-800 px-3 py-2 text-xs text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/delete:opacity-100">
+          <p className="leading-snug text-gray-100">
+            {hasChildren
+              ? ui.debates.graph.deleteTooltipHasChildren
+              : ui.debates.graph.deleteTooltipCan}
+          </p>
+          <div className="absolute right-2 bottom-full border-4 border-transparent border-b-gray-800" />
+        </div>
+      </span>
+
+      <ConfirmDialog
+        isOpen={isConfirmOpen}
+        title="Usuń argument"
+        description={ui.debates.graph.deleteConfirm}
+        confirmLabel="Usuń"
+        isPending={pending}
+        onConfirm={handleConfirm}
+        onCancel={() => setIsConfirmOpen(false)}
+      />
+    </>
+  );
 }

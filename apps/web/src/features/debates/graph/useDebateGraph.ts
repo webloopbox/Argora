@@ -76,6 +76,7 @@ function buildGraph(
 export function useDebateGraph(debate: DebateDetailDto): {
   state: DebateGraphState;
   upsertArgument: (next: ArgumentDto) => void;
+  removeArgument: (argumentId: string) => void;
 } {
   const [state, setState] = useState<DebateGraphState>({
     status: "loading",
@@ -126,5 +127,19 @@ export function useDebateGraph(debate: DebateDetailDto): {
     [debate],
   );
 
-  return { state, upsertArgument };
+  // Drop an argument from the local graph after a successful DELETE. The
+  // backend blocks archiving non-leaf arguments, so we don't need to cascade.
+  const removeArgument = useCallback(
+    (argumentId: string) => {
+      setState((prev) => {
+        if (prev.status !== "ready") return prev;
+        const merged = prev.arguments.filter((a) => a.id !== argumentId);
+        const { nodes, edges } = buildGraph(debate, merged);
+        return { status: "ready", nodes, edges, arguments: merged };
+      });
+    },
+    [debate],
+  );
+
+  return { state, upsertArgument, removeArgument };
 }

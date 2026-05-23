@@ -14,10 +14,13 @@ import {
   ThumbsDown,
   ThumbsUp,
   X,
+  Trash2,
+  Loader2,
 } from "lucide-react";
 import type { ArgumentDto, DebateDetailDto } from "@brainstorm/core";
 import { ArgumentSide, DebateVisibility } from "@brainstorm/core";
-import { fetchDebateDetail } from "../../api/debates.api";
+import { toast } from "sonner";
+import { fetchDebateDetail, deleteDebate } from "../../api/debates.api";
 import { useAuth } from "../../app-config/auth-context";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { ui } from "../../texts/ui";
@@ -130,8 +133,8 @@ function FullBleedShell({ children }: { children: React.ReactNode }) {
 function DebateReady({ debate }: { debate: DebateDetailDto }) {
   useDocumentTitle(debate.thesis);
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-  const { state: graphState, upsertArgument } = useDebateGraph(debate);
+  const { isAuthenticated, user } = useAuth();
+  const { state: graphState, upsertArgument, removeArgument } = useDebateGraph(debate);
   const [selectedArgumentId, setSelectedArgumentId] = useState<string | null>(
     null,
   );
@@ -140,6 +143,21 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
   const [lassoMode, setLassoMode] = useState(false);
   const [lassoIds, setLassoIds] = useState<string[]>([]);
   const [synthesisPanelOpen, setSynthesisPanelOpen] = useState(false);
+  const isOwner = user?.id === debate.author.id;
+
+  const handleDelete = async () => {
+    try {
+      await deleteDebate(debate.id);
+      if (debate.groupId) {
+        navigate(`/grupy/${debate.groupId}`);
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      toast.error(ui.debates.detail.deleteFailed);
+      throw err;
+    }
+  };
 
   const handleLassoComplete = useCallback((ids: string[]) => {
     setLassoIds(ids);
@@ -171,13 +189,39 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
     setSelectedArgumentId(null);
   }
 
+  // Precompute child counts so each node knows whether it can be deleted
+  // (only leaf arguments are deletable per backend invariant).
+  const childCountByArgumentId = useMemo(() => {
+    const map = new Map<string, number>();
+    if (graphState.status !== "ready") return map;
+    for (const arg of graphState.arguments) {
+      if (arg.parentArgumentId) {
+        map.set(
+          arg.parentArgumentId,
+          (map.get(arg.parentArgumentId) ?? 0) + 1,
+        );
+      }
+    }
+    return map;
+  }, [graphState]);
+
   const graphCtx = useMemo(
     () => ({
       isAuthenticated,
+      currentUserId: user?.id ?? null,
+      childCountByArgumentId,
       onArgumentUpdated: upsertArgument,
+      onArgumentDeleted: removeArgument,
       onSignInClick: () => navigate("/logowanie"),
     }),
-    [isAuthenticated, upsertArgument, navigate],
+    [
+      isAuthenticated,
+      user,
+      childCountByArgumentId,
+      upsertArgument,
+      removeArgument,
+      navigate,
+    ],
   );
 
   return (
@@ -202,17 +246,21 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
           onArgumentSelect={handleArgumentSelect}
           lassoMode={lassoMode}
           onLassoComplete={handleLassoComplete}
+          hideMiniMap={drawerOpen}
         />
       )}
 
-      <FloatingThesisCard debate={debate} onBack={() => navigate("/")} />
+      <FloatingThesisCard
+        debate={debate}
+        onBack={() => navigate("/")}
+        isOwner={isOwner}
+        onDelete={handleDelete}
+      />
 
       {isAuthenticated && graphState.status === "ready" ? (
         <FloatingActionToolbar
           onAddPro={() => openDrawerWithSide(ArgumentSide.Pro)}
           onAddAgainst={() => openDrawerWithSide(ArgumentSide.Against)}
-          parent={parentArgument}
-          onClearParent={() => setSelectedArgumentId(null)}
           lassoMode={lassoMode}
           onLassoToggle={() => setLassoMode((v) => !v)}
           lassoIds={lassoIds}
@@ -260,15 +308,39 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
   );
 }
 
+import { ConfirmDialog } from "../../components/ConfirmDialog";
+
 function FloatingThesisCard({
   debate,
   onBack,
+  isOwner,
+  onDelete,
 }: {
   debate: DebateDetailDto;
   onBack: () => void;
+  isOwner?: boolean;
+  onDelete?: () => Promise<void>;
 }) {
   const [expanded, setExpanded] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const isPrivate = debate.visibility === DebateVisibility.Private;
+
+  const handleConfirm = async () => {
+    if (!onDelete) return;
+    setIsDeleting(true);
+    try {
+      await onDelete();
+    } catch {
+      setIsDeleting(false);
+      setIsConfirmOpen(false);
+    }
+  };
+
+  const handleDeleteClick = () => {
+    if (!onDelete) return;
+    setIsConfirmOpen(true);
+  };
 
   return (
     <motion.aside
@@ -307,14 +379,31 @@ function FloatingThesisCard({
             </span>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => setExpanded((v) => !v)}
-          aria-label={expanded ? "Zwiń" : "Rozwiń"}
-          className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-default-500 transition-colors hover:bg-default-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:text-zinc-400 dark:hover:bg-zinc-800"
-        >
-          {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-        </button>
+        <div className="flex items-center gap-1">
+          {isOwner && (
+            <button
+              type="button"
+              onClick={handleDeleteClick}
+              disabled={isDeleting}
+              aria-label={ui.debates.detail.deleteAriaLabel}
+              className="grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded-full text-red-500 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 disabled:opacity-50 dark:text-red-400 dark:hover:bg-red-900/30"
+            >
+              {isDeleting ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : (
+                <Trash2 size={14} />
+              )}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            aria-label={expanded ? "Zwiń" : "Rozwiń"}
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-default-500 transition-colors hover:bg-default-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:text-zinc-400 dark:hover:bg-zinc-800"
+          >
+            {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+        </div>
       </div>
 
       <h1
@@ -337,7 +426,7 @@ function FloatingThesisCard({
           >
             <div className="flex flex-wrap items-center gap-2 px-4 py-3 text-xs">
               <div className="flex items-center gap-1.5">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-[10px] font-semibold text-violet-700">
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-[10px] font-semibold text-violet-700 dark:from-indigo-400/20 dark:to-fuchsia-400/20 dark:text-violet-300">
                   {initialsFor(debate.author.displayName)}
                 </span>
                 <span className="font-medium text-default-700 dark:text-zinc-300">
@@ -362,6 +451,16 @@ function FloatingThesisCard({
         ) : null}
       </AnimatePresence>
       {!expanded ? <div className="pb-3" /> : null}
+
+      <ConfirmDialog
+        isOpen={isConfirmOpen}
+        title="Usuń dyskusję"
+        description={ui.debates.detail.deleteConfirm}
+        confirmLabel="Usuń"
+        isPending={isDeleting}
+        onConfirm={handleConfirm}
+        onCancel={() => setIsConfirmOpen(false)}
+      />
     </motion.aside>
   );
 }
@@ -369,8 +468,6 @@ function FloatingThesisCard({
 function FloatingActionToolbar({
   onAddPro,
   onAddAgainst,
-  parent,
-  onClearParent,
   lassoMode,
   onLassoToggle,
   lassoIds,
@@ -378,8 +475,6 @@ function FloatingActionToolbar({
 }: {
   onAddPro: () => void;
   onAddAgainst: () => void;
-  parent: ArgumentDto | null;
-  onClearParent: () => void;
   lassoMode: boolean;
   onLassoToggle: () => void;
   lassoIds: string[];
@@ -393,19 +488,6 @@ function FloatingActionToolbar({
       className="pointer-events-auto absolute bottom-6 right-4 z-30 flex flex-col items-end gap-2 sm:bottom-auto sm:top-4"
     >
       <AnimatePresence>
-        {parent && !lassoMode ? (
-          <motion.button
-            type="button"
-            onClick={onClearParent}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 6 }}
-            transition={{ duration: 0.2 }}
-            className="max-w-[300px] truncate rounded-full border border-violet-200 bg-violet-50/90 px-3 py-1.5 text-[11px] font-medium text-violet-700 backdrop-blur transition-colors hover:bg-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
-          >
-            {ui.debates.graph.replyingToEyebrow}: {parent.content}
-          </motion.button>
-        ) : null}
         {lassoIds.length > 0 && !lassoMode ? (
           <motion.button
             type="button"

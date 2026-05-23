@@ -77,3 +77,9 @@ body {
 .dark .rf-minimap-themed {
   background: rgba(24, 24, 27, 0.85) !important;
 }
+
+@layer base {
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+}

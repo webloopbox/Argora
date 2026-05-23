@@ -1,24 +1,24 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { OpenAiProvider } from './providers/openai.provider';
+import { GeminiProvider } from './providers/gemini.provider';
 
 @Injectable()
 export class EmbeddingService {
   private readonly logger = new Logger(EmbeddingService.name);
-  private readonly openai: OpenAiProvider | null;
+  private readonly provider: GeminiProvider | null;
 
   constructor(config: ConfigService) {
-    const key = config.get<string>('OPENAI_API_KEY');
-    this.openai = key ? new OpenAiProvider(key) : null;
+    const key = config.get<string>('GEMINI_API_KEY');
+    this.provider = key ? new GeminiProvider(key) : null;
   }
 
   async embed(text: string): Promise<number[] | null> {
-    if (!this.openai) {
-      this.logger.warn('OPENAI_API_KEY not set — skipping embedding');
+    if (!this.provider) {
+      this.logger.warn('GEMINI_API_KEY not set — skipping embedding');
       return null;
     }
     try {
-      return await this.openai.embed(text);
+      return await this.provider.embed(text);
     } catch (err) {
       this.logger.error('Embedding failed', err);
       return null;

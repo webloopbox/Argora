@@ -22,7 +22,7 @@ import { LlmRegistry } from './llm-registry';
 import type { GenerateInput, SynthesizeInput } from './llm-provider.interface';
 
 const DUPLICATE_THRESHOLD = parseFloat(
-  process.env['DUPLICATE_THRESHOLD'] ?? '0.86',
+  process.env['DUPLICATE_THRESHOLD'] ?? '0.75',
 );
 
 @Injectable()

@@ -43,8 +43,10 @@ export function MergeOrNuanceDialog({
 
   const isPro = original.side === ArgumentSide.Pro;
   const SideIcon = isPro ? ThumbsUp : ThumbsDown;
-  const sideColor = isPro ? "text-pro-700" : "text-against-700";
-  const sideBg = isPro ? "bg-pro-50 border-pro-200" : "bg-against-50 border-against-200";
+  const sideColor = isPro ? "text-pro-700 dark:text-pro-400" : "text-against-700 dark:text-against-400";
+  const sideBg = isPro 
+    ? "bg-pro-50 border-pro-200 dark:bg-pro-900/20 dark:border-pro-800/50" 
+    : "bg-against-50 border-against-200 dark:bg-against-900/20 dark:border-against-800/50";
 
   return (
     <AnimatePresence>
@@ -61,7 +63,7 @@ export function MergeOrNuanceDialog({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 8 }}
           transition={{ type: "spring", stiffness: 340, damping: 30 }}
-          className="w-full max-w-lg overflow-hidden rounded-3xl border border-default-100 bg-white shadow-2xl shadow-violet-500/15"
+          className="w-full max-w-lg overflow-hidden rounded-3xl border border-default-100 bg-white dark:bg-zinc-900 shadow-2xl shadow-violet-500/15"
           onClick={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
@@ -108,41 +110,41 @@ export function MergeOrNuanceDialog({
               <span className="text-[11px] font-semibold uppercase tracking-wide text-default-500">
                 {ui.debates.ai.duplicateNewLabel}
               </span>
-              <div className="flex-1 rounded-2xl border border-default-200 bg-default-50 p-3 text-xs leading-snug text-default-800">
+              <div className="flex-1 rounded-2xl border border-default-200 dark:border-default-100 bg-default-50 dark:bg-default-100/50 p-3 text-xs leading-snug text-default-800">
                 {newContent}
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col-reverse gap-2 border-t border-default-100 px-5 py-4 sm:flex-row sm:justify-end">
+          <div className="flex flex-col gap-2 border-t border-default-100 px-5 py-4">
             <Button
-              variant="outline"
+              variant="primary"
               size="md"
-              onPress={onClose}
+              onPress={onNuance}
               isDisabled={merging}
+              className="w-full gap-2"
             >
-              {ui.common.cancel}
+              <Layers size={14} />
+              {ui.debates.ai.duplicateNuance}
             </Button>
             <Button
               variant="outline"
               size="md"
               onPress={() => void handleMerge()}
               isDisabled={merging}
-              className="gap-2 border-violet-200 text-violet-700 hover:bg-violet-50"
+              className="w-full gap-2 border-violet-200 text-violet-700 hover:bg-violet-50 dark:border-violet-500/30 dark:text-violet-400 dark:hover:bg-violet-500/10"
             >
               <GitMerge size={14} />
               {merging ? ui.debates.ai.duplicateMerging : ui.debates.ai.duplicateMerge}
             </Button>
-            <Button
-              variant="primary"
-              size="md"
-              onPress={onNuance}
-              isDisabled={merging}
-              className="gap-2"
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={merging}
+              className="mt-1 text-xs text-default-400 hover:text-default-600 transition-colors disabled:opacity-40"
             >
-              <Layers size={14} />
-              {ui.debates.ai.duplicateNuance}
-            </Button>
+              {ui.common.cancel}
+            </button>
           </div>
         </motion.div>
       </motion.div>

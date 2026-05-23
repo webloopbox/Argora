@@ -21,6 +21,7 @@ interface ArgumentGraphProps {
   selectedArgumentId?: string | null;
   lassoMode?: boolean;
   onLassoComplete?: (argumentIds: string[]) => void;
+  hideMiniMap?: boolean;
 }
 
 // Node types declared module-level — React Flow throws if recreated each render.
@@ -30,6 +31,8 @@ const nodeTypes: NodeTypes = {
   against: AgainstNode,
 };
 
+import { Loader2 } from "lucide-react";
+
 export function ArgumentGraph({
   nodes,
   edges,
@@ -37,12 +40,15 @@ export function ArgumentGraph({
   selectedArgumentId,
   lassoMode = false,
   onLassoComplete,
+  hideMiniMap = false,
 }: ArgumentGraphProps) {
   const layout = useGraphLayout(nodes, edges);
   const containerRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
   const maskColor =
     theme === "dark" ? "rgba(0,0,0,0.55)" : "rgba(180,180,190,0.5)";
+
+  const [isReady, setIsReady] = useState(false);
 
   // The lasso hook needs `useReactFlow` / `useViewport`, which require being
   // inside <ReactFlow>. We render a `<LassoBridge>` child to call the hook,
@@ -99,21 +105,36 @@ export function ArgumentGraph({
       onPointerMove={lassoMode ? handlers?.onPointerMove : undefined}
       onPointerUp={lassoMode ? handlers?.onPointerUp : undefined}
     >
-      <ReactFlow
-        nodes={decoratedNodes}
-        edges={layout.edges}
-        nodeTypes={nodeTypes}
-        nodesDraggable={false}
-        nodesConnectable={false}
-        edgesFocusable={false}
-        panOnDrag={!lassoMode}
-        zoomOnScroll={!lassoMode}
-        fitView
-        fitViewOptions={{ padding: 0.25, includeHiddenNodes: false }}
-        proOptions={{ hideAttribution: true }}
-        onNodeClick={handleNodeClick}
-        onPaneClick={handlePaneClick}
+      {!isReady && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center">
+          <Loader2 className="animate-spin text-violet-500 opacity-50" size={32} />
+        </div>
+      )}
+      <div
+        className={`h-full w-full transition-opacity duration-300 ease-out ${
+          isReady ? "opacity-100" : "opacity-0"
+        }`}
       >
+        <ReactFlow
+          nodes={decoratedNodes}
+          edges={layout.edges}
+          nodeTypes={nodeTypes}
+          nodesDraggable={false}
+          nodesConnectable={false}
+          edgesFocusable={false}
+          panOnDrag={!lassoMode}
+          zoomOnScroll={!lassoMode}
+          fitView
+          fitViewOptions={{ padding: 0.25, includeHiddenNodes: false }}
+          proOptions={{ hideAttribution: true }}
+          onInit={() => {
+            // React Flow's fitView happens shortly after init when nodes are measured.
+            // Giving it a tiny timeout avoids the initial snap flicker.
+            setTimeout(() => setIsReady(true), 50);
+          }}
+          onNodeClick={handleNodeClick}
+          onPaneClick={handlePaneClick}
+        >
         <LassoBridge
           containerRef={containerRef}
           onHandlersReady={setHandlers}
@@ -133,25 +154,28 @@ export function ArgumentGraph({
           showInteractive={false}
           className="rf-controls-themed"
         />
-        <MiniMap
-          pannable
-          zoomable
-          nodeBorderRadius={4}
-          nodeStrokeWidth={1.5}
-          maskColor={maskColor}
-          className="rf-minimap-themed !hidden !rounded-xl md:!block"
-          nodeColor={(node) => {
-            if (node.type === "pro") return "#4ade80";
-            if (node.type === "against") return "#f87171";
-            return "#a78bfa";
-          }}
-          nodeStrokeColor={(node) => {
-            if (node.type === "pro") return "#16a34a";
-            if (node.type === "against") return "#dc2626";
-            return "#7c3aed";
-          }}
-        />
+        {!hideMiniMap ? (
+          <MiniMap
+            pannable
+            zoomable
+            nodeBorderRadius={4}
+            nodeStrokeWidth={1.5}
+            maskColor={maskColor}
+            className="rf-minimap-themed !hidden !rounded-xl md:!block"
+            nodeColor={(node) => {
+              if (node.type === "pro") return "#4ade80";
+              if (node.type === "against") return "#f87171";
+              return "#a78bfa";
+            }}
+            nodeStrokeColor={(node) => {
+              if (node.type === "pro") return "#16a34a";
+              if (node.type === "against") return "#dc2626";
+              return "#7c3aed";
+            }}
+          />
+        ) : null}
       </ReactFlow>
+      </div>
 
       {lassoMode ? (
         <LassoOverlay lasso={{ drawing: lassoDrawing, polygon: lassoPolygon }} />

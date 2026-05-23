@@ -8,7 +8,12 @@ import type { ArgumentDto } from "@brainstorm/core";
 // debate keeps the wiring obvious.
 export interface DebateGraphContextValue {
   isAuthenticated: boolean;
+  /** ID of the logged-in user — used by node UI to gate author-only actions. */
+  currentUserId: string | null;
+  /** Map: argumentId → number of active (non-archived) direct children. */
+  childCountByArgumentId: Map<string, number>;
   onArgumentUpdated: (argument: ArgumentDto) => void;
+  onArgumentDeleted: (argumentId: string) => void;
   onSignInClick: () => void;
 }
 

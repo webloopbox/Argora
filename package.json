@@ -6,7 +6,8 @@
     "dev:api": "pnpm --filter \"./apps/api\" dev",
     "build:core": "pnpm --filter \"./packages/core\" build",
     "build": "pnpm -r build",
-    "test:e2e": "pnpm --filter \"./apps/e2e\" test"
+    "test:e2e": "pnpm --filter \"./apps/e2e\" test",
+    "seed:demo": "node scripts/seed-demo-duplicate.mjs"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

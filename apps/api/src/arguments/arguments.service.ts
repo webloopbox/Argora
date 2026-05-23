@@ -174,7 +174,17 @@ export class ArgumentsService {
     if (!arg) throw new NotFoundException('Argument nie istnieje.');
     if (arg.authorId !== caller.id) {
       throw new BadRequestException(
-        'Tylko autor argumentu może go zarchiwizować.',
+        'Tylko autor argumentu może go usunąć.',
+      );
+    }
+    // Disallow archiving non-leaf arguments — children would lose their
+    // parent context and the rebuttal thread would be orphaned.
+    const childCount = await this.args.count({
+      where: activeWhere<Argument>({ parentArgumentId: argumentId }),
+    });
+    if (childCount > 0) {
+      throw new BadRequestException(
+        'Nie można usunąć argumentu, który ma już odpowiedzi.',
       );
     }
     arg.archivedOn = new Date();
