@@ -60,9 +60,7 @@ export class InvitationsService {
       }),
     });
     if (existingMembership) {
-      throw new ConflictException(
-        'Ten użytkownik jest już członkiem grupy.',
-      );
+      throw new ConflictException('Ten użytkownik jest już członkiem grupy.');
     }
 
     const existingPending = await this.invitations.findOne({
@@ -106,10 +104,7 @@ export class InvitationsService {
     return this.hydrate(invitations);
   }
 
-  async listForGroup(
-    groupId: string,
-    caller: User,
-  ): Promise<InvitationDto[]> {
+  async listForGroup(groupId: string, caller: User): Promise<InvitationDto[]> {
     await this.groupsService.ensureOwner(groupId, caller.id);
     const invitations = await this.invitations.find({
       where: activeWhere<GroupInvitation>({ groupId }),
@@ -174,7 +169,7 @@ export class InvitationsService {
     const refreshed = await this.invitations.findOne({
       where: { id: invitation.id },
     });
-    return (await this.hydrate(refreshed ? [refreshed] : []))[0]!;
+    return (await this.hydrate(refreshed ? [refreshed] : []))[0];
   }
 
   private async hydrate(
@@ -201,10 +196,10 @@ export class InvitationsService {
       return this.toDto(invitation, {
         group: group ?? {
           id: invitation.groupId,
-          name: '—',
+          name: '-',
         },
-        inviter: inviter ?? { id: invitation.inviterId, displayName: '—' },
-        invitee: invitee ?? { id: invitation.inviteeId, displayName: '—' },
+        inviter: inviter ?? { id: invitation.inviterId, displayName: '-' },
+        invitee: invitee ?? { id: invitation.inviteeId, displayName: '-' },
       });
     });
   }

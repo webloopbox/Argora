@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertTriangle, X } from "lucide-react";
+import { AlertTriangle, Loader2, X } from "lucide-react";
 import { Button } from "@heroui/react";
 import { ui } from "../texts/ui";
 
@@ -73,17 +73,19 @@ export function ConfirmDialog({
 
             <div className="flex items-center justify-end gap-3 border-t border-default-100 bg-default-50/50 px-5 py-4 dark:border-zinc-800 dark:bg-zinc-900/50">
               <Button
-                variant="flat"
+                variant="outline"
                 onPress={onCancel}
                 isDisabled={isPending}
               >
                 {cancelLabel}
               </Button>
               <Button
-                color={isDestructive ? "danger" : "primary"}
+                variant={isDestructive ? "danger" : "primary"}
                 onPress={onConfirm}
-                isLoading={isPending}
+                isDisabled={isPending}
+                className="inline-flex items-center gap-1.5"
               >
+                {isPending && <Loader2 size={14} className="animate-spin" />}
                 {confirmLabel}
               </Button>
             </div>

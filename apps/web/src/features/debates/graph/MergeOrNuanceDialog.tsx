@@ -33,7 +33,7 @@ export function MergeOrNuanceDialog({
       onArgumentUpdated(updated);
       onMerged();
     } catch {
-      // Vote may already exist (idempotent re-merge) — still close the
+      // Vote may already exist (idempotent re-merge) - still close the
       // dialog so the user isn't stuck.
       onMerged();
     } finally {
@@ -43,9 +43,11 @@ export function MergeOrNuanceDialog({
 
   const isPro = original.side === ArgumentSide.Pro;
   const SideIcon = isPro ? ThumbsUp : ThumbsDown;
-  const sideColor = isPro ? "text-pro-700 dark:text-pro-400" : "text-against-700 dark:text-against-400";
-  const sideBg = isPro 
-    ? "bg-pro-50 border-pro-200 dark:bg-pro-900/20 dark:border-pro-800/50" 
+  const sideColor = isPro
+    ? "text-pro-700 dark:text-pro-400"
+    : "text-against-700 dark:text-against-400";
+  const sideBg = isPro
+    ? "bg-pro-50 border-pro-200 dark:bg-pro-900/20 dark:border-pro-800/50"
     : "bg-against-50 border-against-200 dark:bg-against-900/20 dark:border-against-800/50";
 
   return (
@@ -135,7 +137,9 @@ export function MergeOrNuanceDialog({
               className="w-full gap-2 border-violet-200 text-violet-700 hover:bg-violet-50 dark:border-violet-500/30 dark:text-violet-400 dark:hover:bg-violet-500/10"
             >
               <GitMerge size={14} />
-              {merging ? ui.debates.ai.duplicateMerging : ui.debates.ai.duplicateMerge}
+              {merging
+                ? ui.debates.ai.duplicateMerging
+                : ui.debates.ai.duplicateMerge}
             </Button>
             <button
               type="button"

@@ -22,7 +22,7 @@ export async function listGroupDebates(
   return data;
 }
 
-// Detail page handles 404/403/error states with dedicated UI — toast would
+// Detail page handles 404/403/error states with dedicated UI - toast would
 // be noise on top.
 export async function fetchDebateDetail(id: string): Promise<DebateDetailDto> {
   const { data } = await httpClient.get<DebateDetailDto>(`/debates/${id}`, {

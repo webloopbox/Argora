@@ -6,12 +6,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import type {
+  CheckDuplicateDto,
   DuplicateCheckResultDto,
   GeneratedArgumentDto,
   LlmProviderDto,
   SynthesisResultDto,
 } from '@brainstorm/core';
-import { ArgumentSide } from '@brainstorm/core';
 import { Argument } from '../arguments/argument.entity';
 import { ArgumentsService } from '../arguments/arguments.service';
 import { Debate } from '../debates/debate.entity';
@@ -52,22 +52,21 @@ export class AiService {
   }
 
   async checkDuplicate(
-    debateId: string,
-    side: ArgumentSide,
-    content: string,
+    dto: CheckDuplicateDto,
     caller?: User,
   ): Promise<DuplicateCheckResultDto> {
-    const newEmbedding = await this.embedding.embed(content);
+    const newEmbedding = await this.embedding.embed(dto.content);
     if (!newEmbedding) {
       return { similarity: 0, threshold: DUPLICATE_THRESHOLD };
     }
 
     const candidates = await this.args.find({
-      where: activeWhere<Argument>({ debateId, side }),
+      where: activeWhere<Argument>({ debateId: dto.debateId, side: dto.side }),
     });
 
     let best: { id: string; similarity: number } | null = null;
     for (const arg of candidates) {
+      if (dto.parentArgumentId && arg.id === dto.parentArgumentId) continue;
       if (!arg.embedding) continue;
       const sim = this.embedding.cosineSimilarity(newEmbedding, arg.embedding);
       if (!best || sim > best.similarity) {
@@ -107,7 +106,7 @@ export class AiService {
       throw new BadRequestException('Brak argumentów do syntezy.');
 
     // Reuse the enriched-DTO pipeline so the synthesis prompt receives
-    // author display names, vote counts, weight and sentiment — without
+    // author display names, vote counts, weight and sentiment - without
     // duplicating the JOIN/aggregate logic here.
     const allDtos = await this.argumentsService.listForDebate(debate);
     const dtoMap = new Map(allDtos.map((d) => [d.id, d]));

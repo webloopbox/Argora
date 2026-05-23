@@ -46,7 +46,7 @@ export class UsersService {
     return bcrypt.compare(password, passwordHash);
   }
 
-  // Used by the invite picker — case-insensitive prefix match against
+  // Used by the invite picker - case-insensitive prefix match against
   // displayName and email, excludes the caller, caps at 10. The trimmed
   // query must be at least 2 chars to keep the result set focused.
   async search(
@@ -61,10 +61,9 @@ export class UsersService {
       .createQueryBuilder('u')
       .where('u.archived_on IS NULL')
       .andWhere('u.id <> :selfId', { selfId: excludeUserId })
-      .andWhere(
-        '(u.display_name ILIKE :pattern OR u.email ILIKE :pattern)',
-        { pattern },
-      )
+      .andWhere('(u.display_name ILIKE :pattern OR u.email ILIKE :pattern)', {
+        pattern,
+      })
       .orderBy('u.display_name', 'ASC')
       .limit(10)
       .getMany();

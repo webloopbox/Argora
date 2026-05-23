@@ -13,7 +13,7 @@ interface UserSearchPickerProps {
 }
 
 // Debounced autocomplete over /users/search. The picker mirrors a single
-// chosen user — clearing it returns to the input field so the parent can
+// chosen user - clearing it returns to the input field so the parent can
 // switch invitees without re-mounting.
 export function UserSearchPicker({
   selected,

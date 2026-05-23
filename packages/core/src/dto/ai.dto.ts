@@ -49,6 +49,10 @@ export class CheckDuplicateDto {
   @IsString()
   @MinLength(4)
   content!: string;
+
+  @IsOptional()
+  @IsUUID()
+  parentArgumentId?: string | null;
 }
 
 export interface DuplicateCheckResultDto {

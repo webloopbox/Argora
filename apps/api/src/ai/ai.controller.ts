@@ -1,10 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { VisibilityGuard } from '../common/guards/visibility.guard';
@@ -27,10 +21,7 @@ export class AiController {
 
   @Post('arguments/generate')
   @UseGuards(JwtAuthGuard)
-  generate(
-    @Body() dto: GenerateArgumentDto,
-    @CurrentUser() _caller: User,
-  ) {
+  generate(@Body() dto: GenerateArgumentDto) {
     return this.ai.generate(dto.modelId, {
       thesis: dto.thesis,
       side: dto.side as string,
@@ -40,11 +31,8 @@ export class AiController {
 
   @Post('arguments/check-duplicate')
   @UseGuards(JwtAuthGuard, VisibilityGuard)
-  checkDuplicate(
-    @Body() dto: CheckDuplicateDto,
-    @CurrentUser() caller: User,
-  ) {
-    return this.ai.checkDuplicate(dto.debateId, dto.side, dto.content, caller);
+  checkDuplicate(@Body() dto: CheckDuplicateDto, @CurrentUser() caller: User) {
+    return this.ai.checkDuplicate(dto, caller);
   }
 
   @Post('synthesize')

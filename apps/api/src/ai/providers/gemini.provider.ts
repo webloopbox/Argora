@@ -29,9 +29,10 @@ export class GeminiProvider implements LlmProvider {
     const response = await this.client.models.generateContent({
       model: MODEL_ID,
       contents:
-        `Teza debaty: "${input.thesis}"${parentCtx}\n` +
-        `Wygeneruj jeden zwięzły argument ${sideLabel} tej tezie. ` +
-        `Odpowiedź zawiera TYLKO treść argumentu — bez wstępu, numeracji ani cudzysłowów. ` +
+        `Teza debaty: "${input.thesis}"\n` +
+        (parentCtx ? `${parentCtx}` : '') +
+        `Wygeneruj jeden zwięzły argument ${sideLabel} ${input.parentContent ? 'powyższemu argumentowi' : 'tej tezie'}. ` +
+        `Odpowiedź zawiera TYLKO treść argumentu - bez wstępu, numeracji ani cudzysłowów. ` +
         `Maksymalnie 3 zdania. Pisz po polsku.`,
       config: { maxOutputTokens: 2048 },
     });

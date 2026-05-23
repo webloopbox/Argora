@@ -24,7 +24,7 @@ interface ArgumentGraphProps {
   hideMiniMap?: boolean;
 }
 
-// Node types declared module-level — React Flow throws if recreated each render.
+// Node types declared module-level - React Flow throws if recreated each render.
 const nodeTypes: NodeTypes = {
   thesis: ThesisNode,
   pro: ProNode,
@@ -59,9 +59,9 @@ export function ArgumentGraph({
     onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
     onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => void;
   } | null>(null);
-  const [lassoPolygon, setLassoPolygon] = useState<
-    { x: number; y: number }[]
-  >([]);
+  const [lassoPolygon, setLassoPolygon] = useState<{ x: number; y: number }[]>(
+    [],
+  );
   const [lassoDrawing, setLassoDrawing] = useState(false);
 
   const decoratedNodes = useMemo(
@@ -107,7 +107,10 @@ export function ArgumentGraph({
     >
       {!isReady && (
         <div className="absolute inset-0 z-50 flex items-center justify-center">
-          <Loader2 className="animate-spin text-violet-500 opacity-50" size={32} />
+          <Loader2
+            className="animate-spin text-violet-500 opacity-50"
+            size={32}
+          />
         </div>
       )}
       <div
@@ -135,50 +138,49 @@ export function ArgumentGraph({
           onNodeClick={handleNodeClick}
           onPaneClick={handlePaneClick}
         >
-        <LassoBridge
-          containerRef={containerRef}
-          onHandlersReady={setHandlers}
-          onPolygonChange={setLassoPolygon}
-          onDrawingChange={setLassoDrawing}
-          onComplete={handleLassoComplete}
-          lassoMode={lassoMode}
-        />
-
-        <Background
-          variant={BackgroundVariant.Dots}
-          gap={20}
-          size={1}
-          color="rgba(99, 102, 241, 0.18)"
-        />
-        <Controls
-          showInteractive={false}
-          className="rf-controls-themed"
-        />
-        {!hideMiniMap ? (
-          <MiniMap
-            pannable
-            zoomable
-            nodeBorderRadius={4}
-            nodeStrokeWidth={1.5}
-            maskColor={maskColor}
-            className="rf-minimap-themed !hidden !rounded-xl md:!block"
-            nodeColor={(node) => {
-              if (node.type === "pro") return "#4ade80";
-              if (node.type === "against") return "#f87171";
-              return "#a78bfa";
-            }}
-            nodeStrokeColor={(node) => {
-              if (node.type === "pro") return "#16a34a";
-              if (node.type === "against") return "#dc2626";
-              return "#7c3aed";
-            }}
+          <LassoBridge
+            containerRef={containerRef}
+            onHandlersReady={setHandlers}
+            onPolygonChange={setLassoPolygon}
+            onDrawingChange={setLassoDrawing}
+            onComplete={handleLassoComplete}
+            lassoMode={lassoMode}
           />
-        ) : null}
-      </ReactFlow>
+
+          <Background
+            variant={BackgroundVariant.Dots}
+            gap={20}
+            size={1}
+            color="rgba(99, 102, 241, 0.18)"
+          />
+          <Controls showInteractive={false} className="rf-controls-themed" />
+          {!hideMiniMap ? (
+            <MiniMap
+              pannable
+              zoomable
+              nodeBorderRadius={4}
+              nodeStrokeWidth={1.5}
+              maskColor={maskColor}
+              className="rf-minimap-themed !hidden !rounded-xl md:!block"
+              nodeColor={(node) => {
+                if (node.type === "pro") return "#4ade80";
+                if (node.type === "against") return "#f87171";
+                return "#a78bfa";
+              }}
+              nodeStrokeColor={(node) => {
+                if (node.type === "pro") return "#16a34a";
+                if (node.type === "against") return "#dc2626";
+                return "#7c3aed";
+              }}
+            />
+          ) : null}
+        </ReactFlow>
       </div>
 
       {lassoMode ? (
-        <LassoOverlay lasso={{ drawing: lassoDrawing, polygon: lassoPolygon }} />
+        <LassoOverlay
+          lasso={{ drawing: lassoDrawing, polygon: lassoPolygon }}
+        />
       ) : null}
     </div>
   );
@@ -238,7 +240,7 @@ function useStableHandlers(args: {
   }) => void;
 }) {
   const { onPointerDown, onPointerMove, onPointerUp, onHandlersReady } = args;
-  // Run once per mount — handlers are stable via the hook's useCallback.
+  // Run once per mount - handlers are stable via the hook's useCallback.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useMemoOnce(() => {
     onHandlersReady({ onPointerDown, onPointerMove, onPointerUp });

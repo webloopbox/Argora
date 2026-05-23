@@ -187,7 +187,7 @@ export class DebatesService {
         groupId: debate.groupId,
         author: author
           ? { id: author.id, displayName: author.displayName }
-          : { id: debate.authorId, displayName: '—' },
+          : { id: debate.authorId, displayName: '-' },
         argumentCount: c.pro + c.against,
         proCount: c.pro,
         againstCount: c.against,

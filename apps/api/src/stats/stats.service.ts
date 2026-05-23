@@ -24,12 +24,13 @@ export class StatsService {
     const now = Date.now();
     if (this.cached && this.cached.expiresAt > now) return this.cached.value;
 
-    const [activeDebates, participants, argCount, voteCount] = await Promise.all([
-      this.debates.count({ where: { archivedOn: IsNull() } }),
-      this.users.count({ where: { archivedOn: IsNull() } }),
-      this.args.count({ where: { archivedOn: IsNull() } }),
-      this.votes.count({ where: { archivedOn: IsNull() } }),
-    ]);
+    const [activeDebates, participants, argCount, voteCount] =
+      await Promise.all([
+        this.debates.count({ where: { archivedOn: IsNull() } }),
+        this.users.count({ where: { archivedOn: IsNull() } }),
+        this.args.count({ where: { archivedOn: IsNull() } }),
+        this.votes.count({ where: { archivedOn: IsNull() } }),
+      ]);
 
     const value: StatsDto = {
       activeDebates,

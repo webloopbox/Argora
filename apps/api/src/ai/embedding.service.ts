@@ -14,7 +14,7 @@ export class EmbeddingService {
 
   async embed(text: string): Promise<number[] | null> {
     if (!this.provider) {
-      this.logger.warn('GEMINI_API_KEY not set — skipping embedding');
+      this.logger.warn('GEMINI_API_KEY not set - skipping embedding');
       return null;
     }
     try {
@@ -30,9 +30,9 @@ export class EmbeddingService {
     let normA = 0;
     let normB = 0;
     for (let i = 0; i < a.length; i++) {
-      dot += a[i]! * b[i]!;
-      normA += a[i]! * a[i]!;
-      normB += b[i]! * b[i]!;
+      dot += a[i] * b[i];
+      normA += a[i] * a[i];
+      normB += b[i] * b[i];
     }
     if (normA === 0 || normB === 0) return 0;
     return dot / (Math.sqrt(normA) * Math.sqrt(normB));

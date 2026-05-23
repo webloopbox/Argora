@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 // One pending invite per (group, invitee) is enforced by a partial unique
-// index created in db/init.sql — TypeORM can't express partial unique
+// index created in db/init.sql - TypeORM can't express partial unique
 // constraints declaratively, so the application-level check in
 // InvitationsService is the primary guard and the DB index is the safety net.
 @Entity('group_invitations')

@@ -129,7 +129,7 @@ export const ui = {
       graphLoadFailed: "Nie udało się wczytać argumentów.",
       graphEmptyTitle: "Drzewo argumentów jest puste",
       graphEmptyBody:
-        "Rozpocznij debatę — dodaj pierwszy argument Za lub Przeciw tezie.",
+        "Rozpocznij debatę - dodaj pierwszy argument Za lub Przeciw tezie.",
       loading: "Wczytuję dyskusję…",
       notFoundTitle: "Nie znaleziono dyskusji",
       notFoundBody:
@@ -139,7 +139,8 @@ export const ui = {
         "Ta dyskusja jest prywatna. Poproś właściciela grupy o zaproszenie.",
       loadFailed: "Nie udało się wczytać dyskusji.",
       deleteAriaLabel: "Usuń dyskusję",
-      deleteConfirm: "Na pewno usunąć tę dyskusję? Usunięte zostaną również wszystkie umieszczone w niej argumenty.",
+      deleteConfirm:
+        "Na pewno usunąć tę dyskusję? Usunięte zostaną również wszystkie umieszczone w niej argumenty.",
       deleteFailed: "Nie udało się usunąć dyskusji. Spróbuj ponownie.",
     },
     graph: {
@@ -210,8 +211,10 @@ export const ui = {
       synthesisModelLabel: "Model",
       synthesisStart: "Streść zaznaczony kontekst",
       synthesisSending: "Streszczam…",
-      synthesisEmpty: "Zaznacz argumenty na grafie (lasso), a AI streści wybrany fragment dyskusji.",
-      synthesisError: "Nie udało się przygotować streszczenia. Spróbuj ponownie.",
+      synthesisEmpty:
+        "Zaznacz argumenty na grafie (lasso), a AI streści wybrany fragment dyskusji.",
+      synthesisError:
+        "Nie udało się przygotować streszczenia. Spróbuj ponownie.",
       synthesisClose: "Zamknij",
       synthesisAgain: "Streść ponownie",
       duplicateTitle: "Podobny argument już istnieje",
@@ -240,7 +243,7 @@ export const ui = {
       "Nie udało się wczytać grup. Odśwież stronę albo spróbuj ponownie za chwilę.",
     emptyTitle: "Nie należysz jeszcze do żadnej grupy",
     emptyBody:
-      "Utwórz własną grupę albo poczekaj na zaproszenie — pojawi się w zakładce Zaproszenia.",
+      "Utwórz własną grupę albo poczekaj na zaproszenie - pojawi się w zakładce Zaproszenia.",
     create: {
       title: "Nowa grupa",
       subtitle:
@@ -326,7 +329,8 @@ export const ui = {
     close: "Zamknij",
   },
   toast: {
-    networkError: "Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie.",
+    networkError:
+      "Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie.",
     serverError: "Wystąpił błąd serwera. Spróbuj ponownie za chwilę.",
     forbidden: "Brak dostępu do tego zasobu.",
     notFound: "Nie znaleziono żądanego zasobu.",

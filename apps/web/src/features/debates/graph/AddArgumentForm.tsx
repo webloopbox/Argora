@@ -13,11 +13,26 @@ import {
   TextField,
 } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, ChevronDown, CornerUpRight, Sparkles, ThumbsDown, ThumbsUp } from "lucide-react";
-import type { ArgumentDto, CreateArgumentDto, LlmProviderDto } from "@brainstorm/core";
+import {
+  Bot,
+  ChevronDown,
+  CornerUpRight,
+  Sparkles,
+  ThumbsDown,
+  ThumbsUp,
+} from "lucide-react";
+import type {
+  ArgumentDto,
+  CreateArgumentDto,
+  LlmProviderDto,
+} from "@brainstorm/core";
 import { ArgumentSide } from "@brainstorm/core";
 import { createArgument } from "../../../api/arguments.api";
-import { checkDuplicate, generateArgument, listProviders } from "../../../api/ai.api";
+import {
+  checkDuplicate,
+  generateArgument,
+  listProviders,
+} from "../../../api/ai.api";
 import { useTypewriter } from "../../../hooks/useTypewriter";
 import { ui } from "../../../texts/ui";
 import { MergeOrNuanceDialog } from "./MergeOrNuanceDialog";
@@ -63,7 +78,8 @@ export function AddArgumentForm({
 
   // Duplicate dialog
   const [duplicate, setDuplicate] = useState<ArgumentDto | null>(null);
-  const [pendingPayload, setPendingPayload] = useState<CreateArgumentDto | null>(null);
+  const [pendingPayload, setPendingPayload] =
+    useState<CreateArgumentDto | null>(null);
 
   // Typewriter animation for AI-generated content. The textarea stays
   // disabled (generating=true) while the animation plays so the user
@@ -82,8 +98,10 @@ export function AddArgumentForm({
 
   function validate(): string | null {
     const trimmed = content.trim();
-    if (trimmed.length < CONTENT_MIN) return ui.debates.argumentForm.contentTooShort;
-    if (trimmed.length > CONTENT_MAX) return ui.debates.argumentForm.contentTooLong;
+    if (trimmed.length < CONTENT_MIN)
+      return ui.debates.argumentForm.contentTooShort;
+    if (trimmed.length > CONTENT_MAX)
+      return ui.debates.argumentForm.contentTooLong;
     return null;
   }
 
@@ -128,14 +146,16 @@ export function AddArgumentForm({
     setContentError(validationError);
     if (validationError) return;
 
+    const parentId = typeof parent?.id === "string" ? parent.id : null;
+
     const payload: CreateArgumentDto = {
       side: side === "pro" ? ArgumentSide.Pro : ArgumentSide.Against,
       content: content.trim(),
-      parentArgumentId: parent?.id ?? null,
+      parentArgumentId: parentId,
       isAiGenerated: aiMode,
     };
 
-    // Duplicate check gate — mandatory per CLAUDE.md
+    // Duplicate check gate - mandatory per CLAUDE.md
     setSubmitting(true);
     setFormError(null);
     try {
@@ -143,6 +163,7 @@ export function AddArgumentForm({
         debateId,
         side: payload.side,
         content: payload.content,
+        parentArgumentId: parentId,
       });
       if (dupResult.duplicateOf) {
         setDuplicate(dupResult.duplicateOf);
@@ -182,7 +203,10 @@ export function AddArgumentForm({
                 {ui.debates.graph.attachToThesis}
               </button>
             </div>
-            <p className="mt-1.5 line-clamp-3 text-sm text-default-700 dark:text-zinc-300">
+            <p
+              className="mt-1.5 line-clamp-3 text-sm text-default-700 dark:text-zinc-300"
+              title={parent.content}
+            >
               {parent.content}
             </p>
           </div>
@@ -211,7 +235,10 @@ export function AddArgumentForm({
                 <RadioIndicator />
               </RadioControl>
               <RadioContent className="flex items-center gap-1.5 font-semibold leading-none text-default-900 dark:text-zinc-100">
-                <ThumbsUp size={12} className="text-pro-600 dark:text-pro-400" />
+                <ThumbsUp
+                  size={12}
+                  className="text-pro-600 dark:text-pro-400"
+                />
                 <span>{ui.debates.argumentForm.sidePro}</span>
               </RadioContent>
             </Radio>
@@ -223,7 +250,10 @@ export function AddArgumentForm({
                 <RadioIndicator />
               </RadioControl>
               <RadioContent className="flex items-center gap-1.5 font-semibold leading-none text-default-900 dark:text-zinc-100">
-                <ThumbsDown size={12} className="text-against-600 dark:text-against-400" />
+                <ThumbsDown
+                  size={12}
+                  className="text-against-600 dark:text-against-400"
+                />
                 <span>{ui.debates.argumentForm.sideAgainst}</span>
               </RadioContent>
             </Radio>
@@ -268,7 +298,9 @@ export function AddArgumentForm({
                 </button>
               </div>
               {aiError ? (
-                <p className="text-[11px] text-red-600 dark:text-red-400">{aiError}</p>
+                <p className="text-[11px] text-red-600 dark:text-red-400">
+                  {aiError}
+                </p>
               ) : null}
             </div>
           ) : null}
@@ -311,7 +343,7 @@ export function AddArgumentForm({
           {onCancel ? (
             <Button
               type="button"
-              variant="bordered"
+              variant="outline"
               size="md"
               isDisabled={submitting || generating}
               onPress={onCancel}
@@ -321,13 +353,11 @@ export function AddArgumentForm({
           ) : null}
           <Button
             type="submit"
-            color="primary"
+            variant="primary"
             size="md"
             isDisabled={submitting || generating}
           >
-            {submitting
-              ? ui.debates.argumentForm.submitting
-              : submitLabel}
+            {submitting ? ui.debates.argumentForm.submitting : submitLabel}
           </Button>
         </div>
       </form>
@@ -340,7 +370,7 @@ export function AddArgumentForm({
             setDuplicate(null);
             setPendingPayload(null);
             setContent("");
-            // Notify parent that the interaction is "done" — user chose merge
+            // Notify parent that the interaction is "done" - user chose merge
             // so no new argument is created; close the panel.
             onCancel?.();
           }}
@@ -367,7 +397,12 @@ interface ModelPickerProps {
   disabled: boolean;
 }
 
-function ModelPicker({ providers, value, onChange, disabled }: ModelPickerProps) {
+function ModelPicker({
+  providers,
+  value,
+  onChange,
+  disabled,
+}: ModelPickerProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -393,7 +428,7 @@ function ModelPicker({ providers, value, onChange, disabled }: ModelPickerProps)
         <span>
           {providers.length === 0
             ? ui.debates.argumentForm.aiNoProviders
-            : (selected?.name ?? "—")}
+            : (selected?.name ?? "-")}
         </span>
         <ChevronDown
           size={12}

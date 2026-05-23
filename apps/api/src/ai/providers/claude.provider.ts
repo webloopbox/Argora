@@ -33,9 +33,10 @@ export class ClaudeProvider implements LlmProvider {
         {
           role: 'user',
           content:
-            `Teza debaty: "${input.thesis}"${parentCtx}\n` +
-            `Wygeneruj jeden zwięzły argument ${sideLabel} tej tezie. ` +
-            `Odpowiedź zawiera TYLKO treść argumentu — bez wstępu, numeracji ani cudzysłowów. ` +
+            `Teza debaty: "${input.thesis}"\n` +
+            (parentCtx ? `${parentCtx}` : '') +
+            `Wygeneruj jeden zwięzły argument ${sideLabel} ${input.parentContent ? 'powyższemu argumentowi' : 'tej tezie'}. ` +
+            `Odpowiedź zawiera TYLKO treść argumentu - bez wstępu, numeracji ani cudzysłowów. ` +
             `Maksymalnie 3 zdania. Pisz po polsku.`,
         },
       ],
@@ -51,9 +52,7 @@ export class ClaudeProvider implements LlmProvider {
     const message = await this.client.messages.create({
       model: MODEL_ID,
       max_tokens: 2048,
-      messages: [
-        { role: 'user', content: buildSynthesisPrompt(input) },
-      ],
+      messages: [{ role: 'user', content: buildSynthesisPrompt(input) }],
     });
 
     const block = message.content[0];

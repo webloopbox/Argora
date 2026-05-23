@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 
 interface TypewriterOptions {
-  /** Characters revealed per tick. Default 3 — feels fast but still legible. */
+  /** Characters revealed per tick. Default 3 - feels fast but still legible. */
   charsPerTick?: number;
   /** Tick interval in ms. Default 16 (~60fps). */
   tickMs?: number;

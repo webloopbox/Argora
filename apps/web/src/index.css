@@ -36,11 +36,18 @@ body,
 
 body {
   margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
 }
 
-/* React Flow theming — light by default, dark via .dark ancestor. The
+/* React Flow theming - light by default, dark via .dark ancestor. The
    library renders raw <button>/<svg> elements outside our Tailwind palette,
    so we override its CSS vars at the component scope. */
 .rf-controls-themed {

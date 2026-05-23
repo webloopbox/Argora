@@ -85,7 +85,10 @@ function ArgumentNodeBase({ data, selected }: ArgumentNodeProps) {
           ) : null}
         </div>
       </div>
-      <p className="mt-2 line-clamp-5 text-sm leading-snug text-default-900 dark:text-zinc-100">
+      <p 
+        className="mt-2 line-clamp-5 text-sm leading-snug text-default-900 dark:text-zinc-100"
+        title={argument.content}
+      >
         {argument.content}
       </p>
       <div className="mt-3 flex items-center justify-between gap-2 text-[11px] text-default-500 dark:text-zinc-400">

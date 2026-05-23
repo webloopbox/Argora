@@ -184,7 +184,7 @@ function PanelBody({
             </p>
             <Button
               size="md"
-              color="primary"
+              variant="primary"
               onPress={() => navigate("/logowanie")}
             >
               {ui.debates.argumentForm.signIn}

@@ -7,7 +7,7 @@ import { ui } from "../texts/ui";
 export function useDocumentTitle(title: string | null): void {
   useEffect(() => {
     const previous = document.title;
-    document.title = title ? `${title} — ${ui.app.name}` : ui.app.name;
+    document.title = title ? `${title} - ${ui.app.name}` : ui.app.name;
     return () => {
       document.title = previous;
     };

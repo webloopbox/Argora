@@ -75,8 +75,12 @@ export function useLassoSelection(
       setLasso((prev) => {
         if (!prev.drawing) return prev;
         const pt = {
-          x: e.clientX - (containerRef.current?.getBoundingClientRect().left ?? 0),
-          y: e.clientY - (containerRef.current?.getBoundingClientRect().top ?? 0),
+          x:
+            e.clientX -
+            (containerRef.current?.getBoundingClientRect().left ?? 0),
+          y:
+            e.clientY -
+            (containerRef.current?.getBoundingClientRect().top ?? 0),
         };
         return { ...prev, polygon: [...prev.polygon, pt] };
       });
@@ -89,7 +93,7 @@ export function useLassoSelection(
       try {
         (e.currentTarget as HTMLDivElement).releasePointerCapture(e.pointerId);
       } catch {
-        /* ignore — capture may already be released */
+        /* ignore - capture may already be released */
       }
 
       setLasso((prev) => {

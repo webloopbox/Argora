@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-// At most one active vote per (argument, user) — enforced via partial
+// At most one active vote per (argument, user) - enforced via partial
 // unique index in db/init.sql (TypeORM @Unique can't express WHERE clauses).
 // Retracting a vote soft-archives the row, so a fresh +1 after a -1 yields
 // an audit trail of two rows but only the active one counts.

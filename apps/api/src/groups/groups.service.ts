@@ -105,7 +105,7 @@ export class GroupsService {
       id: group.id,
       name: group.name,
       ownerId: group.ownerId,
-      ownerDisplayName: owner?.displayName ?? '—',
+      ownerDisplayName: owner?.displayName ?? '-',
       memberCount: memberships.length,
       debateCount,
       createdAt: group.createdAt.toISOString(),
@@ -114,7 +114,7 @@ export class GroupsService {
         const user = userMap.get(m.userId);
         return {
           id: m.userId,
-          displayName: user?.displayName ?? '—',
+          displayName: user?.displayName ?? '-',
           isOwner: m.userId === group.ownerId,
           joinedAt: m.joinedAt.toISOString(),
         };
@@ -171,7 +171,10 @@ export class GroupsService {
     });
   }
 
-  async ensureMember(groupId: string, userId: string): Promise<GroupMembership> {
+  async ensureMember(
+    groupId: string,
+    userId: string,
+  ): Promise<GroupMembership> {
     const membership = await this.memberships.findOne({
       where: activeWhere<GroupMembership>({ groupId, userId }),
     });
@@ -219,7 +222,7 @@ export class GroupsService {
     await this.memberships.save(membership);
   }
 
-  private async toDetail(group: Group, owner: User): Promise<GroupDetailDto> {
+  private toDetail(group: Group, owner: User): GroupDetailDto {
     return {
       id: group.id,
       name: group.name,
@@ -277,7 +280,7 @@ export class GroupsService {
       id: group.id,
       name: group.name,
       ownerId: group.ownerId,
-      ownerDisplayName: ownerMap.get(group.ownerId)?.displayName ?? '—',
+      ownerDisplayName: ownerMap.get(group.ownerId)?.displayName ?? '-',
       memberCount: memberMap.get(group.id) ?? 0,
       debateCount: debateMap.get(group.id) ?? 0,
       createdAt: group.createdAt.toISOString(),

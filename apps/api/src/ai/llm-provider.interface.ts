@@ -15,7 +15,7 @@ export interface SynthesizeArgInput {
   againstCount: number;
   weight: number;
   sentiment: string;
-  /** Content of the parent argument (truncated upstream) — `null` for top-level. */
+  /** Content of the parent argument (truncated upstream) - `null` for top-level. */
   parentContent: string | null;
 }
 

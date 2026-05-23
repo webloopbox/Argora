@@ -4,13 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  ArgumentDto,
-  CastVoteDto,
-  DebateVisibility,
-  VoteValue,
-} from '@brainstorm/core';
-import { In, Repository } from 'typeorm';
+import { ArgumentDto, CastVoteDto, DebateVisibility } from '@brainstorm/core';
+import { Repository } from 'typeorm';
 import { Argument } from '../arguments/argument.entity';
 import { ArgumentsService } from '../arguments/arguments.service';
 import { activeWhere } from '../common/repository/soft-delete';
@@ -56,7 +51,7 @@ export class VotesService {
       const vote = this.votes.create({
         argumentId,
         userId: caller.id,
-        value: input.value as VoteValue,
+        value: input.value,
         archivedOn: null,
       });
       await this.votes.save(vote);

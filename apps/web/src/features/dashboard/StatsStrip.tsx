@@ -24,7 +24,7 @@ export function StatsStrip() {
         if (!cancelled) setStats(data);
       })
       .catch(() => {
-        // Silent failure — strip renders skeletons until next render.
+        // Silent failure - strip renders skeletons until next render.
       });
     return () => {
       cancelled = true;

@@ -55,25 +55,25 @@ export function onUnauthorized(handler: UnauthorizedHandler): () => void {
   return () => unauthorizedHandlers.delete(handler);
 }
 
-httpClient.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const token = tokenStore.read();
-    if (token) {
-      config.headers.set("Authorization", `Bearer ${token}`);
-    }
-    return config;
-  },
-);
+httpClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const token = tokenStore.read();
+  if (token) {
+    config.headers.set("Authorization", `Bearer ${token}`);
+  }
+  return config;
+});
 
 httpClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    const config = error.config as (AxiosRequestConfig & { silent?: boolean }) | undefined;
+    const config = error.config as
+      | (AxiosRequestConfig & { silent?: boolean })
+      | undefined;
 
     if (error.response?.status === 401) {
       tokenStore.clear();
       unauthorizedHandlers.forEach((fn) => fn());
-      // Silent on 401 — the redirect to login is the user-visible signal.
+      // Silent on 401 - the redirect to login is the user-visible signal.
       return Promise.reject(error);
     }
 
@@ -103,6 +103,7 @@ function extractServerMessage(payload: unknown): string | null {
   if (!payload || typeof payload !== "object") return null;
   const message = (payload as { message?: unknown }).message;
   if (typeof message === "string") return message;
-  if (Array.isArray(message) && typeof message[0] === "string") return message[0];
+  if (Array.isArray(message) && typeof message[0] === "string")
+    return message[0];
   return null;
 }

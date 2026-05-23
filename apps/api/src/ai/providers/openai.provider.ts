@@ -34,9 +34,10 @@ export class OpenAiProvider implements LlmProvider {
         {
           role: 'user',
           content:
-            `Teza debaty: "${input.thesis}"${parentCtx}\n` +
-            `Wygeneruj jeden zwięzły argument ${sideLabel} tej tezie. ` +
-            `Odpowiedź zawiera TYLKO treść argumentu — bez wstępu, numeracji ani cudzysłowów. ` +
+            `Teza debaty: "${input.thesis}"\n` +
+            (parentCtx ? `${parentCtx}` : '') +
+            `Wygeneruj jeden zwięzły argument ${sideLabel} ${input.parentContent ? 'powyższemu argumentowi' : 'tej tezie'}. ` +
+            `Odpowiedź zawiera TYLKO treść argumentu - bez wstępu, numeracji ani cudzysłowów. ` +
             `Maksymalnie 3 zdania. Pisz po polsku.`,
         },
       ],
@@ -49,9 +50,7 @@ export class OpenAiProvider implements LlmProvider {
     const completion = await this.client.chat.completions.create({
       model: MODEL_ID,
       max_tokens: 2048,
-      messages: [
-        { role: 'user', content: buildSynthesisPrompt(input) },
-      ],
+      messages: [{ role: 'user', content: buildSynthesisPrompt(input) }],
     });
 
     return completion.choices[0]?.message.content?.trim() ?? '';
@@ -62,6 +61,6 @@ export class OpenAiProvider implements LlmProvider {
       model: EMBEDDING_MODEL,
       input: text,
     });
-    return response.data[0]!.embedding;
+    return response.data[0].embedding;
   }
 }

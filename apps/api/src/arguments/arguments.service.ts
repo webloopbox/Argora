@@ -76,14 +76,11 @@ export class ArgumentsService {
     // Fire-and-forget: compute and store the embedding asynchronously so the
     // HTTP response is not blocked. Failures are logged but not retried.
     this.embedAsync(saved.id, saved.content);
-    // Fresh argument has no votes yet — skip the aggregate query.
+    // Fresh argument has no votes yet - skip the aggregate query.
     return this.toDto(saved, author, { for: 0, against: 0 }, null);
   }
 
-  async listForDebate(
-    debate: Debate,
-    caller?: User,
-  ): Promise<ArgumentDto[]> {
+  async listForDebate(debate: Debate, caller?: User): Promise<ArgumentDto[]> {
     const args = await this.args.find({
       where: activeWhere<Argument>({ debateId: debate.id }),
       order: { createdAt: 'ASC' },
@@ -131,7 +128,7 @@ export class ArgumentsService {
   }
 
   // Used by VotesService after cast/retract to return the freshly recomputed
-  // argument projection — saves the caller from a follow-up GET.
+  // argument projection - saves the caller from a follow-up GET.
   async findById(argumentId: string, caller?: User): Promise<ArgumentDto> {
     const arg = await this.args.findOne({
       where: activeWhere<Argument>({ id: argumentId }),
@@ -164,7 +161,12 @@ export class ArgumentsService {
       else if (row.value === -1) counts.against = row.count;
     }
 
-    return this.toDto(arg, author ?? undefined, counts, callerVote?.value ?? null);
+    return this.toDto(
+      arg,
+      author ?? undefined,
+      counts,
+      callerVote?.value ?? null,
+    );
   }
 
   async archive(argumentId: string, caller: User): Promise<void> {
@@ -173,11 +175,9 @@ export class ArgumentsService {
     });
     if (!arg) throw new NotFoundException('Argument nie istnieje.');
     if (arg.authorId !== caller.id) {
-      throw new BadRequestException(
-        'Tylko autor argumentu może go usunąć.',
-      );
+      throw new BadRequestException('Tylko autor argumentu może go usunąć.');
     }
-    // Disallow archiving non-leaf arguments — children would lose their
+    // Disallow archiving non-leaf arguments - children would lose their
     // parent context and the rebuttal thread would be orphaned.
     const childCount = await this.args.count({
       where: activeWhere<Argument>({ parentArgumentId: argumentId }),
@@ -219,7 +219,7 @@ export class ArgumentsService {
       content: arg.content,
       author: author
         ? { id: author.id, displayName: author.displayName }
-        : { id: arg.authorId, displayName: '—' },
+        : { id: arg.authorId, displayName: '-' },
       isAiGenerated: arg.isAiGenerated,
       createdAt: arg.createdAt.toISOString(),
       forCount: counts.for,
@@ -230,7 +230,10 @@ export class ArgumentsService {
     };
   }
 
-  private computeSentiment(forCount: number, againstCount: number): ArgumentSentiment {
+  private computeSentiment(
+    forCount: number,
+    againstCount: number,
+  ): ArgumentSentiment {
     const weight = forCount + againstCount;
     if (weight === 0) return 'neutral';
     const balanceRatio = Math.abs(forCount - againstCount) / weight;

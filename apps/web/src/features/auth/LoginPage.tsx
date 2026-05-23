@@ -1,13 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import {
-  Button,
-  FieldError,
-  Input,
-  Label,
-  TextField,
-} from "@heroui/react";
+import { Button, FieldError, Input, Label, TextField } from "@heroui/react";
 import { AxiosError } from "axios";
 import { useAuth } from "../../app-config/auth-context";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
@@ -118,7 +112,7 @@ export function LoginPage() {
 
         <Button
           type="submit"
-          color="primary"
+          variant="primary"
           size="lg"
           fullWidth
           isDisabled={submitting}
