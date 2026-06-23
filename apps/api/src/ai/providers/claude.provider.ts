@@ -6,6 +6,7 @@ import type {
   SynthesizeInput,
 } from '../llm-provider.interface';
 import { buildSynthesisPrompt } from '../prompts/synthesis.prompt';
+import { GENERATE_MAX_TOKENS, SYNTHESIS_MAX_TOKENS } from '../ai.constants';
 
 const MODEL_ID = 'claude-sonnet-4-6';
 
@@ -28,7 +29,7 @@ export class ClaudeProvider implements LlmProvider {
 
     const message = await this.client.messages.create({
       model: MODEL_ID,
-      max_tokens: 2048,
+      max_tokens: GENERATE_MAX_TOKENS,
       messages: [
         {
           role: 'user',
@@ -36,7 +37,7 @@ export class ClaudeProvider implements LlmProvider {
             `Teza debaty: "${input.thesis}"\n` +
             (parentCtx ? `${parentCtx}` : '') +
             `Wygeneruj jeden zwięzły argument ${sideLabel} ${input.parentContent ? 'powyższemu argumentowi' : 'tej tezie'}. ` +
-            `Odpowiedź zawiera TYLKO treść argumentu - bez wstępu, numeracji ani cudzysłowów. ` +
+            `Odpowiedź zawiera TYLKO treść argumentu - bez wstępu, numeracji, metakomentarzy ani cudzysłowów. ` +
             `Maksymalnie 3 zdania. Pisz po polsku.`,
         },
       ],
@@ -51,7 +52,7 @@ export class ClaudeProvider implements LlmProvider {
   async synthesize(input: SynthesizeInput): Promise<string> {
     const message = await this.client.messages.create({
       model: MODEL_ID,
-      max_tokens: 2048,
+      max_tokens: SYNTHESIS_MAX_TOKENS,
       messages: [{ role: 'user', content: buildSynthesisPrompt(input) }],
     });
 

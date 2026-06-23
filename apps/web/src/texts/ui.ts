@@ -217,6 +217,9 @@ export const ui = {
         "Nie udało się przygotować streszczenia. Spróbuj ponownie.",
       synthesisClose: "Zamknij",
       synthesisAgain: "Streść ponownie",
+      summarizeAll: "Streść całą dyskusję",
+      synthesisFullTitle: "Streszczenie całej dyskusji",
+      summarizeAllSubtitle: "argumentów w dyskusji",
       duplicateTitle: "Podobny argument już istnieje",
       duplicateSubtitle:
         "Wykryto argument o zbliżonym znaczeniu. Możesz wzmocnić istniejący głosem lub dodać swój argument jako nowy niuans.",

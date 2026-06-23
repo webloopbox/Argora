@@ -6,6 +6,7 @@ import type {
   SynthesizeInput,
 } from '../llm-provider.interface';
 import { buildSynthesisPrompt } from '../prompts/synthesis.prompt';
+import { GENERATE_MAX_TOKENS, SYNTHESIS_MAX_TOKENS } from '../ai.constants';
 
 const MODEL_ID = 'gemini-2.5-flash';
 
@@ -32,9 +33,9 @@ export class GeminiProvider implements LlmProvider {
         `Teza debaty: "${input.thesis}"\n` +
         (parentCtx ? `${parentCtx}` : '') +
         `Wygeneruj jeden zwięzły argument ${sideLabel} ${input.parentContent ? 'powyższemu argumentowi' : 'tej tezie'}. ` +
-        `Odpowiedź zawiera TYLKO treść argumentu - bez wstępu, numeracji ani cudzysłowów. ` +
+        `Odpowiedź zawiera TYLKO treść argumentu - bez wstępu, numeracji, metakomentarzy ani cudzysłowów. ` +
         `Maksymalnie 3 zdania. Pisz po polsku.`,
-      config: { maxOutputTokens: 2048 },
+      config: { maxOutputTokens: GENERATE_MAX_TOKENS },
     });
 
     return (response.text ?? '').trim();
@@ -44,7 +45,7 @@ export class GeminiProvider implements LlmProvider {
     const response = await this.client.models.generateContent({
       model: MODEL_ID,
       contents: buildSynthesisPrompt(input),
-      config: { maxOutputTokens: 2048 },
+      config: { maxOutputTokens: SYNTHESIS_MAX_TOKENS },
     });
 
     return (response.text ?? '').trim();

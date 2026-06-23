@@ -6,6 +6,7 @@ import type {
   SynthesizeInput,
 } from '../llm-provider.interface';
 import { buildSynthesisPrompt } from '../prompts/synthesis.prompt';
+import { GENERATE_MAX_TOKENS, SYNTHESIS_MAX_TOKENS } from '../ai.constants';
 
 const MODEL_ID = 'gpt-4o';
 const EMBEDDING_MODEL = 'text-embedding-3-small';
@@ -29,7 +30,7 @@ export class OpenAiProvider implements LlmProvider {
 
     const completion = await this.client.chat.completions.create({
       model: MODEL_ID,
-      max_tokens: 2048,
+      max_tokens: GENERATE_MAX_TOKENS,
       messages: [
         {
           role: 'user',
@@ -37,7 +38,7 @@ export class OpenAiProvider implements LlmProvider {
             `Teza debaty: "${input.thesis}"\n` +
             (parentCtx ? `${parentCtx}` : '') +
             `Wygeneruj jeden zwięzły argument ${sideLabel} ${input.parentContent ? 'powyższemu argumentowi' : 'tej tezie'}. ` +
-            `Odpowiedź zawiera TYLKO treść argumentu - bez wstępu, numeracji ani cudzysłowów. ` +
+            `Odpowiedź zawiera TYLKO treść argumentu - bez wstępu, numeracji, metakomentarzy ani cudzysłowów. ` +
             `Maksymalnie 3 zdania. Pisz po polsku.`,
         },
       ],
@@ -49,7 +50,7 @@ export class OpenAiProvider implements LlmProvider {
   async synthesize(input: SynthesizeInput): Promise<string> {
     const completion = await this.client.chat.completions.create({
       model: MODEL_ID,
-      max_tokens: 2048,
+      max_tokens: SYNTHESIS_MAX_TOKENS,
       messages: [{ role: 'user', content: buildSynthesisPrompt(input) }],
     });
 

@@ -13,6 +13,7 @@ interface SynthesisPanelProps {
   selectedArgumentIds: string[];
   isOpen: boolean;
   onClose: () => void;
+  mode?: "lasso" | "full";
 }
 
 export function SynthesisPanel({
@@ -20,6 +21,7 @@ export function SynthesisPanel({
   selectedArgumentIds,
   isOpen,
   onClose,
+  mode = "lasso",
 }: SynthesisPanelProps) {
   const [providers, setProviders] = useState<LlmProviderDto[]>([]);
   const [modelId, setModelId] = useState<string>("");
@@ -92,10 +94,17 @@ export function SynthesisPanel({
               <div>
                 <div className="flex items-center gap-2 text-xs font-medium text-violet-700 dark:text-violet-300">
                   <Sparkles size={12} />
-                  <span>{ui.debates.ai.synthesisTitle}</span>
+                  <span>
+                    {mode === "full"
+                      ? ui.debates.ai.synthesisFullTitle
+                      : ui.debates.ai.synthesisTitle}
+                  </span>
                 </div>
                 <p className="mt-0.5 text-xs text-default-500 dark:text-zinc-400">
-                  {selectedArgumentIds.length} argumentów zaznaczonych
+                  {selectedArgumentIds.length}{" "}
+                  {mode === "full"
+                    ? ui.debates.ai.summarizeAllSubtitle
+                    : "argumentów zaznaczonych"}
                 </p>
               </div>
               <button

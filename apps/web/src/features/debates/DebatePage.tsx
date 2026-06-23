@@ -144,6 +144,7 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
   const [lassoMode, setLassoMode] = useState(false);
   const [lassoIds, setLassoIds] = useState<string[]>([]);
   const [synthesisPanelOpen, setSynthesisPanelOpen] = useState(false);
+  const [synthesisPanelMode, setSynthesisPanelMode] = useState<"lasso" | "full">("lasso");
   const isOwner = user?.id === debate.author.id;
 
   const handleDelete = async () => {
@@ -256,6 +257,15 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
         onBack={() => navigate("/")}
         isOwner={isOwner}
         onDelete={handleDelete}
+        argumentCount={graphState.status === "ready" ? graphState.arguments.length : 0}
+        isAuthenticated={isAuthenticated}
+        onSummarizeAll={() => {
+          if (graphState.status !== "ready") return;
+          const allIds = graphState.arguments.map((a) => a.id);
+          setLassoIds(allIds);
+          setSynthesisPanelMode("full");
+          setSynthesisPanelOpen(true);
+        }}
       />
 
       {isAuthenticated && graphState.status === "ready" ? (
@@ -299,9 +309,11 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
         debateId={debate.id}
         selectedArgumentIds={lassoIds}
         isOpen={synthesisPanelOpen}
+        mode={synthesisPanelMode}
         onClose={() => {
           setSynthesisPanelOpen(false);
           setLassoIds([]);
+          setSynthesisPanelMode("lasso");
         }}
       />
       </DebateGraphContext.Provider>
@@ -316,11 +328,17 @@ function FloatingThesisCard({
   onBack,
   isOwner,
   onDelete,
+  argumentCount = 0,
+  isAuthenticated = false,
+  onSummarizeAll,
 }: {
   debate: DebateDetailDto;
   onBack: () => void;
   isOwner?: boolean;
   onDelete?: () => Promise<void>;
+  argumentCount?: number;
+  isAuthenticated?: boolean;
+  onSummarizeAll?: () => void;
 }) {
   const [expanded, setExpanded] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -448,6 +466,22 @@ function FloatingThesisCard({
                 {debate.argumentCount}
               </span>
             </div>
+
+            {isAuthenticated && argumentCount > 0 && onSummarizeAll ? (
+              <div className="px-4 pb-3">
+                <button
+                  type="button"
+                  onClick={onSummarizeAll}
+                  className="group inline-flex items-center gap-1.5 rounded-lg border border-violet-200 bg-violet-50/80 px-3 py-1.5 text-xs font-medium text-violet-700 transition-all hover:border-violet-300 hover:bg-violet-100 hover:shadow-sm hover:shadow-violet-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 active:scale-[0.97] dark:border-violet-700/40 dark:bg-violet-900/30 dark:text-violet-300 dark:hover:border-violet-600/60 dark:hover:bg-violet-900/50"
+                >
+                  <Sparkles
+                    size={12}
+                    className="transition-transform group-hover:scale-110"
+                  />
+                  {ui.debates.ai.summarizeAll}
+                </button>
+              </div>
+            ) : null}
           </motion.div>
         ) : null}
       </AnimatePresence>
