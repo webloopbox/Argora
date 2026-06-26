@@ -1,12 +1,21 @@
 import Anthropic from '@anthropic-ai/sdk';
 import type { LlmProviderDto } from '@brainstorm/core';
 import type {
+  ClassifySideInput,
   GenerateInput,
   LlmProvider,
   SynthesizeInput,
 } from '../llm-provider.interface';
 import { buildSynthesisPrompt } from '../prompts/synthesis.prompt';
-import { GENERATE_MAX_TOKENS, SYNTHESIS_MAX_TOKENS } from '../ai.constants';
+import {
+  buildClassifySidePrompt,
+  parseSide,
+} from '../prompts/classify-side.prompt';
+import {
+  CLASSIFY_MAX_TOKENS,
+  GENERATE_MAX_TOKENS,
+  SYNTHESIS_MAX_TOKENS,
+} from '../ai.constants';
 
 const MODEL_ID = 'claude-sonnet-4-6';
 
@@ -60,5 +69,17 @@ export class ClaudeProvider implements LlmProvider {
     if (block.type !== 'text')
       throw new Error('Unexpected Claude response type');
     return block.text.trim();
+  }
+
+  async classifySide(input: ClassifySideInput): Promise<'pro' | 'against' | null> {
+    const message = await this.client.messages.create({
+      model: MODEL_ID,
+      max_tokens: CLASSIFY_MAX_TOKENS,
+      messages: [{ role: 'user', content: buildClassifySidePrompt(input) }],
+    });
+
+    const block = message.content[0];
+    if (block.type !== 'text') return null;
+    return parseSide(block.text);
   }
 }

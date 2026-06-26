@@ -6,6 +6,7 @@ import { AiThrottlerGuard } from '../common/guards/ai-throttler.guard';
 import { VisibilityGuard } from '../common/guards/visibility.guard';
 import { User } from '../users/user.entity';
 import {
+  CheckArgumentSideDto,
   CheckDuplicateDto,
   GenerateArgumentDto,
   SynthesizeDto,
@@ -37,6 +38,13 @@ export class AiController {
   @Throttle({ 'ai-duplicate': { limit: 20, ttl: 60_000 } })
   checkDuplicate(@Body() dto: CheckDuplicateDto, @CurrentUser() caller: User) {
     return this.ai.checkDuplicate(dto, caller);
+  }
+
+  @Post('arguments/check-side')
+  @UseGuards(JwtAuthGuard, AiThrottlerGuard)
+  @Throttle({ 'ai-generate': { limit: 20, ttl: 60_000 } })
+  checkArgumentSide(@Body() dto: CheckArgumentSideDto) {
+    return this.ai.checkArgumentSide(dto);
   }
 
   @Post('synthesize')

@@ -13,4 +13,8 @@ export class MistralProvider implements LlmProvider {
   synthesize(): Promise<string> {
     throw new Error('MistralProvider not implemented');
   }
+
+  classifySide(): Promise<'pro' | 'against' | null> {
+    throw new Error('MistralProvider not implemented');
+  }
 }

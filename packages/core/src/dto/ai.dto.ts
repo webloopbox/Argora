@@ -61,6 +61,28 @@ export interface DuplicateCheckResultDto {
   threshold: number;
 }
 
+export class CheckArgumentSideDto {
+  @IsString()
+  @MinLength(8)
+  thesis!: string;
+
+  @IsEnum(ArgumentSide)
+  selectedSide!: ArgumentSide;
+
+  @IsString()
+  @MinLength(4)
+  content!: string;
+
+  @IsOptional()
+  @IsString()
+  parentContent?: string;
+}
+
+export interface ArgumentSideCheckResultDto {
+  isMismatch: boolean;
+  suggestedSide?: ArgumentSide;
+}
+
 export class SynthesizeDto {
   @IsUUID()
   debateId!: string;

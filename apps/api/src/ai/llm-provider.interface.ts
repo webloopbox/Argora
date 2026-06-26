@@ -6,6 +6,12 @@ export interface GenerateInput {
   parentContent?: string;
 }
 
+export interface ClassifySideInput {
+  thesis: string;
+  content: string;
+  parentContent?: string;
+}
+
 export interface SynthesizeArgInput {
   side: string;
   content: string;
@@ -28,4 +34,5 @@ export interface LlmProvider {
   getModelInfo(): LlmProviderDto;
   generate(input: GenerateInput): Promise<string>;
   synthesize(input: SynthesizeInput): Promise<string>;
+  classifySide(input: ClassifySideInput): Promise<'pro' | 'against' | null>;
 }

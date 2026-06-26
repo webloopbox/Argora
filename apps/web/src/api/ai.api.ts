@@ -1,4 +1,6 @@
 import type {
+  ArgumentSideCheckResultDto,
+  CheckArgumentSideDto,
   CheckDuplicateDto,
   DuplicateCheckResultDto,
   GenerateArgumentDto,
@@ -19,6 +21,16 @@ export async function generateArgument(
 ): Promise<GeneratedArgumentDto> {
   const { data } = await httpClient.post<GeneratedArgumentDto>(
     "/ai/arguments/generate",
+    payload,
+  );
+  return data;
+}
+
+export async function checkArgumentSide(
+  payload: CheckArgumentSideDto,
+): Promise<ArgumentSideCheckResultDto> {
+  const { data } = await httpClient.post<ArgumentSideCheckResultDto>(
+    "/ai/arguments/check-side",
     payload,
   );
   return data;

@@ -13,4 +13,8 @@ export class GrokProvider implements LlmProvider {
   synthesize(): Promise<string> {
     throw new Error('GrokProvider not implemented');
   }
+
+  classifySide(): Promise<'pro' | 'against' | null> {
+    throw new Error('GrokProvider not implemented');
+  }
 }

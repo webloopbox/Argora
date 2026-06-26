@@ -29,6 +29,7 @@ import type {
 import { ArgumentSide } from "@brainstorm/core";
 import { createArgument } from "../../../api/arguments.api";
 import {
+  checkArgumentSide,
   checkDuplicate,
   generateArgument,
   listProviders,
@@ -36,6 +37,7 @@ import {
 import { useTypewriter } from "../../../hooks/useTypewriter";
 import { ui } from "../../../texts/ui";
 import { MergeOrNuanceDialog } from "./MergeOrNuanceDialog";
+import { SideMismatchDialog } from "./SideMismatchDialog";
 
 const CONTENT_MIN = 4;
 const CONTENT_MAX = 2000;
@@ -81,10 +83,40 @@ export function AddArgumentForm({
   const [pendingPayload, setPendingPayload] =
     useState<CreateArgumentDto | null>(null);
 
+  // Side mismatch dialog
+  const [sideMismatch, setSideMismatch] = useState<ArgumentSide | null>(null);
+
+  // Parent preview expand/collapse - long parents clamp to 3 lines otherwise.
+  // `parentClamped` is measured from actual overflow (scrollHeight vs
+  // clientHeight) rather than a character-count guess, because the sidebar is
+  // narrow and a clamped block can hold far fewer chars than expected.
+  const [parentExpanded, setParentExpanded] = useState(false);
+  const [parentClamped, setParentClamped] = useState(false);
+  const parentTextRef = useRef<HTMLParagraphElement>(null);
+
   // Typewriter animation for AI-generated content. The textarea stays
   // disabled (generating=true) while the animation plays so the user
   // doesn't fight the streaming cursor.
   const { animate: animateContent } = useTypewriter(setContent);
+
+  // Collapse the preview and re-measure overflow whenever the parent changes.
+  // Measuring against the clamped element tells us whether a "show more"
+  // toggle is actually needed for this specific content + container width.
+  useEffect(() => {
+    setParentExpanded(false);
+    if (!parent) {
+      setParentClamped(false);
+      return;
+    }
+    const el = parentTextRef.current;
+    if (!el) return;
+    const measure = () =>
+      setParentClamped(el.scrollHeight > el.clientHeight + 1);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [parent?.id, parent?.content]);
 
   useEffect(() => {
     if (!aiMode || providers.length > 0) return;
@@ -140,6 +172,32 @@ export function AddArgumentForm({
     }
   }
 
+  // Side-mismatch gate — runs the AI check and either shows the mismatch
+  // dialog (halting submission) or proceeds to the final submit.  Every
+  // submission path must go through this function so the check is never
+  // accidentally bypassed (e.g. after the duplicate-check nuance path).
+  async function submitWithSideCheck(payload: CreateArgumentDto) {
+    setSubmitting(true);
+    try {
+      const sideResult = await checkArgumentSide({
+        thesis,
+        selectedSide: payload.side,
+        content: payload.content,
+        parentContent: parent?.content,
+      });
+      if (sideResult.isMismatch && sideResult.suggestedSide) {
+        setSideMismatch(sideResult.suggestedSide);
+        setPendingPayload(payload);
+        setSubmitting(false);
+        return;
+      }
+    } catch {
+      // If the check fails, allow submission to proceed.
+    }
+    setSubmitting(false);
+    await submitWithPayload(payload);
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const validationError = validate();
@@ -155,7 +213,7 @@ export function AddArgumentForm({
       isAiGenerated: aiMode,
     };
 
-    // Duplicate check gate - mandatory per CLAUDE.md
+    // Duplicate check gate
     setSubmitting(true);
     setFormError(null);
     try {
@@ -176,7 +234,7 @@ export function AddArgumentForm({
     }
     setSubmitting(false);
 
-    await submitWithPayload(payload);
+    await submitWithSideCheck(payload);
   }
 
   const charsLeft = CONTENT_MAX - content.length;
@@ -204,11 +262,31 @@ export function AddArgumentForm({
               </button>
             </div>
             <p
-              className="mt-1.5 line-clamp-3 text-sm text-default-700 dark:text-zinc-300"
-              title={parent.content}
+              ref={parentTextRef}
+              className={`mt-1.5 text-sm text-default-700 dark:text-zinc-300 ${
+                parentExpanded ? "" : "line-clamp-3"
+              }`}
             >
               {parent.content}
             </p>
+            {parentClamped || parentExpanded ? (
+              <button
+                type="button"
+                onClick={() => setParentExpanded((v) => !v)}
+                className="mt-1 inline-flex items-center gap-1 rounded-md text-[11px] font-medium text-violet-700 underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:text-violet-400"
+                aria-expanded={parentExpanded}
+              >
+                <ChevronDown
+                  size={11}
+                  className={`shrink-0 transition-transform duration-150 ${
+                    parentExpanded ? "rotate-180" : ""
+                  }`}
+                />
+                {parentExpanded
+                  ? ui.debates.graph.parentShowLess
+                  : ui.debates.graph.parentShowMore}
+              </button>
+            ) : null}
           </div>
         ) : (
           <p className="text-xs text-default-500">
@@ -362,6 +440,31 @@ export function AddArgumentForm({
         </div>
       </form>
 
+      {sideMismatch && pendingPayload ? (
+        <SideMismatchDialog
+          selectedSide={pendingPayload.side}
+          suggestedSide={sideMismatch}
+          argumentContent={pendingPayload.content}
+          onSwitch={() => {
+            const switched = { ...pendingPayload, side: sideMismatch };
+            setSideMismatch(null);
+            setPendingPayload(null);
+            setSide(sideMismatch === ArgumentSide.Pro ? "pro" : "against");
+            void submitWithPayload(switched);
+          }}
+          onKeepOriginal={() => {
+            const payload = pendingPayload;
+            setSideMismatch(null);
+            setPendingPayload(null);
+            void submitWithPayload(payload);
+          }}
+          onClose={() => {
+            setSideMismatch(null);
+            setPendingPayload(null);
+          }}
+        />
+      ) : null}
+
       {duplicate && pendingPayload ? (
         <MergeOrNuanceDialog
           original={duplicate}
@@ -378,7 +481,7 @@ export function AddArgumentForm({
             const payload = pendingPayload;
             setDuplicate(null);
             setPendingPayload(null);
-            void submitWithPayload(payload);
+            void submitWithSideCheck(payload);
           }}
           onClose={() => {
             setDuplicate(null);

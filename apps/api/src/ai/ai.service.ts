@@ -1,17 +1,21 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import type {
+  ArgumentSideCheckResultDto,
+  CheckArgumentSideDto,
   CheckDuplicateDto,
   DuplicateCheckResultDto,
   GeneratedArgumentDto,
   LlmProviderDto,
   SynthesisResultDto,
 } from '@brainstorm/core';
+import { ArgumentSide } from '@brainstorm/core';
 import { Argument } from '../arguments/argument.entity';
 import { ArgumentsService } from '../arguments/arguments.service';
 import { Debate } from '../debates/debate.entity';
@@ -27,6 +31,8 @@ const DUPLICATE_THRESHOLD = parseFloat(
 
 @Injectable()
 export class AiService {
+  private readonly logger = new Logger(AiService.name);
+
   constructor(
     private readonly registry: LlmRegistry,
     private readonly embedding: EmbeddingService,
@@ -87,6 +93,45 @@ export class AiService {
       similarity: best.similarity,
       threshold: DUPLICATE_THRESHOLD,
     };
+  }
+
+  async checkArgumentSide(
+    dto: CheckArgumentSideDto,
+  ): Promise<ArgumentSideCheckResultDto> {
+    const providerInfos = this.registry.getActive();
+    if (providerInfos.length === 0) return { isMismatch: false };
+
+    const input = {
+      thesis: dto.thesis,
+      content: dto.content,
+      parentContent: dto.parentContent,
+    };
+
+    // Try each active provider until one succeeds. The classification is a
+    // lightweight single-word call, so falling through is cheap.
+    for (const info of providerInfos) {
+      const provider = this.registry.get(info.id);
+      if (!provider) continue;
+
+      try {
+        const raw = await provider.classifySide(input);
+        this.logger.log(
+          `[checkArgumentSide] provider=${info.id}, raw=${JSON.stringify(raw)}, selectedSide=${dto.selectedSide}`,
+        );
+        if (!raw) return { isMismatch: false };
+        const suggestedSide =
+          raw === 'pro' ? ArgumentSide.Pro : ArgumentSide.Against;
+        if (suggestedSide === dto.selectedSide) return { isMismatch: false };
+        return { isMismatch: true, suggestedSide };
+      } catch (err) {
+        this.logger.warn(
+          `[checkArgumentSide] ${info.id} failed, trying next: ${err}`,
+        );
+      }
+    }
+
+    // All providers failed — don't block the user.
+    return { isMismatch: false };
   }
 
   async synthesize(

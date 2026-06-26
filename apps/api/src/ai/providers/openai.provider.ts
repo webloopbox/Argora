@@ -1,12 +1,21 @@
 import OpenAI from 'openai';
 import type { LlmProviderDto } from '@brainstorm/core';
 import type {
+  ClassifySideInput,
   GenerateInput,
   LlmProvider,
   SynthesizeInput,
 } from '../llm-provider.interface';
 import { buildSynthesisPrompt } from '../prompts/synthesis.prompt';
-import { GENERATE_MAX_TOKENS, SYNTHESIS_MAX_TOKENS } from '../ai.constants';
+import {
+  buildClassifySidePrompt,
+  parseSide,
+} from '../prompts/classify-side.prompt';
+import {
+  CLASSIFY_MAX_TOKENS,
+  GENERATE_MAX_TOKENS,
+  SYNTHESIS_MAX_TOKENS,
+} from '../ai.constants';
 
 const MODEL_ID = 'gpt-4o';
 const EMBEDDING_MODEL = 'text-embedding-3-small';
@@ -63,5 +72,15 @@ export class OpenAiProvider implements LlmProvider {
       input: text,
     });
     return response.data[0].embedding;
+  }
+
+  async classifySide(input: ClassifySideInput): Promise<'pro' | 'against' | null> {
+    const completion = await this.client.chat.completions.create({
+      model: MODEL_ID,
+      max_tokens: CLASSIFY_MAX_TOKENS,
+      messages: [{ role: 'user', content: buildClassifySidePrompt(input) }],
+    });
+
+    return parseSide(completion.choices[0]?.message.content ?? '');
   }
 }

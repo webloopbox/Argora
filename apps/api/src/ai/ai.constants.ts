@@ -7,3 +7,5 @@
 // generation is capped to ~3 sentences, so a small budget is enough.
 export const SYNTHESIS_MAX_TOKENS = 8192;
 export const GENERATE_MAX_TOKENS = 2048;
+// Side classification needs only a single word response (ZA / PRZECIW).
+export const CLASSIFY_MAX_TOKENS = 20;
