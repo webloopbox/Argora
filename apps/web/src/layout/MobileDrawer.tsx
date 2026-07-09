@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Avatar, AvatarFallback, Button } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { Languages, X } from "lucide-react";
 import { ui } from "../texts/ui";
 import { navItems } from "./nav-items";
+import { useLanguage } from "../app-config/language-context";
 
 interface MobileDrawerProps {
   isOpen: boolean;
@@ -23,6 +24,8 @@ export function MobileDrawer({
   onSignIn,
   onSignOut,
 }: MobileDrawerProps) {
+  const { lang, toggle: toggleLang } = useLanguage();
+
   useEffect(() => {
     if (!isOpen) return;
     const previous = document.body.style.overflow;
@@ -114,7 +117,24 @@ export function MobileDrawer({
               </ul>
             </nav>
 
-            <footer className="border-t border-default-100 px-5 py-4 dark:border-zinc-800">
+            <footer className="border-t border-default-100 px-5 py-4 dark:border-zinc-800 space-y-3">
+              {/* Language switcher */}
+              <button
+                type="button"
+                onClick={toggleLang}
+                aria-label={ui.language.toggle}
+                className="flex w-full items-center justify-between rounded-xl border border-default-200 px-4 py-2.5 text-sm font-medium text-default-700 transition-colors hover:bg-default-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              >
+                <span className="flex items-center gap-2">
+                  <Languages size={15} />
+                  {ui.language.toggle}
+                </span>
+                <span className="rounded-md bg-violet-100 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-widest text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+                  {lang}
+                </span>
+              </button>
+
+              {/* Auth button */}
               {isAuthenticated ? (
                 <Button
                   variant="outline"

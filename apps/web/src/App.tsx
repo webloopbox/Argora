@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { useLanguage } from "./app-config/language-context";
 import { PrivateRoute } from "./app-config/PrivateRoute";
 import { AuthLayout } from "./features/auth/AuthLayout";
 import { LoginPage } from "./features/auth/LoginPage";
@@ -12,8 +13,13 @@ import { InvitationsPage } from "./features/invitations/InvitationsPage";
 import { AppShell } from "./layout/AppShell";
 
 function App() {
+  // `key={lang}` on Routes forces a full remount of the route tree whenever
+  // the language changes, guaranteeing every page component re-renders and
+  // picks up fresh strings from the ui Proxy.
+  const { lang } = useLanguage();
+
   return (
-    <Routes>
+    <Routes key={lang}>
       <Route element={<AuthLayout />}>
         <Route path="/logowanie" element={<LoginPage />} />
         <Route path="/rejestracja" element={<RegisterPage />} />

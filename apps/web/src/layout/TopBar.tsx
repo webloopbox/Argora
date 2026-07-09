@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, Button } from "@heroui/react";
-import { Gavel, Menu, Moon, Sun } from "lucide-react";
+import { Gavel, Languages, Menu, Moon, Sun } from "lucide-react";
 import { motion } from "framer-motion";
 import { navItems } from "./nav-items";
 import { useAuth } from "../app-config/auth-context";
 import { useTheme } from "../app-config/theme-context";
+import { useLanguage } from "../app-config/language-context";
 import { MobileDrawer } from "./MobileDrawer";
 import { ui } from "../texts/ui";
 
 export function TopBar() {
   const { isAuthenticated, displayName, signOut } = useAuth();
   const { theme, toggle: toggleTheme } = useTheme();
+  const { lang, toggle: toggleLang } = useLanguage();
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -32,26 +34,32 @@ export function TopBar() {
   return (
     <>
       <header className="sticky top-0 z-40 border-b border-default-100 bg-white/70 backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-950/70">
-        <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4 sm:gap-6 sm:px-6">
-          <button
-            type="button"
-            onClick={() => setDrawerOpen(true)}
-            aria-label={ui.nav_aria.openMenu}
-            className="grid h-9 w-9 place-items-center rounded-xl text-default-700 transition-colors hover:bg-default-100 dark:text-zinc-300 dark:hover:bg-zinc-800 md:hidden"
-          >
-            <Menu size={18} />
-          </button>
+        {/* Mobile: flex  |  Desktop: 3-column grid so nav is always truly centered */}
+        <div className="mx-auto flex h-16 w-full max-w-7xl items-center px-4 sm:px-6 md:grid md:grid-cols-[auto_1fr_auto] md:gap-0">
 
-          <NavLink to="/" className="group flex items-center gap-2">
-            <div className="relative grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 text-white shadow-md shadow-violet-500/20 transition-transform group-hover:scale-[1.04]">
-              <Gavel size={18} strokeWidth={2.5} />
-            </div>
-            <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-lg font-semibold tracking-tight text-transparent">
-              {ui.app.name}
-            </span>
-          </NavLink>
+          {/* ── Left: hamburger + logo ── */}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setDrawerOpen(true)}
+              aria-label={ui.nav_aria.openMenu}
+              className="grid h-9 w-9 place-items-center rounded-xl text-default-700 transition-colors hover:bg-default-100 dark:text-zinc-300 dark:hover:bg-zinc-800 md:hidden"
+            >
+              <Menu size={18} />
+            </button>
 
-          <nav className="hidden flex-1 md:flex md:items-center md:justify-center">
+            <NavLink to="/" className="group flex items-center gap-2">
+              <div className="relative grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 text-white shadow-md shadow-violet-500/20 transition-transform group-hover:scale-[1.04]">
+                <Gavel size={18} strokeWidth={2.5} />
+              </div>
+              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-lg font-semibold tracking-tight text-transparent">
+                {ui.app.name}
+              </span>
+            </NavLink>
+          </div>
+
+          {/* ── Center: nav (desktop only) ── */}
+          <nav className="hidden md:flex md:items-center md:justify-center">
             <ul className="flex items-center gap-1 rounded-full border border-default-100 bg-default-50/60 p-1 dark:border-zinc-800 dark:bg-zinc-900/60">
               {visibleNav.map((item) => (
                 <li key={item.path}>
@@ -81,7 +89,23 @@ export function TopBar() {
             </ul>
           </nav>
 
-          <div className="ml-auto flex items-center gap-2 sm:gap-3">
+          {/* ── Right: lang + theme + auth ── */}
+          <div className="ml-auto flex items-center gap-2 sm:gap-3 md:ml-0 md:justify-end">
+            {/* Language switcher */}
+            <button
+              type="button"
+              onClick={toggleLang}
+              aria-label={ui.language.toggle}
+              title={ui.language.toggle}
+              className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-default-600 transition-colors hover:bg-default-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            >
+              <Languages size={15} />
+              <span className="w-[1.5ch] text-center text-xs font-semibold uppercase tracking-widest">
+                {lang}
+              </span>
+            </button>
+
+            {/* Theme toggle */}
             <button
               type="button"
               onClick={toggleTheme}
@@ -106,7 +130,7 @@ export function TopBar() {
                   size="sm"
                   variant="ghost"
                   onPress={signOut}
-                  className="hidden sm:inline-flex"
+                  className="hidden min-w-[5.5rem] sm:inline-flex"
                 >
                   {ui.auth.signOut}
                 </Button>
@@ -116,7 +140,7 @@ export function TopBar() {
                 size="sm"
                 variant="primary"
                 onPress={() => navigate("/logowanie")}
-                className="hidden sm:inline-flex"
+                className="hidden min-w-[5.5rem] sm:inline-flex"
               >
                 {ui.auth.signIn}
               </Button>
@@ -135,4 +159,5 @@ export function TopBar() {
       />
     </>
   );
+
 }
