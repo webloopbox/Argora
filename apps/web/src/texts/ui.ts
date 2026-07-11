@@ -238,6 +238,7 @@ export interface UiDict {
       summarizeAll: string;
       synthesisFullTitle: string;
       summarizeAllSubtitle: string;
+      argumentsSelectedSubtitle: string;
       duplicateTitle: string;
       duplicateSubtitle: string;
       duplicateOriginalLabel: string;
@@ -372,7 +373,7 @@ export interface UiDict {
 // ---------------------------------------------------------------------------
 const pl: UiDict = {
   app: {
-    name: "Brainstorm",
+    name: "Argora",
     tagline: "Wizualna przestrzeń do debat.",
   },
   nav: {
@@ -439,7 +440,7 @@ const pl: UiDict = {
       votes: "Oddane głosy",
     },
     filters: {
-      hottest: "Najpopularniejsze",
+      hottest: "Najbardziej dyskutowane",
       newest: "Najnowsze",
       mostDivisive: "Najbardziej sporne",
     },
@@ -592,8 +593,9 @@ const pl: UiDict = {
       synthesisClose: "Zamknij",
       synthesisAgain: "Streść ponownie",
       summarizeAll: "Streść całą dyskusję",
-      synthesisFullTitle: "Streszczenie całej dyskusji",
+      synthesisFullTitle: "Pełne podsumowanie",
       summarizeAllSubtitle: "argumentów w dyskusji",
+      argumentsSelectedSubtitle: "argumentów zaznaczonych",
       duplicateTitle: "Podobny argument już istnieje",
       duplicateSubtitle:
         "Wykryto argument o zbliżonym znaczeniu. Możesz wzmocnić istniejący głosem lub dodać swój argument jako nowy niuans.",
@@ -745,7 +747,7 @@ const pl: UiDict = {
 // ---------------------------------------------------------------------------
 const en: UiDict = {
   app: {
-    name: "Brainstorm",
+    name: "Argora",
     tagline: "A visual space for debates.",
   },
   nav: {
@@ -812,7 +814,7 @@ const en: UiDict = {
       votes: "Votes cast",
     },
     filters: {
-      hottest: "Hottest",
+      hottest: "Most debated",
       newest: "Newest",
       mostDivisive: "Most divisive",
     },
@@ -965,8 +967,9 @@ const en: UiDict = {
       synthesisClose: "Close",
       synthesisAgain: "Summarize again",
       summarizeAll: "Summarize entire debate",
-      synthesisFullTitle: "Full debate summary",
+      synthesisFullTitle: "Full summary",
       summarizeAllSubtitle: "arguments in the debate",
+      argumentsSelectedSubtitle: "arguments selected",
       duplicateTitle: "Similar argument already exists",
       duplicateSubtitle:
         "An argument with a similar meaning was detected. You can strengthen the existing one with a vote, or add yours as a new nuance.",

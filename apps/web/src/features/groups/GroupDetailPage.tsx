@@ -28,6 +28,7 @@ import {
   listGroupInvitations,
 } from "../../api/groups.api";
 import { useAuth } from "../../app-config/auth-context";
+import { useLanguage } from "../../app-config/language-context";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { ui } from "../../texts/ui";
 import { UserSearchPicker } from "./UserSearchPicker";
@@ -44,11 +45,18 @@ type LoadState =
   | { kind: "forbidden" }
   | { kind: "error" };
 
-const dateFormatter = new Intl.DateTimeFormat("pl-PL", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
+const dateFormatters: Record<string, Intl.DateTimeFormat> = {};
+function getDateTimeFormatter(lang: string) {
+  const locale = lang === "pl" ? "pl-PL" : "en-US";
+  if (!dateFormatters[locale]) {
+    dateFormatters[locale] = new Intl.DateTimeFormat(locale, {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  }
+  return dateFormatters[locale];
+}
 
 export function GroupDetailPage() {
   const params = useParams<{ id: string }>();
@@ -60,6 +68,7 @@ export function GroupDetailPage() {
 
 function GroupDetailBody({ groupId }: { groupId: string }) {
   const { user } = useAuth();
+  const { lang } = useLanguage();
   const navigate = useNavigate();
   const [state, setState] = useState<LoadState>({ kind: "loading" });
 
@@ -151,7 +160,7 @@ function GroupDetailBody({ groupId }: { groupId: string }) {
               {group.ownerDisplayName}
             </span>{" "}
             · {ui.groups.detail.createdAt}{" "}
-            {dateFormatter.format(new Date(group.createdAt))}
+            {getDateTimeFormatter(lang).format(new Date(group.createdAt))}
           </p>
         </div>
 
@@ -285,6 +294,7 @@ interface MembersCardProps {
 }
 
 function MembersCard({ members }: MembersCardProps) {
+  const { lang } = useLanguage();
   return (
     <section
       aria-label={ui.groups.detail.membersTitle}
@@ -309,7 +319,7 @@ function MembersCard({ members }: MembersCardProps) {
                 {member.displayName}
               </span>
               <span className="block truncate text-[11px] text-default-400 dark:text-zinc-500">
-                {dateFormatter.format(new Date(member.joinedAt))}
+                {getDateTimeFormatter(lang).format(new Date(member.joinedAt))}
               </span>
             </span>
             {member.isOwner ? (
@@ -338,6 +348,7 @@ function InvitationsCard({
   excludeIds,
   onCreated,
 }: InvitationsCardProps) {
+  const { lang } = useLanguage();
   const [selected, setSelected] = useState<UserSearchResultDto | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -431,7 +442,7 @@ function InvitationsCard({
                     </span>
                     <span className="flex items-center gap-1 text-[11px] text-default-400 dark:text-zinc-500">
                       <Clock size={10} />
-                      {dateFormatter.format(new Date(invitation.createdAt))}
+                      {getDateTimeFormatter(lang).format(new Date(invitation.createdAt))}
                     </span>
                   </span>
                   <InvitationStatusBadge status={invitation.status} />

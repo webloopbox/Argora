@@ -3,6 +3,8 @@ import { ArrowRight, Eye } from "lucide-react";
 import { motion } from "framer-motion";
 import type { DebatePreviewDto } from "@brainstorm/core";
 import { ui } from "../../texts/ui";
+import { useLanguage } from "../../app-config/language-context";
+import { useAuth } from "../../app-config/auth-context";
 
 interface DebateCardProps {
   debate: DebatePreviewDto;
@@ -10,22 +12,30 @@ interface DebateCardProps {
   onOpen: (id: string) => void;
 }
 
-const relativeFormatter = new Intl.RelativeTimeFormat("pl-PL", {
-  numeric: "auto",
-});
+const relativeFormatters: Record<string, Intl.RelativeTimeFormat> = {};
+function getRelativeFormatter(lang: string) {
+  const locale = lang === "pl" ? "pl-PL" : "en-US";
+  if (!relativeFormatters[locale]) {
+    relativeFormatters[locale] = new Intl.RelativeTimeFormat(locale, {
+      numeric: "auto",
+    });
+  }
+  return relativeFormatters[locale];
+}
 
-function relativeLabel(iso: string): string {
+function relativeLabel(iso: string, lang: string): string {
+  const formatter = getRelativeFormatter(lang);
   const created = new Date(iso).getTime();
   const diffSeconds = Math.round((created - Date.now()) / 1000);
   const abs = Math.abs(diffSeconds);
-  if (abs < 60) return relativeFormatter.format(diffSeconds, "second");
+  if (abs < 60) return formatter.format(diffSeconds, "second");
   if (abs < 3600)
-    return relativeFormatter.format(Math.round(diffSeconds / 60), "minute");
+    return formatter.format(Math.round(diffSeconds / 60), "minute");
   if (abs < 86_400)
-    return relativeFormatter.format(Math.round(diffSeconds / 3600), "hour");
+    return formatter.format(Math.round(diffSeconds / 3600), "hour");
   if (abs < 604_800)
-    return relativeFormatter.format(Math.round(diffSeconds / 86_400), "day");
-  return relativeFormatter.format(Math.round(diffSeconds / 604_800), "week");
+    return formatter.format(Math.round(diffSeconds / 86_400), "day");
+  return formatter.format(Math.round(diffSeconds / 604_800), "week");
 }
 
 function initialsFor(name: string): string {
@@ -37,10 +47,9 @@ function initialsFor(name: string): string {
     .join("");
 }
 
-import { useAuth } from "../../app-config/auth-context";
-
 export function DebateCard({ debate, canParticipate, onOpen }: DebateCardProps) {
   const { user } = useAuth();
+  const { lang } = useLanguage();
   const isOwner = user?.id === debate.author.id;
   const total = debate.proCount + debate.againstCount;
   const proPct = total === 0 ? 50 : Math.round((debate.proCount / total) * 100);
@@ -68,7 +77,7 @@ export function DebateCard({ debate, canParticipate, onOpen }: DebateCardProps) 
           {debate.author.displayName}
         </span>
         <span>·</span>
-        <span>{relativeLabel(debate.createdAt)}</span>
+        <span>{relativeLabel(debate.createdAt, lang)}</span>
       </div>
 
       <h3 className="mt-3 text-base font-semibold leading-snug text-default-900 sm:text-lg dark:text-zinc-100">

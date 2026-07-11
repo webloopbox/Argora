@@ -6,6 +6,7 @@ import type {
   LlmProvider,
   SynthesizeInput,
 } from '../llm-provider.interface';
+import { buildGeneratePrompt } from '../prompts/generate.prompt';
 import { buildSynthesisPrompt } from '../prompts/synthesis.prompt';
 import {
   buildClassifySidePrompt,
@@ -31,25 +32,10 @@ export class ClaudeProvider implements LlmProvider {
   }
 
   async generate(input: GenerateInput): Promise<string> {
-    const sideLabel = input.side === 'pro' ? 'Za' : 'Przeciw';
-    const parentCtx = input.parentContent
-      ? `\nOdpowiadasz na istniejący argument: "${input.parentContent}"\n`
-      : '';
-
     const message = await this.client.messages.create({
       model: MODEL_ID,
       max_tokens: GENERATE_MAX_TOKENS,
-      messages: [
-        {
-          role: 'user',
-          content:
-            `Teza debaty: "${input.thesis}"\n` +
-            (parentCtx ? `${parentCtx}` : '') +
-            `Wygeneruj jeden zwięzły argument ${sideLabel} ${input.parentContent ? 'powyższemu argumentowi' : 'tej tezie'}. ` +
-            `Odpowiedź zawiera TYLKO treść argumentu - bez wstępu, numeracji, metakomentarzy ani cudzysłowów. ` +
-            `Maksymalnie 3 zdania. Pisz po polsku.`,
-        },
-      ],
+      messages: [{ role: 'user', content: buildGeneratePrompt(input) }],
     });
 
     const block = message.content[0];

@@ -11,17 +11,25 @@ import {
 } from "../../api/invitations.api";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { ui } from "../../texts/ui";
+import { useLanguage } from "../../app-config/language-context";
 
 type LoadState =
   | { kind: "loading" }
   | { kind: "ready"; invitations: InvitationDto[] }
   | { kind: "error" };
 
-const dateFormatter = new Intl.DateTimeFormat("pl-PL", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
+const dateFormatters: Record<string, Intl.DateTimeFormat> = {};
+function getDateTimeFormatter(lang: string) {
+  const locale = lang === "pl" ? "pl-PL" : "en-US";
+  if (!dateFormatters[locale]) {
+    dateFormatters[locale] = new Intl.DateTimeFormat(locale, {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  }
+  return dateFormatters[locale];
+}
 
 export function InvitationsPage() {
   useDocumentTitle(ui.invitations.pageTitle);
@@ -151,6 +159,7 @@ function InvitationRow({
   onAccept,
   onDecline,
 }: InvitationRowProps) {
+  const { lang } = useLanguage();
   return (
     <motion.li
       layout
@@ -179,7 +188,7 @@ function InvitationRow({
               </span>
               <span className="inline-flex items-center gap-1">
                 <Clock size={11} />
-                {dateFormatter.format(new Date(invitation.createdAt))}
+                {getDateTimeFormatter(lang).format(new Date(invitation.createdAt))}
               </span>
             </p>
           </div>

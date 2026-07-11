@@ -9,7 +9,10 @@
     "test:e2e": "pnpm --filter \"./apps/e2e\" test",
     "seed:demo": "node scripts/seed-demo-duplicate.mjs",
     "seed:seminar": "node scripts/seed-demo-seminar.mjs",
-    "seed:ev": "node scripts/seed-demo-ev.mjs"
+    "seed:ev": "node scripts/seed-demo-ev.mjs",
+    "seed:ev:en": "node scripts/seed-demo-ev-en.mjs",
+    "seed:additional:en": "node scripts/seed-additional-en.mjs",
+    "seed:agi:en": "node scripts/seed-large-agi-en.mjs"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

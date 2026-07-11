@@ -77,6 +77,9 @@ export function useGraphLayout(
 
     dagre.layout(g);
 
+    const thesisNodeDagre = g.node("thesis");
+    const offsetX = thesisNodeDagre ? thesisNodeDagre.x : 0;
+
     const positionedNodes = sortedNodes.map((node) => {
       const dn = g.node(node.id);
       const isThesis = node.type === "thesis";
@@ -85,7 +88,7 @@ export function useGraphLayout(
       return {
         ...node,
         position: {
-          x: dn.x - width / 2,
+          x: dn.x - offsetX - width / 2,
           y: dn.y - height / 2,
         },
         width,

@@ -22,6 +22,7 @@ import { ArgumentSide, DebateVisibility } from "@brainstorm/core";
 import { toast } from "sonner";
 import { fetchDebateDetail, deleteDebate } from "../../api/debates.api";
 import { useAuth } from "../../app-config/auth-context";
+import { useLanguage } from "../../app-config/language-context";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { ui } from "../../texts/ui";
 import { AddArgumentPanel } from "./graph/AddArgumentPanel";
@@ -37,11 +38,18 @@ type LoadState =
   | { kind: "forbidden" }
   | { kind: "error" };
 
-const dateFormatter = new Intl.DateTimeFormat("pl-PL", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
+const dateFormatters: Record<string, Intl.DateTimeFormat> = {};
+function getDateTimeFormatter(lang: string) {
+  const locale = lang === "pl" ? "pl-PL" : "en-US";
+  if (!dateFormatters[locale]) {
+    dateFormatters[locale] = new Intl.DateTimeFormat(locale, {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  }
+  return dateFormatters[locale];
+}
 
 // Wrapper keys the inner component by id so navigating between debates
 // remounts the body. That lets the inner useState lazy initializer
@@ -141,6 +149,7 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
   );
   const [defaultSide, setDefaultSide] = useState<ArgumentSide>(ArgumentSide.Pro);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [focusNodeId, setFocusNodeId] = useState<string | null>(null);
   const [lassoMode, setLassoMode] = useState(false);
   const [lassoIds, setLassoIds] = useState<string[]>([]);
   const [synthesisPanelOpen, setSynthesisPanelOpen] = useState(false);
@@ -248,6 +257,7 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
           onArgumentSelect={handleArgumentSelect}
           lassoMode={lassoMode}
           onLassoComplete={handleLassoComplete}
+          focusNodeId={focusNodeId}
           hideMiniMap={drawerOpen}
         />
       )}
@@ -300,6 +310,7 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
         onCreated={(created) => {
           upsertArgument(created);
           setSelectedArgumentId(null);
+          setFocusNodeId(created.id);
         }}
         isOpen={drawerOpen}
         onClose={handleDrawerClose}
@@ -343,6 +354,7 @@ function FloatingThesisCard({
   const [expanded, setExpanded] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const { lang } = useLanguage();
   const isPrivate = debate.visibility === DebateVisibility.Private;
 
   const handleConfirm = async () => {
@@ -394,7 +406,7 @@ function FloatingThesisCard({
             </span>
             <span className="text-default-400 dark:text-zinc-600">·</span>
             <span className="text-default-500 dark:text-zinc-400">
-              {dateFormatter.format(new Date(debate.createdAt))}
+              {getDateTimeFormatter(lang).format(new Date(debate.createdAt))}
             </span>
           </div>
         </div>

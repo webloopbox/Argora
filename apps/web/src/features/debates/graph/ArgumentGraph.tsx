@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Background,
   BackgroundVariant,
@@ -22,6 +22,7 @@ interface ArgumentGraphProps {
   lassoMode?: boolean;
   onLassoComplete?: (argumentIds: string[]) => void;
   hideMiniMap?: boolean;
+  focusNodeId?: string | null;
 }
 
 // Node types declared module-level - React Flow throws if recreated each render.
@@ -41,6 +42,7 @@ export function ArgumentGraph({
   lassoMode = false,
   onLassoComplete,
   hideMiniMap = false,
+  focusNodeId,
 }: ArgumentGraphProps) {
   const layout = useGraphLayout(nodes, edges);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -63,6 +65,21 @@ export function ArgumentGraph({
     [],
   );
   const [lassoDrawing, setLassoDrawing] = useState(false);
+  const [rfInstance, setRfInstance] = useState<any>(null);
+
+  useEffect(() => {
+    if (rfInstance && focusNodeId) {
+      // slight delay to let React Flow apply the new nodes and measure them
+      setTimeout(() => {
+        rfInstance.fitView({
+          nodes: [{ id: focusNodeId }],
+          duration: 800,
+          padding: 0.2,
+          maxZoom: 1.2
+        });
+      }, 50);
+    }
+  }, [rfInstance, focusNodeId]);
 
   const decoratedNodes = useMemo(
     () =>
@@ -130,7 +147,8 @@ export function ArgumentGraph({
           fitView
           fitViewOptions={{ padding: 0.25, includeHiddenNodes: false }}
           proOptions={{ hideAttribution: true }}
-          onInit={() => {
+          onInit={(instance) => {
+            setRfInstance(instance);
             // React Flow's fitView happens shortly after init when nodes are measured.
             // Giving it a tiny timeout avoids the initial snap flicker.
             setTimeout(() => setIsReady(true), 50);

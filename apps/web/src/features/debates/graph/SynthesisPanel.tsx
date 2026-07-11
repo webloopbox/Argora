@@ -7,6 +7,8 @@ import type { LlmProviderDto } from "@brainstorm/core";
 import { listProviders, synthesize } from "../../../api/ai.api";
 import { useTypewriter } from "../../../hooks/useTypewriter";
 import { ui } from "../../../texts/ui";
+import { useLanguage } from "../../../app-config/language-context";
+import { ModelPicker } from "./ModelPicker";
 
 interface SynthesisPanelProps {
   debateId: string;
@@ -25,9 +27,36 @@ export function SynthesisPanel({
 }: SynthesisPanelProps) {
   const [providers, setProviders] = useState<LlmProviderDto[]>([]);
   const [modelId, setModelId] = useState<string>("");
+  const { lang } = useLanguage();
+  const [loadingTextIndex, setLoadingTextIndex] = useState(0);
   const [result, setResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!loading) {
+      setLoadingTextIndex(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setLoadingTextIndex((i) => (i + 1) % 5);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [loading]);
+
+  const loadingPhrases = lang === "pl" ? [
+    "Zbieranie przesłanek...",
+    "Analizowanie treści...",
+    "Ocenianie argumentów...",
+    "Synteza opinii...",
+    "Przygotowywanie wniosków..."
+  ] : [
+    "Gathering arguments...",
+    "Analyzing content...",
+    "Evaluating arguments...",
+    "Synthesizing opinions...",
+    "Preparing conclusions..."
+  ];
 
   // Animate the synthesis text so it feels live-streamed even though the
   // API returns it in one shot. Adapter wraps the nullable setter.
@@ -104,7 +133,7 @@ export function SynthesisPanel({
                   {selectedArgumentIds.length}{" "}
                   {mode === "full"
                     ? ui.debates.ai.summarizeAllSubtitle
-                    : "argumentów zaznaczonych"}
+                    : ui.debates.ai.argumentsSelectedSubtitle}
                 </p>
               </div>
               <button
@@ -158,23 +187,13 @@ export function SynthesisPanel({
                   >
                     {ui.debates.ai.synthesisModelLabel}
                   </label>
-                  <select
-                    id="synthesis-model"
+                  <ModelPicker
+                    providers={providers}
                     value={modelId}
-                    onChange={(e) => setModelId(e.target.value)}
-                    disabled={loading || providers.length === 0}
-                    className="w-full rounded-xl border border-default-200 bg-white px-3 py-2 text-sm text-default-900 focus:outline-none focus:ring-2 focus:ring-violet-400 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-                  >
-                    {providers.length === 0 ? (
-                      <option value="">{ui.debates.argumentForm.aiNoProviders}</option>
-                    ) : (
-                      providers.map((p) => (
-                        <option key={p.id} value={p.id}>
-                          {p.name}
-                        </option>
-                      ))
-                    )}
-                  </select>
+                    onChange={setModelId}
+                    disabled={loading}
+                    placement="top"
+                  />
                 </div>
                 <Button
                   variant="primary"
@@ -184,9 +203,11 @@ export function SynthesisPanel({
                   className="w-full gap-2"
                 >
                   <Sparkles size={14} />
-                  {loading
-                    ? ui.debates.ai.synthesisSending
-                    : ui.debates.ai.synthesisStart}
+                  <span className="truncate">
+                    {loading
+                      ? loadingPhrases[loadingTextIndex]
+                      : ui.debates.ai.synthesisStart}
+                  </span>
                 </Button>
               </footer>
             ) : result ? (

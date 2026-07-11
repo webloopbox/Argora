@@ -69,7 +69,7 @@ export function MobileDrawer({
             className="fixed inset-y-0 left-0 z-50 flex w-[min(320px,85vw)] flex-col overflow-hidden bg-white shadow-2xl dark:bg-zinc-950 md:hidden"
           >
             <header className="flex items-center justify-between border-b border-default-100 px-5 py-4 dark:border-zinc-800">
-              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-lg font-semibold tracking-tight text-transparent">
+              <span className="text-lg font-semibold tracking-tight text-violet-700 dark:text-violet-500">
                 {ui.app.name}
               </span>
               <button

@@ -1,0 +1,9 @@
+node_modules/
+out/
+.env
+# Generated voiceover audio (regenerate with `npm run voiceover`)
+public/audio/*.mp3
+# Recorded screen clips can be large — keep them out of git unless you want them
+public/clips/*.mp4
+public/clips/*.mov
+public/clips/*.webm

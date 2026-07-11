@@ -49,10 +49,10 @@ export function TopBar() {
             </button>
 
             <NavLink to="/" className="group flex items-center gap-2">
-              <div className="relative grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 text-white shadow-md shadow-violet-500/20 transition-transform group-hover:scale-[1.04]">
+              <div className="relative grid h-9 w-9 place-items-center rounded-xl bg-violet-600 text-white shadow-md shadow-violet-500/20 transition-transform group-hover:scale-[1.04]">
                 <Gavel size={18} strokeWidth={2.5} />
               </div>
-              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-lg font-semibold tracking-tight text-transparent">
+              <span className="text-lg font-semibold tracking-tight text-violet-700 dark:text-violet-500">
                 {ui.app.name}
               </span>
             </NavLink>

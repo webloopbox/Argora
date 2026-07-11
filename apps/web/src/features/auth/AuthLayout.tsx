@@ -28,10 +28,10 @@ export function AuthLayout() {
           to="/"
           className="mb-8 flex items-center justify-center gap-2"
         >
-          <span className="relative grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 text-white shadow-md shadow-violet-500/30">
+          <span className="relative grid h-10 w-10 place-items-center rounded-xl bg-violet-600 text-white shadow-md shadow-violet-500/30">
             <Sparkles size={20} strokeWidth={2.5} />
           </span>
-          <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-xl font-semibold tracking-tight text-transparent">
+          <span className="text-xl font-semibold tracking-tight text-violet-700 dark:text-violet-500">
             {ui.app.name}
           </span>
         </NavLink>
