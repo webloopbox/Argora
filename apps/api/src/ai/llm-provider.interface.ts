@@ -16,7 +16,12 @@ export interface SynthesizeArgInput {
   side: string;
   content: string;
   author: string;
-  depth: number;
+  /**
+   * Stance toward the debate thesis ('pro' | 'against'), resolved by walking the
+   * parent chain and flipping polarity on every Against link - `side` alone is only
+   * relative to the immediate parent, so it must not be used as a thesis-relative label.
+   */
+  effectiveStance: string;
   forCount: number;
   againstCount: number;
   weight: number;

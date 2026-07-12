@@ -158,6 +158,8 @@ export function SynthesisPanel({
                   className={
                     "rounded-2xl border border-violet-100 bg-violet-50/50 px-4 py-4 text-sm leading-relaxed text-default-800 dark:border-violet-900/40 dark:bg-violet-950/30 dark:text-zinc-200 " +
                     "[&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 " +
+                    "[&_h3]:mt-4 [&_h3:first-child]:mt-0 [&_h3]:mb-1.5 [&_h3]:text-[11px] [&_h3]:font-bold " +
+                    "[&_h3]:uppercase [&_h3]:tracking-wide [&_h3]:text-violet-700 dark:[&_h3]:text-violet-300 " +
                     "[&_strong]:font-semibold [&_strong]:text-default-900 " +
                     "[&_em]:italic " +
                     "[&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-5 " +

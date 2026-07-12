@@ -2,31 +2,42 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { LlmProviderDto } from '@brainstorm/core';
 import type { LlmProvider } from './llm-provider.interface';
-import { ClaudeProvider } from './providers/claude.provider';
-import { GeminiProvider } from './providers/gemini.provider';
-import { OpenAiProvider } from './providers/openai.provider';
+import { WatsonxProvider } from './providers/watsonx.provider';
+
+// watsonx.ai foundation models exposed in the "generate argument" / "synthesize"
+// UI. All served through the same IBM watsonx.ai account (one auth, one
+// endpoint) - verified against this project's live catalog
+// (GET /ml/v1/foundation_model_specs) to make sure every id is actually
+// entitled and not deprecated/withdrawn.
+const WATSONX_MODELS: { modelId: string; name: string }[] = [
+  { modelId: 'ibm/granite-4-h-small', name: 'IBM Granite 4' },
+  { modelId: 'meta-llama/llama-3-3-70b-instruct', name: 'Meta Llama 3.3' },
+  {
+    modelId: 'mistralai/mistral-small-3-1-24b-instruct-2503',
+    name: 'Mistral Small 3.1',
+  },
+];
 
 @Injectable()
 export class LlmRegistry {
   private readonly providers = new Map<string, LlmProvider>();
 
   constructor(config: ConfigService) {
-    const anthropicKey = config.get<string>('ANTHROPIC_API_KEY');
-    if (anthropicKey) {
-      const p = new ClaudeProvider(anthropicKey);
-      this.providers.set(p.getModelInfo().id, p);
-    }
+    const apiKey = config.get<string>('IBM_CLOUD_API_KEY');
+    const projectId = config.get<string>('WATSONX_PROJECT_ID');
+    const serviceUrl = config.get<string>('WATSONX_URL');
 
-    const openaiKey = config.get<string>('OPENAI_API_KEY');
-    if (openaiKey) {
-      const p = new OpenAiProvider(openaiKey);
-      this.providers.set(p.getModelInfo().id, p);
-    }
-
-    const geminiKey = config.get<string>('GEMINI_API_KEY');
-    if (geminiKey) {
-      const p = new GeminiProvider(geminiKey);
-      this.providers.set(p.getModelInfo().id, p);
+    if (apiKey && projectId && serviceUrl) {
+      for (const { modelId, name } of WATSONX_MODELS) {
+        const p = new WatsonxProvider(
+          apiKey,
+          serviceUrl,
+          projectId,
+          modelId,
+          name,
+        );
+        this.providers.set(p.getModelInfo().id, p);
+      }
     }
   }
 

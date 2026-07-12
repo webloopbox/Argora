@@ -11,7 +11,6 @@
 //
 
 import pg from "pg";
-import { GoogleGenAI } from "@google/genai";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -631,13 +630,14 @@ async function main() {
 
   const { Client } = pg;
   const dbUrl = process.env.DATABASE_URL;
-  const geminiKey = process.env.GEMINI_API_KEY;
+  const watsonxKey = process.env.IBM_CLOUD_API_KEY;
+  const watsonxProject = process.env.WATSONX_PROJECT_ID;
+  const watsonxUrl = process.env.WATSONX_URL;
 
-  if (dbUrl && geminiKey) {
+  if (dbUrl && watsonxKey && watsonxProject && watsonxUrl) {
     console.log(
       `\n🧩  Populating vectors (embeddings) for arguments...`
     );
-    const ai = new GoogleGenAI({ apiKey: geminiKey });
     const client = new Client({ connectionString: dbUrl });
     await client.connect();
     await new Promise((r) => setTimeout(r, 2000));
@@ -648,14 +648,33 @@ async function main() {
     );
 
     if (queryRes.rows.length > 0) {
+      const tokenRes = await fetch("https://iam.cloud.ibm.com/identity/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=${watsonxKey}`,
+      });
+      const { access_token: token } = await tokenRes.json();
+
       let successCount = 0;
       for (const row of queryRes.rows) {
         try {
-          const response = await ai.models.embedContent({
-            model: "gemini-embedding-001",
-            contents: row.content,
-          });
-          const embedding = response.embeddings?.[0]?.values;
+          const embedRes = await fetch(
+            `${watsonxUrl}/ml/v1/text/embeddings?version=2024-05-31`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                model_id: "ibm/granite-embedding-278m-multilingual",
+                project_id: watsonxProject,
+                inputs: [row.content],
+              }),
+            },
+          );
+          const embedJson = await embedRes.json();
+          const embedding = embedJson.results?.[0]?.embedding;
           if (embedding && embedding.length > 0) {
             await client.query(
               `UPDATE arguments SET embedding = $1::jsonb WHERE id = $2`,
@@ -666,7 +685,8 @@ async function main() {
         } catch {
           // ignore
         }
-        await new Promise((resolve) => setTimeout(resolve, 200));
+        // Lite plan allows 2 req/s - stay well under it.
+        await new Promise((resolve) => setTimeout(resolve, 700));
       }
       console.log(
         `    Vectors populated (${successCount}/${queryRes.rows.length}).`
@@ -677,7 +697,7 @@ async function main() {
     await client.end();
   } else {
     console.log(
-      `\n⚠️   Missing DATABASE_URL or GEMINI_API_KEY in .env. Skipped vector generation.`
+      `\n⚠️   Missing DATABASE_URL / IBM_CLOUD_API_KEY / WATSONX_PROJECT_ID / WATSONX_URL. Skipped vector generation.`
     );
   }
 

@@ -163,14 +163,22 @@ export class AiService {
         'Żaden z podanych argumentów nie należy do tej debaty.',
       );
 
-    const getDepth = (id: string): number => {
-      let depth = 0;
-      let currentId: string | null = dtoMap.get(id)?.parentArgumentId ?? null;
-      while (currentId && depth < 20) {
-        depth++;
-        currentId = dtoMap.get(currentId)?.parentArgumentId ?? null;
+    // `side` is only relative to the immediate parent (Kialo-style nesting), so an
+    // argument several levels deep can locally read "for" while actually opposing
+    // the thesis. Resolve the real stance by walking up to the root and flipping
+    // polarity on every Against link.
+    const getEffectiveStance = (id: string): ArgumentSide => {
+      let pro = true;
+      let currentId: string | null = id;
+      let hops = 0;
+      while (currentId && hops < 20) {
+        const node = dtoMap.get(currentId);
+        if (!node) break;
+        if (node.side === ArgumentSide.Against) pro = !pro;
+        currentId = node.parentArgumentId;
+        hops++;
       }
-      return depth;
+      return pro ? ArgumentSide.Pro : ArgumentSide.Against;
     };
 
     const input: SynthesizeInput = {
@@ -179,7 +187,7 @@ export class AiService {
         side: d.side as string,
         content: d.content,
         author: d.author.displayName,
-        depth: getDepth(d.id),
+        effectiveStance: getEffectiveStance(d.id),
         forCount: d.forCount,
         againstCount: d.againstCount,
         weight: d.weight,

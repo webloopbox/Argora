@@ -116,7 +116,7 @@ export const steps = [
     tag: "AI assist",
     clip: "clips/step-05.mp4",
     audio: "audio/step-05.mp3",
-    seconds: 16,
+    seconds: 17.7,
     accent: "purple",
     captions: ["Let AI extend the reasoning", "Any model you like"],
     narration:
@@ -141,18 +141,11 @@ export const steps = [
     tag: "Synthesis",
     clip: "clips/step-07.mp4",
     audio: "audio/step-07.mp3",
-    seconds: 29.7,
+    seconds: 40.2,
     accent: "teal",
-    // Source is a 54 s take (AI synthesis is genuinely slow). Play the lasso
-    // at 1x — starting at 1 s so the "Select arguments" click (~2-4.5 s) stays
-    // in frame — fast-forward the waiting at 20x, then show the finished
-    // summary at 1x. `from`/`to` are source-clip seconds; scene length is
-    // their sum: 18 + 24.5/20 + 10.5 = 29.7 s.
-    segments: [
-      { from: 1, to: 19, rate: 1 },
-      { from: 19, to: 43.5, rate: 20 },
-      { from: 43.5, to: 54, rate: 1 },
-    ],
+    // Re-recorded take (IBM watsonx models instead of the old competitor
+    // roster) - AI now responds in ~3s, so the whole clip plays at 1x with no
+    // timelapse segments needed.
     captions: [
       "Lasso any subtree",
       "AI reads just that branch",

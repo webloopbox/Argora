@@ -1,20 +1,29 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { GeminiProvider } from './providers/gemini.provider';
+import { WatsonxEmbeddingProvider } from './providers/watsonx-embedding.provider';
 
 @Injectable()
 export class EmbeddingService {
   private readonly logger = new Logger(EmbeddingService.name);
-  private readonly provider: GeminiProvider | null;
+  private readonly provider: WatsonxEmbeddingProvider | null;
 
   constructor(config: ConfigService) {
-    const key = config.get<string>('GEMINI_API_KEY');
-    this.provider = key ? new GeminiProvider(key) : null;
+    const apiKey = config.get<string>('IBM_CLOUD_API_KEY');
+    const projectId = config.get<string>('WATSONX_PROJECT_ID');
+    const serviceUrl = config.get<string>('WATSONX_URL');
+    const modelId = config.get<string>('WATSONX_EMBEDDING_MODEL_ID');
+
+    this.provider =
+      apiKey && projectId && serviceUrl
+        ? new WatsonxEmbeddingProvider(apiKey, serviceUrl, projectId, modelId)
+        : null;
   }
 
   async embed(text: string): Promise<number[] | null> {
     if (!this.provider) {
-      this.logger.warn('GEMINI_API_KEY not set - skipping embedding');
+      this.logger.warn(
+        'IBM_CLOUD_API_KEY/WATSONX_PROJECT_ID/WATSONX_URL not set - skipping embedding',
+      );
       return null;
     }
     try {
