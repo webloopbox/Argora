@@ -7,7 +7,7 @@ import {
   MinLength,
   ValidateIf,
 } from 'class-validator';
-import { DebateVisibility } from '../enums/debate.enums';
+import { DebateLanguage, DebateVisibility } from '../enums/debate.enums';
 
 const THESIS_MAX = 280;
 const THESIS_MIN = 8;
@@ -24,6 +24,12 @@ export class CreateDebateDto {
   @ValidateIf((o: CreateDebateDto) => o.visibility === DebateVisibility.Private)
   @IsUUID()
   groupId?: string | null;
+
+  // Optional so pre-existing clients keep working; the server falls back to
+  // Polish, which is what every debate created before this field existed was.
+  @IsOptional()
+  @IsEnum(DebateLanguage)
+  language?: DebateLanguage;
 }
 
 export interface DebateAuthorDto {
@@ -35,6 +41,7 @@ export interface DebatePreviewDto {
   id: string;
   thesis: string;
   visibility: DebateVisibility;
+  language: DebateLanguage;
   groupId: string | null;
   author: DebateAuthorDto;
   argumentCount: number;

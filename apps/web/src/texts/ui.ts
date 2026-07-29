@@ -133,6 +133,10 @@ export interface UiDict {
       visibilityPrivate: string;
       visibilityPrivateHint: string;
       visibilityPrivateLocked: string;
+      languageLabel: string;
+      languageHint: string;
+      languagePl: string;
+      languageEn: string;
       submit: string;
       submitting: string;
       cancel: string;
@@ -476,6 +480,11 @@ const pl: UiDict = {
       visibilityPrivateHint: "Dostępna tylko dla wybranej grupy.",
       visibilityPrivateLocked:
         "Dostępne po utworzeniu lub dołączeniu do grupy (już wkrótce).",
+      languageLabel: "Język dyskusji",
+      languageHint:
+        "Decyduje o języku argumentów i streszczeń tworzonych przez AI. Nie da się go później zmienić.",
+      languagePl: "Polski",
+      languageEn: "Angielski",
       submit: "Utwórz dyskusję",
       submitting: "Tworzę dyskusję…",
       cancel: "Anuluj",
@@ -850,6 +859,11 @@ const en: UiDict = {
       visibilityPrivateHint: "Available only to a selected group.",
       visibilityPrivateLocked:
         "Available after creating or joining a group (coming soon).",
+      languageLabel: "Debate language",
+      languageHint:
+        "Sets the language of AI-generated arguments and summaries. It cannot be changed later.",
+      languagePl: "Polish",
+      languageEn: "English",
       submit: "Create debate",
       submitting: "Creating debate…",
       cancel: "Cancel",

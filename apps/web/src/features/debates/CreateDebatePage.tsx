@@ -16,9 +16,10 @@ import {
 import { motion } from "framer-motion";
 import { ArrowLeft, Lock, Sparkles, Users } from "lucide-react";
 import type { CreateDebateDto, GroupDetailDto } from "@brainstorm/core";
-import { DebateVisibility } from "@brainstorm/core";
+import { DebateLanguage, DebateVisibility } from "@brainstorm/core";
 import { createDebate } from "../../api/debates.api";
 import { fetchGroupDetail } from "../../api/groups.api";
+import { useLanguage } from "../../app-config/language-context";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { ui } from "../../texts/ui";
 
@@ -37,9 +38,17 @@ export function CreateDebatePage() {
   const [params] = useSearchParams();
   const groupIdParam = params.get("grupa");
 
+  const { lang } = useLanguage();
+
   const [thesis, setThesis] = useState("");
   const [visibility, setVisibility] = useState<VisibilityValue>(
     groupIdParam ? "private" : "public",
+  );
+  // Seeded from the interface locale because that is the best available guess
+  // at what the author will type, but kept separate from it: the debate keeps
+  // this language for good, while the interface can be switched at any time.
+  const [language, setLanguage] = useState<DebateLanguage>(
+    lang === "en" ? DebateLanguage.En : DebateLanguage.Pl,
   );
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
@@ -105,11 +114,13 @@ export function CreateDebatePage() {
           ? {
               thesis: thesis.trim(),
               visibility: DebateVisibility.Private,
+              language,
               groupId: group.id,
             }
           : {
               thesis: thesis.trim(),
               visibility: DebateVisibility.Public,
+              language,
             };
       const debate = await createDebate(payload);
       navigate(`/dyskusje/${debate.id}`, { replace: true });
@@ -270,6 +281,50 @@ export function CreateDebatePage() {
                 </RadioContent>
               </Radio>
             </div>
+          </RadioGroup>
+
+          <RadioGroup
+            value={language}
+            onChange={(value) => setLanguage(value as DebateLanguage)}
+            isDisabled={submitting}
+            aria-label={ui.debates.create.languageLabel}
+            className="space-y-2"
+          >
+            <Label className="text-sm font-medium text-default-800 dark:text-zinc-200">
+              {ui.debates.create.languageLabel}
+            </Label>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Radio
+                value={DebateLanguage.Pl}
+                className="group relative flex cursor-pointer items-center gap-3 rounded-2xl border border-default-100 bg-default-50/60 p-4 transition-colors hover:border-violet-300 data-[selected]:border-violet-400 data-[selected]:bg-violet-50/60 dark:border-zinc-700 dark:bg-zinc-800/40 dark:hover:border-violet-500 dark:data-[selected]:border-violet-500 dark:data-[selected]:bg-violet-900/30"
+              >
+                <RadioControl>
+                  <RadioIndicator />
+                </RadioControl>
+                <RadioContent className="flex min-w-0 flex-col">
+                  <span className="text-sm font-semibold text-default-900 dark:text-zinc-100">
+                    {ui.debates.create.languagePl}
+                  </span>
+                </RadioContent>
+              </Radio>
+
+              <Radio
+                value={DebateLanguage.En}
+                className="group relative flex cursor-pointer items-center gap-3 rounded-2xl border border-default-100 bg-default-50/60 p-4 transition-colors hover:border-violet-300 data-[selected]:border-violet-400 data-[selected]:bg-violet-50/60 dark:border-zinc-700 dark:bg-zinc-800/40 dark:hover:border-violet-500 dark:data-[selected]:border-violet-500 dark:data-[selected]:bg-violet-900/30"
+              >
+                <RadioControl>
+                  <RadioIndicator />
+                </RadioControl>
+                <RadioContent className="flex min-w-0 flex-col">
+                  <span className="text-sm font-semibold text-default-900 dark:text-zinc-100">
+                    {ui.debates.create.languageEn}
+                  </span>
+                </RadioContent>
+              </Radio>
+            </div>
+            <p className="text-xs text-default-400 dark:text-zinc-500">
+              {ui.debates.create.languageHint}
+            </p>
           </RadioGroup>
 
           {formError ? (

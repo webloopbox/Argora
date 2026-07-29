@@ -302,7 +302,6 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
 
       <AddArgumentPanel
         debateId={debate.id}
-        thesis={debate.thesis}
         isAuthenticated={isAuthenticated}
         parent={parentArgument}
         defaultSide={defaultSide}

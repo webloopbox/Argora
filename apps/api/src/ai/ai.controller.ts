@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { AiThrottlerGuard } from '../common/guards/ai-throttler.guard';
 import { VisibilityGuard } from '../common/guards/visibility.guard';
+import type { RequestWithDebate } from '../common/guards/visibility.guard';
 import { User } from '../users/user.entity';
 import {
   CheckArgumentSideDto,
@@ -22,15 +23,14 @@ export class AiController {
     return this.ai.getProviders();
   }
 
+  // VisibilityGuard resolves `debateId` from the body and attaches the row, so
+  // the handler can hand the service an authoritative debate - the AI calls are
+  // debate-scoped now that they read its language.
   @Post('arguments/generate')
-  @UseGuards(JwtAuthGuard, AiThrottlerGuard)
+  @UseGuards(JwtAuthGuard, VisibilityGuard, AiThrottlerGuard)
   @Throttle({ 'ai-generate': { limit: 10, ttl: 60_000 } })
-  generate(@Body() dto: GenerateArgumentDto) {
-    return this.ai.generate(dto.modelId, {
-      thesis: dto.thesis,
-      side: dto.side as string,
-      parentContent: dto.parentContent,
-    });
+  generate(@Body() dto: GenerateArgumentDto, @Req() req: RequestWithDebate) {
+    return this.ai.generate(req.debate!, dto);
   }
 
   @Post('arguments/check-duplicate')
@@ -41,10 +41,13 @@ export class AiController {
   }
 
   @Post('arguments/check-side')
-  @UseGuards(JwtAuthGuard, AiThrottlerGuard)
+  @UseGuards(JwtAuthGuard, VisibilityGuard, AiThrottlerGuard)
   @Throttle({ 'ai-generate': { limit: 20, ttl: 60_000 } })
-  checkArgumentSide(@Body() dto: CheckArgumentSideDto) {
-    return this.ai.checkArgumentSide(dto);
+  checkArgumentSide(
+    @Body() dto: CheckArgumentSideDto,
+    @Req() req: RequestWithDebate,
+  ) {
+    return this.ai.checkArgumentSide(req.debate!, dto);
   }
 
   @Post('synthesize')

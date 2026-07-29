@@ -7,6 +7,7 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import {
   CreateDebateDto,
   DebateDetailDto,
+  DebateLanguage,
   DebatePreviewDto,
   DebateVisibility,
 } from '@brainstorm/core';
@@ -67,6 +68,7 @@ export class DebatesService {
     const debate = this.debates.create({
       thesis: input.thesis.trim(),
       visibility: input.visibility,
+      language: input.language ?? DebateLanguage.Pl,
       authorId: author.id,
       groupId,
       archivedOn: null,
@@ -184,6 +186,7 @@ export class DebatesService {
         id: debate.id,
         thesis: debate.thesis,
         visibility: debate.visibility,
+        language: debate.language,
         groupId: debate.groupId,
         author: author
           ? { id: author.id, displayName: author.displayName }
@@ -212,6 +215,7 @@ export class DebatesService {
       id: input.debate.id,
       thesis: input.debate.thesis,
       visibility: input.debate.visibility,
+      language: input.debate.language,
       groupId: input.debate.groupId,
       author: input.author,
       argumentCount: pro + against,

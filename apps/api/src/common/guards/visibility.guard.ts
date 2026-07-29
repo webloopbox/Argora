@@ -48,14 +48,14 @@ export class VisibilityGuard implements CanActivate {
     const req = context.switchToHttp().getRequest<RequestWithDebate>();
     const debateId = this.resolveDebateId(req);
     if (!debateId) {
-      throw new NotFoundException('Debate id missing from route');
+      throw new NotFoundException('Nie wskazano debaty.');
     }
 
     const debate = await this.debates.findOne({
       where: activeWhere<Debate>({ id: debateId }),
     });
     if (!debate) {
-      throw new NotFoundException('Debate not found');
+      throw new NotFoundException('Debata nie istnieje.');
     }
 
     if (debate.visibility === DebateVisibility.Public) {

@@ -99,6 +99,18 @@ function messageFor(error: AxiosError): string {
   return ui.toast.unknownError;
 }
 
+/**
+ * The message the API sent for a rejected request, or `null` when it did not send
+ * one (network failure, opaque 5xx). For panels that render an inline error state
+ * next to the failed action and would otherwise flatten every cause into one
+ * generic sentence - a rate limit reads very differently from a real outage.
+ * The centralised toast still fires; this only sharpens the inline copy.
+ */
+export function apiErrorMessage(error: unknown): string | null {
+  if (!axios.isAxiosError(error)) return null;
+  return extractServerMessage(error.response?.data);
+}
+
 function extractServerMessage(payload: unknown): string | null {
   if (!payload || typeof payload !== "object") return null;
   const message = (payload as { message?: unknown }).message;

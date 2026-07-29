@@ -11,6 +11,7 @@ import type {
   CheckArgumentSideDto,
   CheckDuplicateDto,
   DuplicateCheckResultDto,
+  GenerateArgumentDto,
   GeneratedArgumentDto,
   LlmProviderDto,
   SynthesisResultDto,
@@ -23,7 +24,12 @@ import { User } from '../users/user.entity';
 import { activeWhere } from '../common/repository/soft-delete';
 import { EmbeddingService } from './embedding.service';
 import { LlmRegistry } from './llm-registry';
-import type { GenerateInput, SynthesizeInput } from './llm-provider.interface';
+import { describeError, upstreamAiException } from './upstream-error';
+import type {
+  ClassifySideInput,
+  GenerateInput,
+  SynthesizeInput,
+} from './llm-provider.interface';
 
 const DUPLICATE_THRESHOLD = parseFloat(
   process.env['DUPLICATE_THRESHOLD'] ?? '0.75',
@@ -47,14 +53,45 @@ export class AiService {
     return this.registry.getActive();
   }
 
+  // `debate` comes from VisibilityGuard, so both the thesis and the output
+  // language are taken from the persisted row rather than from the request
+  // body - a client must not be able to inject English premises into a Polish
+  // debate, nor argue against a thesis the debate does not actually hold.
   async generate(
-    modelId: string,
-    input: GenerateInput,
+    debate: Debate,
+    dto: GenerateArgumentDto,
   ): Promise<GeneratedArgumentDto> {
-    const provider = this.registry.get(modelId);
-    if (!provider) throw new BadRequestException(`Nieznany model: ${modelId}`);
-    const content = await provider.generate(input);
-    return { content, modelId };
+    const provider = this.registry.get(dto.modelId);
+    if (!provider)
+      throw new BadRequestException(`Nieznany model: ${dto.modelId}`);
+
+    const input: GenerateInput = {
+      thesis: debate.thesis,
+      side: dto.side as string,
+      parentContent: dto.parentContent,
+      lang: debate.language,
+    };
+    const content = await this.callProvider(dto.modelId, () =>
+      provider.generate(input),
+    );
+    return { content, modelId: dto.modelId };
+  }
+
+  // A vendor failure must not reach the client as a raw 500 with an English SDK
+  // message. `checkArgumentSide` is exempt: it already falls through to the next
+  // provider and degrades to "no mismatch" rather than failing the submission.
+  private async callProvider<T>(
+    modelId: string,
+    call: () => Promise<T>,
+  ): Promise<T> {
+    try {
+      return await call();
+    } catch (err) {
+      this.logger.error(
+        `[callProvider] ${modelId} failed: ${describeError(err)}`,
+      );
+      throw upstreamAiException(err);
+    }
   }
 
   async checkDuplicate(
@@ -96,15 +133,17 @@ export class AiService {
   }
 
   async checkArgumentSide(
+    debate: Debate,
     dto: CheckArgumentSideDto,
   ): Promise<ArgumentSideCheckResultDto> {
     const providerInfos = this.registry.getActive();
     if (providerInfos.length === 0) return { isMismatch: false };
 
-    const input = {
-      thesis: dto.thesis,
+    const input: ClassifySideInput = {
+      thesis: debate.thesis,
       content: dto.content,
       parentContent: dto.parentContent,
+      lang: debate.language,
     };
 
     // Try each active provider until one succeeds. The classification is a
@@ -125,7 +164,7 @@ export class AiService {
         return { isMismatch: true, suggestedSide };
       } catch (err) {
         this.logger.warn(
-          `[checkArgumentSide] ${info.id} failed, trying next: ${err}`,
+          `[checkArgumentSide] ${info.id} failed, trying next: ${describeError(err)}`,
         );
       }
     }
@@ -183,6 +222,7 @@ export class AiService {
 
     const input: SynthesizeInput = {
       thesis: debate.thesis,
+      lang: debate.language,
       arguments: selected.map((d) => ({
         side: d.side as string,
         content: d.content,
@@ -198,7 +238,9 @@ export class AiService {
       })),
     };
 
-    const text = await provider.synthesize(input);
+    const text = await this.callProvider(modelId, () =>
+      provider.synthesize(input),
+    );
     return { text, modelId };
   }
 }

@@ -1,12 +1,21 @@
-import type { LlmProviderDto } from '@brainstorm/core';
+import type { DebateLanguage, LlmProviderDto } from '@brainstorm/core';
 
-export interface GenerateInput {
+/**
+ * Language every prompt builder must honour. It is always the language of the
+ * debate being worked on, never the caller's interface locale - see
+ * `DebateLanguage` for why the two must not be conflated.
+ */
+export interface LocalisedInput {
+  lang: DebateLanguage;
+}
+
+export interface GenerateInput extends LocalisedInput {
   thesis: string;
   side: string;
   parentContent?: string;
 }
 
-export interface ClassifySideInput {
+export interface ClassifySideInput extends LocalisedInput {
   thesis: string;
   content: string;
   parentContent?: string;
@@ -30,7 +39,7 @@ export interface SynthesizeArgInput {
   parentContent: string | null;
 }
 
-export interface SynthesizeInput {
+export interface SynthesizeInput extends LocalisedInput {
   thesis: string;
   arguments: SynthesizeArgInput[];
 }

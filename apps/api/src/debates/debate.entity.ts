@@ -1,4 +1,4 @@
-import { DebateVisibility } from '@brainstorm/core';
+import { DebateLanguage, DebateVisibility } from '@brainstorm/core';
 import {
   Check,
   Column,
@@ -17,6 +17,10 @@ import {
   `("visibility" = 'private' AND "group_id" IS NOT NULL) OR ` +
     `("visibility" = 'public' AND "group_id" IS NULL)`,
 )
+// Enforced in the database so the AI layer can trust `language` to be a value
+// it has a prompt variant for, and index a lookup table on it without a
+// runtime fallback.
+@Check('debates_language_supported', `"language" IN ('pl', 'en')`)
 export class Debate {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
@@ -31,6 +35,17 @@ export class Debate {
   })
   @Index()
   visibility!: DebateVisibility;
+
+  // Drives the language of every AI call scoped to this debate. Defaults to
+  // Polish so rows created before this column existed keep their real
+  // language instead of silently switching the assistant to English.
+  @Column({
+    type: 'varchar',
+    length: 8,
+    enum: DebateLanguage,
+    default: DebateLanguage.Pl,
+  })
+  language!: DebateLanguage;
 
   @Column({ name: 'author_id', type: 'uuid' })
   @Index()

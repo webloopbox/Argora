@@ -23,10 +23,6 @@ export class GenerateArgumentDto {
   side!: ArgumentSide;
 
   @IsString()
-  @MinLength(8)
-  thesis!: string;
-
-  @IsString()
   modelId!: string;
 
   @IsOptional()
@@ -62,9 +58,11 @@ export interface DuplicateCheckResultDto {
 }
 
 export class CheckArgumentSideDto {
-  @IsString()
-  @MinLength(8)
-  thesis!: string;
+  // Required so the endpoint can resolve the debate (and therefore its
+  // thesis and language) through VisibilityGuard, like every other
+  // debate-scoped call.
+  @IsUUID()
+  debateId!: string;
 
   @IsEnum(ArgumentSide)
   selectedSide!: ArgumentSide;

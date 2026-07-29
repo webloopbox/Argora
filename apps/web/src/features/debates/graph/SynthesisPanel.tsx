@@ -5,6 +5,7 @@ import { Button } from "@heroui/react";
 import ReactMarkdown from "react-markdown";
 import type { LlmProviderDto } from "@brainstorm/core";
 import { listProviders, synthesize } from "../../../api/ai.api";
+import { apiErrorMessage } from "../../../api/http-client";
 import { useTypewriter } from "../../../hooks/useTypewriter";
 import { ui } from "../../../texts/ui";
 import { useLanguage } from "../../../app-config/language-context";
@@ -84,8 +85,8 @@ export function SynthesisPanel({
     try {
       const res = await synthesize({ debateId, argumentIds: selectedArgumentIds, modelId });
       animateResult(res.text);
-    } catch {
-      setError(ui.debates.ai.synthesisError);
+    } catch (err) {
+      setError(apiErrorMessage(err) ?? ui.debates.ai.synthesisError);
     } finally {
       setLoading(false);
     }

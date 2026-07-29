@@ -26,8 +26,10 @@ React + TypeScript application. Consumes the backend through DTOs imported from 
 
 ## Language (UI copy)
 
-- **Polish only.** Every user-visible string in the app - navigation, buttons, labels, headings, empty states, toasts, form validation messages, tooltips, dialog copy, skeleton placeholders - must be in Polish. No mixing English and Polish strings in the same UI. Source-code identifiers, file names, commit messages and comments stay in English; translation is applied only at the rendering boundary.
-- **Centralise reusable strings.** Strings that repeat (standard CTA labels, error toasts, validation messages, common empty states) live in `src/texts/` so rewording stays consistent. Inline strings are acceptable for one-off headings/body inside a single component, but never for actions or messages that appear in multiple places.
+- **Bilingual pl/en, Polish is the default.** Every user-visible string - navigation, buttons, labels, headings, empty states, toasts, form validation messages, tooltips, dialog copy, skeleton placeholders - lives in `src/texts/ui.ts`, which declares the `UiDict` contract once and implements it separately for each locale. Never hard-code a user-visible literal in a component: add the key to `UiDict` and fill in BOTH locales, or the other language silently breaks. Source-code identifiers, file names, commit messages and comments stay in English.
+- **Locale state** is held by `LanguageProvider` / `useLanguage` (`src/app-config/`), persisted in `localStorage` under `brainstorm.lang`, and defaults to `pl`. Read it with `useLanguage()` when a component needs to branch on language; do not read `localStorage` directly.
+- **The interface locale is not the debate language.** A debate carries its own immutable `language` that drives AI output (see the root CLAUDE.md). Never pass the UI locale to an AI endpoint, and never assume a debate is in the language the reader is currently browsing in.
+- **Backend error messages are Polish regardless of locale.** They come from NestJS exceptions and do not pass through `ui.ts`, so an English interface still surfaces Polish API errors. Known limitation; do not paper over it by hard-coding English copies of those messages in the client.
 
 ## Design bar
 

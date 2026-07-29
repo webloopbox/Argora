@@ -12,7 +12,6 @@ import {
   TextArea,
   TextField,
 } from "@heroui/react";
-import { AnimatePresence, motion } from "framer-motion";
 import {
   Bot,
   ChevronDown,
@@ -34,6 +33,7 @@ import {
   generateArgument,
   listProviders,
 } from "../../../api/ai.api";
+import { apiErrorMessage } from "../../../api/http-client";
 import { useTypewriter } from "../../../hooks/useTypewriter";
 import { ui } from "../../../texts/ui";
 import { MergeOrNuanceDialog } from "./MergeOrNuanceDialog";
@@ -45,7 +45,6 @@ const CONTENT_MAX = 2000;
 
 interface AddArgumentFormProps {
   debateId: string;
-  thesis: string;
   parent: ArgumentDto | null;
   defaultSide?: ArgumentSide;
   onClearParent: () => void;
@@ -57,7 +56,6 @@ type SideValue = "pro" | "against";
 
 export function AddArgumentForm({
   debateId,
-  thesis,
   parent,
   defaultSide,
   onClearParent,
@@ -91,7 +89,11 @@ export function AddArgumentForm({
   // `parentClamped` is measured from actual overflow (scrollHeight vs
   // clientHeight) rather than a character-count guess, because the sidebar is
   // narrow and a clamped block can hold far fewer chars than expected.
-  const [parentExpanded, setParentExpanded] = useState(false);
+  // Expansion is stored as "which parent is expanded" rather than a boolean, so
+  // switching to another parent collapses the preview by derivation instead of
+  // by resetting state from an effect.
+  const [expandedParentId, setExpandedParentId] = useState<string | null>(null);
+  const parentExpanded = parent !== null && expandedParentId === parent.id;
   const [parentClamped, setParentClamped] = useState(false);
   const parentTextRef = useRef<HTMLParagraphElement>(null);
 
@@ -100,17 +102,19 @@ export function AddArgumentForm({
   // doesn't fight the streaming cursor.
   const { animate: animateContent } = useTypewriter(setContent);
 
-  // Collapse the preview and re-measure overflow whenever the parent changes.
-  // Measuring against the clamped element tells us whether a "show more"
-  // toggle is actually needed for this specific content + container width.
+  // Re-measure overflow whenever the parent changes. Measuring against the
+  // clamped element tells us whether a "show more" toggle is actually needed
+  // for this specific content + container width. The measurement has to live
+  // in an effect because it reads the laid-out DOM (scrollHeight vs
+  // clientHeight); the expand/collapse state itself is derived during render
+  // from `expandedParentId` above.
+  //
+  // No reset when `parent` is null: the whole preview is rendered inside a
+  // `parent ?` branch, so a stale value is unobservable, and the next parent
+  // re-measures synchronously below before it can be read.
   useEffect(() => {
-    setParentExpanded(false);
-    if (!parent) {
-      setParentClamped(false);
-      return;
-    }
     const el = parentTextRef.current;
-    if (!el) return;
+    if (!parent || !el) return;
     const measure = () =>
       setParentClamped(el.scrollHeight > el.clientHeight + 1);
     measure();
@@ -145,7 +149,6 @@ export function AddArgumentForm({
     try {
       const result = await generateArgument({
         debateId,
-        thesis,
         side: side === "pro" ? ArgumentSide.Pro : ArgumentSide.Against,
         modelId,
         parentContent: parent?.content,
@@ -153,8 +156,8 @@ export function AddArgumentForm({
       // Hold `generating` for the typewriter so the textarea stays locked
       // until the streaming animation completes.
       animateContent(result.content, () => setGenerating(false));
-    } catch {
-      setAiError(ui.debates.argumentForm.aiGenerateError);
+    } catch (err) {
+      setAiError(apiErrorMessage(err) ?? ui.debates.argumentForm.aiGenerateError);
       setGenerating(false);
     }
   }
@@ -181,7 +184,7 @@ export function AddArgumentForm({
     setSubmitting(true);
     try {
       const sideResult = await checkArgumentSide({
-        thesis,
+        debateId,
         selectedSide: payload.side,
         content: payload.content,
         parentContent: parent?.content,
@@ -273,7 +276,9 @@ export function AddArgumentForm({
             {parentClamped || parentExpanded ? (
               <button
                 type="button"
-                onClick={() => setParentExpanded((v) => !v)}
+                onClick={() =>
+                  setExpandedParentId(parentExpanded ? null : parent.id)
+                }
                 className="mt-1 inline-flex items-center gap-1 rounded-md text-[11px] font-medium text-violet-700 underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:text-violet-400"
                 aria-expanded={parentExpanded}
               >
