@@ -74,10 +74,20 @@ export class CheckArgumentSideDto {
   @IsOptional()
   @IsString()
   parentContent?: string;
+
+  // Needed on top of `parentContent`: `selectedSide` is relative to the parent,
+  // while the classification prompt asks about the thesis. Resolving the two
+  // against each other means walking the parent chain, which needs the id, not
+  // just the text. Absent for arguments hanging straight off the thesis, where
+  // the local side already is the thesis-relative one.
+  @IsOptional()
+  @IsUUID()
+  parentArgumentId?: string | null;
 }
 
 export interface ArgumentSideCheckResultDto {
   isMismatch: boolean;
+  /** Local side (relative to the parent), so the client can drive its side selector directly. */
   suggestedSide?: ArgumentSide;
 }
 

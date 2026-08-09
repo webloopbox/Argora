@@ -188,6 +188,10 @@ export function AddArgumentForm({
         selectedSide: payload.side,
         content: payload.content,
         parentContent: parent?.content,
+        // The server needs the id, not just the text: `selectedSide` is relative
+        // to this parent, while the model is asked about the thesis, and
+        // reconciling the two means walking the parent chain.
+        parentArgumentId: payload.parentArgumentId ?? null,
       });
       if (sideResult.isMismatch && sideResult.suggestedSide) {
         setSideMismatch(sideResult.suggestedSide);

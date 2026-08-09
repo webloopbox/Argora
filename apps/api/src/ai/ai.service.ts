@@ -19,6 +19,11 @@ import type {
 import { ArgumentSide } from '@brainstorm/core';
 import { Argument } from '../arguments/argument.entity';
 import { ArgumentsService } from '../arguments/arguments.service';
+import {
+  effectiveStance,
+  impliedEffectiveStance,
+  localSideFor,
+} from '../arguments/effective-stance';
 import { Debate } from '../debates/debate.entity';
 import { User } from '../users/user.entity';
 import { activeWhere } from '../common/repository/soft-delete';
@@ -146,6 +151,17 @@ export class AiService {
       lang: debate.language,
     };
 
+    // The prompt asks whether the argument supports or refutes THE THESIS, so
+    // the verdict is thesis-relative. `selectedSide` is relative to the parent.
+    // Comparing them directly flagged every reply supporting an anti-thesis
+    // argument as a mismatch, so both are lifted to the thesis-relative frame
+    // before the comparison and the suggestion is lowered back afterwards.
+    const parentStance = await this.resolveParentStance(
+      debate.id,
+      dto.parentArgumentId ?? null,
+    );
+    const expected = impliedEffectiveStance(dto.selectedSide, parentStance);
+
     // Try each active provider until one succeeds. The classification is a
     // lightweight single-word call, so falling through is cheap.
     for (const info of providerInfos) {
@@ -155,13 +171,16 @@ export class AiService {
       try {
         const raw = await provider.classifySide(input);
         this.logger.log(
-          `[checkArgumentSide] provider=${info.id}, raw=${JSON.stringify(raw)}, selectedSide=${dto.selectedSide}`,
+          `[checkArgumentSide] provider=${info.id}, raw=${JSON.stringify(raw)}, ` +
+            `selectedSide=${dto.selectedSide}, parentStance=${parentStance ?? 'none'}, expected=${expected}`,
         );
         if (!raw) return { isMismatch: false };
-        const suggestedSide =
-          raw === 'pro' ? ArgumentSide.Pro : ArgumentSide.Against;
-        if (suggestedSide === dto.selectedSide) return { isMismatch: false };
-        return { isMismatch: true, suggestedSide };
+        const verdict = raw === 'pro' ? ArgumentSide.Pro : ArgumentSide.Against;
+        if (verdict === expected) return { isMismatch: false };
+        return {
+          isMismatch: true,
+          suggestedSide: localSideFor(verdict, parentStance),
+        };
       } catch (err) {
         this.logger.warn(
           `[checkArgumentSide] ${info.id} failed, trying next: ${describeError(err)}`,
@@ -171,6 +190,26 @@ export class AiService {
 
     // All providers failed — don't block the user.
     return { isMismatch: false };
+  }
+
+  /**
+   * Effective stance of the parent an argument is being attached to, or `null`
+   * when it hangs straight off the thesis. Reads only the columns needed to
+   * walk the chain rather than going through the enriched-DTO pipeline, which
+   * would run the vote aggregation for nothing.
+   */
+  private async resolveParentStance(
+    debateId: string,
+    parentArgumentId: string | null,
+  ): Promise<ArgumentSide | null> {
+    if (!parentArgumentId) return null;
+
+    const rows = await this.args.find({
+      where: activeWhere<Argument>({ debateId }),
+      select: ['id', 'parentArgumentId', 'side'],
+    });
+    const byId = new Map(rows.map((row) => [row.id, row]));
+    return effectiveStance(parentArgumentId, (id) => byId.get(id));
   }
 
   async synthesize(
@@ -204,21 +243,9 @@ export class AiService {
 
     // `side` is only relative to the immediate parent (Kialo-style nesting), so an
     // argument several levels deep can locally read "for" while actually opposing
-    // the thesis. Resolve the real stance by walking up to the root and flipping
-    // polarity on every Against link.
-    const getEffectiveStance = (id: string): ArgumentSide => {
-      let pro = true;
-      let currentId: string | null = id;
-      let hops = 0;
-      while (currentId && hops < 20) {
-        const node = dtoMap.get(currentId);
-        if (!node) break;
-        if (node.side === ArgumentSide.Against) pro = !pro;
-        currentId = node.parentArgumentId;
-        hops++;
-      }
-      return pro ? ArgumentSide.Pro : ArgumentSide.Against;
-    };
+    // the thesis. Shared with the side check so the two cannot drift apart.
+    const getEffectiveStance = (id: string): ArgumentSide =>
+      effectiveStance(id, (nodeId) => dtoMap.get(nodeId));
 
     const input: SynthesizeInput = {
       thesis: debate.thesis,

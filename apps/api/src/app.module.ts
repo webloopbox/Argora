@@ -21,6 +21,11 @@ import { VotesModule } from './votes/votes.module';
         join(process.cwd(), '..', '..', '.env'),
       ],
     }),
+    // One named bucket per AI endpoint, limit scaled to how expensive the call
+    // is. ThrottlerGuard evaluates EVERY bucket registered here on every guarded
+    // route and falls back to the bucket's own limit when the route does not
+    // override it - so each route must @SkipThrottle the buckets that are not
+    // its own, or the smallest limit here silently caps all of them.
     ThrottlerModule.forRoot([
       {
         name: 'ai-generate',
@@ -34,6 +39,11 @@ import { VotesModule } from './votes/votes.module';
       },
       {
         name: 'ai-duplicate',
+        ttl: 60_000,
+        limit: 20,
+      },
+      {
+        name: 'ai-check-side',
         ttl: 60_000,
         limit: 20,
       },
