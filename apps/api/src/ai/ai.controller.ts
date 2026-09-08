@@ -78,7 +78,7 @@ export class AiController {
     'ai-duplicate': true,
     'ai-check-side': true,
   })
-  synthesize(@Body() dto: SynthesizeDto) {
-    return this.ai.synthesize(dto.debateId, dto.argumentIds, dto.modelId);
+  synthesize(@Body() dto: SynthesizeDto, @Req() req: RequestWithDebate) {
+    return this.ai.synthesize(req.debate!, dto.argumentIds, dto.modelId);
   }
 }

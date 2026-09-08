@@ -1,0 +1,2111 @@
+[
+  {
+    "debate": "energia",
+    "debateId": "8b8230e5-6b18-4b04-9c2b-39602b4bc77e",
+    "thesis": "Energia jądrowa jest niezbędna do osiągnięcia neutralności klimatycznej Polski.",
+    "branchRootId": "5da5e24c-a82e-415e-8750-0509c75dc1cd",
+    "branchRootContent": "Energia jądrowa dostarcza stabilną moc bazową niezależną od pogody, czego elektrownie wiatrowe i słoneczne nie są w stanie samodzielnie zagwarantować.",
+    "branchSize": 6,
+    "debateSize": 22,
+    "variants": [
+      {
+        "kind": "subgraph",
+        "inputArguments": 6,
+        "promptChars": 4770,
+        "latencyMs": 27458,
+        "usage": {
+          "prompt_tokens": 1872,
+          "completion_tokens": 783,
+          "total_tokens": 2655,
+          "cached_tokens": 0
+        },
+        "finishReason": "stop",
+        "text": "### O co toczy się spór\nZaznaczona część dyskusji dotyczy tezy, że energia jądrowa jest niezbędna do osiągnięcia neutralności klimatycznej Polski. Uczestnicy dyskusji wymieniają argumenty za i przeciw tej tezie, poruszając kwestie stabilności mocy bazowej, elastyczności oraz ryzyka związanego z energetyką jądrową.\n\n### Argumenty za\nAnna Kowalska (waga 8) zwraca uwagę, że energia jądrowa dostarcza stabilną moc bazową niezależną od pogody, co jest istotne dla zapewnienia ciągłości dostaw energii. Jan Nowak (waga 4) podkreśla, że elektrownie jądrowe osiągają wysoki współczynnik wykorzystania mocy, co potwierdza ich przewagę w zakresie stabilności dostaw. Anna Kowalska (waga 2) wskazuje, że magazyny energii nie są w stanie pokryć wielodniowego deficytu wiatru i słońca, co czyni energetykę jądrową niezbędną. Katarzyna Kowalczyk (waga 2) dodaje, że brak elastyczności elektrowni jądrowych nie jest przeszkodą, gdyż mogą one pokrywać stabilne zapotrzebowanie bazowe, a szczytowe wahania bilansować się elastycznymi źródłami uzupełniającymi.\n\n### Argumenty przeciw\nAnna Kowalska (waga 4) argumentuje, że stabilność mocy bazowej można uzyskać również za pomocą magazynów energii i elastycznego zarządzania popytem, bez ryzyka związanego z energetyką jądrową. Jan Nowak (waga 2) zwraca uwagę, że wysoki współczynnik wykorzystania mocy nie oznacza elastyczności, co utrudnia bilansowanie sieci w przypadku elektrowni jądrowych.\n\n### Linie sporu\nGłównym punktem tarcia jest kwestia, czy energia jądrowa jest niezbędna do osiągnięcia neutralności klimatycznej Polski, oraz czy jej zalety, takie jak stabilność mocy bazowej, przewyższają wady, takie jak brak elastyczności. Argumenty oznaczone jako \"sporny\" dotyczą możliwości uzyskania stabilności mocy bazowej za pomocą magazynów energii i elastycznego zarządzania popytem.\n\n### Punkty wspólne i pytania otwarte\nUczestnicy dyskusji zgadzają się co do tego, że osiągnięcie neutralności klimatycznej Polski wymaga rozwoju różnych źródeł energii. Pytaniem otwartym pozostaje, czy energia jądrowa jest niezbędna do osiągnięcia tego celu, oraz jakie są optymalne proporcje między różnymi źródłami energii w celu zapewnienia stabilności i bezpieczeństwa energetycznego.",
+        "sentences": [
+          {
+            "sentence": "Zaznaczona część dyskusji dotyczy tezy, że energia jądrowa jest niezbędna do osiągnięcia neutralności klimatycznej Polski.",
+            "simInsideBranch": 0.74,
+            "simOutsideBranch": 0.811,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Budowa elektrowni jądrowej w Polsce trwa kilkanaście lat, więc nie pomoże osiągnąć celów klimatycznych na najbliższą dekadę."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji wymieniają argumenty za i przeciw tej tezie, poruszając kwestie stabilności mocy bazowej, elastyczności oraz ryzyka związanego z energetyką jądrową.",
+            "simInsideBranch": 0.822,
+            "simOutsideBranch": 0.744,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Stabilność mocy bazowej można też uzyskać magazynami energii i elastycznym zarządzaniem popytem, bez ryzyk właściwych energetyce jądrowej."
+            },
+            "nearestOutsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Dywersyfikacja dostawców paliwa jądrowego oraz zapasy strategiczne na lata pracy reaktora skutecznie ograniczają to ryzyko, czego nie da się powiedzieć o bieżących dostawach gazu."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Anna Kowalska (waga 8) zwraca uwagę, że energia jądrowa dostarcza stabilną moc bazową niezależną od pogody, co jest istotne dla zapewnienia ciągłości dostaw energii.",
+            "simInsideBranch": 0.822,
+            "simOutsideBranch": 0.676,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Energia jądrowa dostarcza stabilną moc bazową niezależną od pogody, czego elektrownie wiatrowe i słoneczne nie są w stanie samodzielnie zagwarantować."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Reaktor jądrowy nie emituje dwutlenku węgla podczas pracy, co czyni go realną alternatywą dla elektrowni węglowych."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Jan Nowak (waga 4) podkreśla, że elektrownie jądrowe osiągają wysoki współczynnik wykorzystania mocy, co potwierdza ich przewagę w zakresie stabilności dostaw.",
+            "simInsideBranch": 0.835,
+            "simOutsideBranch": 0.713,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw."
+            },
+            "nearestOutsideBranch": {
+              "author": "Krzysztof Zieliński",
+              "content": "Kraje takie jak Francja pokazują, że elektrownie jądrowe mogą dostarczać większość krajowej energii elektrycznej przy jednych z najniższych emisji CO2 w Europie."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Anna Kowalska (waga 2) wskazuje, że magazyny energii nie są w stanie pokryć wielodniowego deficytu wiatru i słońca, co czyni energetykę jądrową niezbędną.",
+            "simInsideBranch": 0.771,
+            "simOutsideBranch": 0.682,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Magazyny wystarczające na pokrycie wielodniowego deficytu wiatru i słońca wymagają skali, która dziś nie istnieje w żadnym kraju europejskim."
+            },
+            "nearestOutsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Dywersyfikacja dostawców paliwa jądrowego oraz zapasy strategiczne na lata pracy reaktora skutecznie ograniczają to ryzyko, czego nie da się powiedzieć o bieżących dostawach gazu."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Katarzyna Kowalczyk (waga 2) dodaje, że brak elastyczności elektrowni jądrowych nie jest przeszkodą, gdyż mogą one pokrywać stabilne zapotrzebowanie bazowe, a szczytowe wahania bilansować się elastycznymi źródłami uzupełniającymi.",
+            "simInsideBranch": 0.883,
+            "simOutsideBranch": 0.724,
+            "nearestInsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Brak elastyczności nie jest przeszkodą, gdy elektrownia jądrowa pokrywa jedynie stabilne zapotrzebowanie bazowe, a szczytowe wahania bilansuje się elastycznymi źródłami uzupełniającymi, na przykład gazowymi."
+            },
+            "nearestOutsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Lukę do 2035 roku można pokryć elastycznymi blokami gazowymi jako rozwiązaniem przejściowym, bez rezygnacji z docelowego miksu z udziałem atomu."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Anna Kowalska (waga 4) argumentuje, że stabilność mocy bazowej można uzyskać również za pomocą magazynów energii i elastycznego zarządzania popytem, bez ryzyka związanego z energetyką jądrową.",
+            "simInsideBranch": 0.867,
+            "simOutsideBranch": 0.7,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Stabilność mocy bazowej można też uzyskać magazynami energii i elastycznym zarządzaniem popytem, bez ryzyk właściwych energetyce jądrowej."
+            },
+            "nearestOutsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Dywersyfikacja dostawców paliwa jądrowego oraz zapasy strategiczne na lata pracy reaktora skutecznie ograniczają to ryzyko, czego nie da się powiedzieć o bieżących dostawach gazu."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Jan Nowak (waga 2) zwraca uwagę, że wysoki współczynnik wykorzystania mocy nie oznacza elastyczności, co utrudnia bilansowanie sieci w przypadku elektrowni jądrowych.",
+            "simInsideBranch": 0.858,
+            "simOutsideBranch": 0.694,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Wysoki współczynnik wykorzystania mocy nie oznacza elastyczności - reaktora nie da się szybko wyłączyć ani włączyć w reakcji na chwilowy nadmiar energii z OZE, co w praktyce utrudnia bilansowanie sieci."
+            },
+            "nearestOutsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Lukę do 2035 roku można pokryć elastycznymi blokami gazowymi jako rozwiązaniem przejściowym, bez rezygnacji z docelowego miksu z udziałem atomu."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Głównym punktem tarcia jest kwestia, czy energia jądrowa jest niezbędna do osiągnięcia neutralności klimatycznej Polski, oraz czy jej zalety, takie jak stabilność mocy bazowej, przewyższają wady, takie jak brak elastyczności.",
+            "simInsideBranch": 0.782,
+            "simOutsideBranch": 0.768,
+            "nearestInsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Brak elastyczności nie jest przeszkodą, gdy elektrownia jądrowa pokrywa jedynie stabilne zapotrzebowanie bazowe, a szczytowe wahania bilansuje się elastycznymi źródłami uzupełniającymi, na przykład gazowymi."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Budowa elektrowni jądrowej w Polsce trwa kilkanaście lat, więc nie pomoże osiągnąć celów klimatycznych na najbliższą dekadę."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Argumenty oznaczone jako \"sporny\" dotyczą możliwości uzyskania stabilności mocy bazowej za pomocą magazynów energii i elastycznego zarządzania popytem.",
+            "simInsideBranch": 0.832,
+            "simOutsideBranch": 0.692,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Stabilność mocy bazowej można też uzyskać magazynami energii i elastycznym zarządzaniem popytem, bez ryzyk właściwych energetyce jądrowej."
+            },
+            "nearestOutsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Lukę do 2035 roku można pokryć elastycznymi blokami gazowymi jako rozwiązaniem przejściowym, bez rezygnacji z docelowego miksu z udziałem atomu."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji zgadzają się co do tego, że osiągnięcie neutralności klimatycznej Polski wymaga rozwoju różnych źródeł energii.",
+            "simInsideBranch": 0.68,
+            "simOutsideBranch": 0.726,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Budowa elektrowni jądrowej w Polsce trwa kilkanaście lat, więc nie pomoże osiągnąć celów klimatycznych na najbliższą dekadę."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Pytaniem otwartym pozostaje, czy energia jądrowa jest niezbędna do osiągnięcia tego celu, oraz jakie są optymalne proporcje między różnymi źródłami energii w celu zapewnienia stabilności i bezpieczeństwa energetycznego.",
+            "simInsideBranch": 0.756,
+            "simOutsideBranch": 0.713,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Stabilność mocy bazowej można też uzyskać magazynami energii i elastycznym zarządzaniem popytem, bez ryzyk właściwych energetyce jądrowej."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Zakładanie miksu po 2035 roku nie zwalnia z pytania, czym pokryjemy lukę mocy w najbliższej dekadzie, gdy stare bloki węglowe będą wygaszane."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          }
+        ],
+        "coverage": [
+          {
+            "argumentId": "5da5e24c-a82e-415e-8750-0509c75dc1cd",
+            "author": "Anna Kowalska",
+            "content": "Energia jądrowa dostarcza stabilną moc bazową niezależną od pogody, czego elektrownie wiatrowe i słoneczne nie są w stanie samodzielnie zagwarantować.",
+            "bestSimilarity": 0.822,
+            "bestSentence": "Anna Kowalska (waga 8) zwraca uwagę, że energia jądrowa dostarcza stabilną moc bazową niezależną od pogody, co jest istotne dla zapewnienia ciągłości dostaw energii.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "7e5a0d51-3824-4a4a-93ae-788b520b7adb",
+            "author": "Anna Kowalska",
+            "content": "Stabilność mocy bazowej można też uzyskać magazynami energii i elastycznym zarządzaniem popytem, bez ryzyk właściwych energetyce jądrowej.",
+            "bestSimilarity": 0.867,
+            "bestSentence": "Anna Kowalska (waga 4) argumentuje, że stabilność mocy bazowej można uzyskać również za pomocą magazynów energii i elastycznego zarządzania popytem, bez ryzyka związanego z energetyką jądrową.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "f54f74c7-8183-4b79-8675-9787eb5b94fc",
+            "author": "Jan Nowak",
+            "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw.",
+            "bestSimilarity": 0.835,
+            "bestSentence": "Jan Nowak (waga 4) podkreśla, że elektrownie jądrowe osiągają wysoki współczynnik wykorzystania mocy, co potwierdza ich przewagę w zakresie stabilności dostaw.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "dc67ce7f-84cc-4b0b-802a-c0f7c8702e86",
+            "author": "Anna Kowalska",
+            "content": "Magazyny wystarczające na pokrycie wielodniowego deficytu wiatru i słońca wymagają skali, która dziś nie istnieje w żadnym kraju europejskim.",
+            "bestSimilarity": 0.771,
+            "bestSentence": "Anna Kowalska (waga 2) wskazuje, że magazyny energii nie są w stanie pokryć wielodniowego deficytu wiatru i słońca, co czyni energetykę jądrową niezbędną.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "c904d394-aead-4b68-a732-c5ac76d3945c",
+            "author": "Jan Nowak",
+            "content": "Wysoki współczynnik wykorzystania mocy nie oznacza elastyczności - reaktora nie da się szybko wyłączyć ani włączyć w reakcji na chwilowy nadmiar energii z OZE, co w praktyce utrudnia bilansowanie sieci.",
+            "bestSimilarity": 0.858,
+            "bestSentence": "Jan Nowak (waga 2) zwraca uwagę, że wysoki współczynnik wykorzystania mocy nie oznacza elastyczności, co utrudnia bilansowanie sieci w przypadku elektrowni jądrowych.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "dfcc3fa9-932c-473a-bc12-b5a8bcf36d9a",
+            "author": "Katarzyna Kowalczyk",
+            "content": "Brak elastyczności nie jest przeszkodą, gdy elektrownia jądrowa pokrywa jedynie stabilne zapotrzebowanie bazowe, a szczytowe wahania bilansuje się elastycznymi źródłami uzupełniającymi, na przykład gazowymi.",
+            "bestSimilarity": 0.883,
+            "bestSentence": "Katarzyna Kowalczyk (waga 2) dodaje, że brak elastyczności elektrowni jądrowych nie jest przeszkodą, gdyż mogą one pokrywać stabilne zapotrzebowanie bazowe, a szczytowe wahania bilansować się elastycznymi źródłami uzupełniającymi.",
+            "proposedCovered": true
+          }
+        ]
+      },
+      {
+        "kind": "whole",
+        "inputArguments": 22,
+        "promptChars": 10712,
+        "latencyMs": 23403,
+        "usage": {
+          "prompt_tokens": 4223,
+          "completion_tokens": 1427,
+          "total_tokens": 5650,
+          "cached_tokens": 0
+        },
+        "finishReason": "stop",
+        "text": "### O co toczy się spór\nDyskusja dotyczy tezy, że energia jądrowa jest niezbędna do osiągnięcia neutralności klimatycznej Polski. Uczestnicy wymieniają się argumentami za i przeciw tej tezie, poruszając kwestie związane z stabilnością mocy, emisjami dwutlenku węgla, kosztami budowy i finansowania elektrowni jądrowych, oraz ryzykiem geopolitycznym.\n\n### Argumenty za\nAnna Kowalska (waga 8) zwraca uwagę, że energia jądrowa dostarcza stabilną moc bazową niezależną od pogody. Jan Nowak (waga 6) podkreśla, że elektrownia jądrowa zajmuje ułamek powierzchni potrzebnej farmie fotowoltaicznej o porównywalnej rocznej produkcji energii. Katarzyna Kowalczyk (waga 5) argumentuje, że reaktor jądrowy nie emituje dwutlenku węgla podczas pracy. Krzysztof Zieliński (waga 4) przytacza przykład Francji, gdzie elektrownie jądrowe dostarczają większość krajowej energii elektrycznej przy jednych z najniższych emisji CO2 w Europie. Jan Nowak (waga 4) dodaje, że elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%. Piotr Wójcik (waga 3) zauważa, że opóźnienie inwestycji nie unieważnia jej sensu. Katarzyna Kowalczyk (waga 3) porównuje ilość odpadów wysokoaktywnych z całego cyklu życia reaktora do odpadów górniczych z wydobycia węgla. Tomasz Kamiński (waga 3) wskazuje, że przekroczenia kosztorysów dotyczą głównie pierwszych bloków danej technologii. Magdalena Lewandowska (waga 3) zwraca uwagę na dywersyfikację dostawców paliwa jądrowego. Anna Kowalska (waga 2) argumentuje, że magazyny energii nie są w stanie pokryć wielodniowego deficytu wiatru i słońca. Katarzyna Kowalczyk (waga 2) dodaje, że brak elastyczności nie jest przeszkodą, gdy elektrownia jądrowa pokrywa jedynie stabilne zapotrzebowanie bazowe. Tomasz Kamiński (waga 2) proponuje pokrycie luki do 2035 roku elastycznymi blokami gazowymi.\n\n### Argumenty przeciw\nMaria Wiśniewska (waga 6) zwraca uwagę, że budowa elektrowni jądrowej w Polsce trwa kilkanaście lat, więc nie pomoże osiągnąć celów klimatycznych na najbliższą dekadę. Piotr Wójcik (waga 5) podkreśla, że problem składowania odpadów wysokoaktywnych pozostaje nierozwiązany. Tomasz Kamiński (waga 4) argumentuje, że koszt budowy i finansowania elektrowni jądrowej systematycznie przekracza pierwotne kosztorysy. Magdalena Lewandowska (waga 4) zwraca uwagę na uzależnienie od pojedynczego dostawcy technologii i paliwa jądrowego. Anna Kowalska (waga 4) proponuje uzyskanie stabilności mocy bazowej za pomocą magazynów energii i elastycznego zarządzania popytem. Maria Wiśniewska (waga 3) zauważa, że mała powierzchnia zajęta przez sam reaktor nie uwzględnia stref bezpieczeństwa i infrastruktury towarzyszącej. Krzysztof Zieliński (waga 3) argumentuje, że sukces francuskiego modelu opierał się na scentralizowanym, państwowym programie budowy z lat 70. i 80. Jan Nowak (waga 2) zwraca uwagę, że wysoki współczynnik wykorzystania mocy nie oznacza elastyczności. Maria Wiśniewska (waga 2) pyta, czym pokryjemy lukę mocy w najbliższej dekadzie, gdy stare bloki węglowe będą wygaszane. Piotr Wójcik (waga 2) zauważa, że efekt uczenia się w kolejnych blokach nie wystąpił w większości europejskich projektów ostatniej dekady.\n\n### Linie sporu\nGłówne punkty tarcia dotyczą stabilności mocy, emisji dwutlenku węgla, kosztów budowy i finansowania elektrowni jądrowych, oraz ryzyka geopolitycznego. Argumenty oznaczone jako \"sporny\" dotyczą elastyczności elektrowni jądrowych i możliwości pokrycia luki do 2035 roku.\n\n### Punkty wspólne i pytania otwarte\nUczestnicy dyskusji zgadzają się co do tego, że energia jądrowa może być ważnym elementem miksu energetycznego. Pytaniem otwartym pozostaje, w jaki sposób pokryć lukę mocy w najbliższej dekadzie, gdy stare bloki węglowe będą wygaszane, oraz czy energia jądrowa jest w stanie zapewnić stabilność mocy i zmniejszyć emisje dwutlenku węgla w sposób ekonomicznie uzasadniony.",
+        "sentences": [
+          {
+            "sentence": "Dyskusja dotyczy tezy, że energia jądrowa jest niezbędna do osiągnięcia neutralności klimatycznej Polski.",
+            "simInsideBranch": 0.75,
+            "simOutsideBranch": 0.826,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Budowa elektrowni jądrowej w Polsce trwa kilkanaście lat, więc nie pomoże osiągnąć celów klimatycznych na najbliższą dekadę."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy wymieniają się argumentami za i przeciw tej tezie, poruszając kwestie związane z stabilnością mocy, emisjami dwutlenku węgla, kosztami budowy i finansowania elektrowni jądrowych, oraz ryzykiem geopolitycznym.",
+            "simInsideBranch": 0.757,
+            "simOutsideBranch": 0.767,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Stabilność mocy bazowej można też uzyskać magazynami energii i elastycznym zarządzaniem popytem, bez ryzyk właściwych energetyce jądrowej."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Reaktor jądrowy nie emituje dwutlenku węgla podczas pracy, co czyni go realną alternatywą dla elektrowni węglowych."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Anna Kowalska (waga 8) zwraca uwagę, że energia jądrowa dostarcza stabilną moc bazową niezależną od pogody.",
+            "simInsideBranch": 0.825,
+            "simOutsideBranch": 0.687,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Energia jądrowa dostarcza stabilną moc bazową niezależną od pogody, czego elektrownie wiatrowe i słoneczne nie są w stanie samodzielnie zagwarantować."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Reaktor jądrowy nie emituje dwutlenku węgla podczas pracy, co czyni go realną alternatywą dla elektrowni węglowych."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Jan Nowak (waga 6) podkreśla, że elektrownia jądrowa zajmuje ułamek powierzchni potrzebnej farmie fotowoltaicznej o porównywalnej rocznej produkcji energii.",
+            "simInsideBranch": 0.754,
+            "simOutsideBranch": 0.894,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw."
+            },
+            "nearestOutsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa zajmuje ułamek powierzchni potrzebnej farmie fotowoltaicznej o porównywalnej rocznej produkcji energii."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Katarzyna Kowalczyk (waga 5) argumentuje, że reaktor jądrowy nie emituje dwutlenku węgla podczas pracy.",
+            "simInsideBranch": 0.663,
+            "simOutsideBranch": 0.844,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Reaktor jądrowy nie emituje dwutlenku węgla podczas pracy, co czyni go realną alternatywą dla elektrowni węglowych."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Krzysztof Zieliński (waga 4) przytacza przykład Francji, gdzie elektrownie jądrowe dostarczają większość krajowej energii elektrycznej przy jednych z najniższych emisji CO2 w Europie.",
+            "simInsideBranch": 0.724,
+            "simOutsideBranch": 0.88,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw."
+            },
+            "nearestOutsideBranch": {
+              "author": "Krzysztof Zieliński",
+              "content": "Kraje takie jak Francja pokazują, że elektrownie jądrowe mogą dostarczać większość krajowej energii elektrycznej przy jednych z najniższych emisji CO2 w Europie."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Jan Nowak (waga 4) dodaje, że elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%.",
+            "simInsideBranch": 0.839,
+            "simOutsideBranch": 0.714,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw."
+            },
+            "nearestOutsideBranch": {
+              "author": "Krzysztof Zieliński",
+              "content": "Kraje takie jak Francja pokazują, że elektrownie jądrowe mogą dostarczać większość krajowej energii elektrycznej przy jednych z najniższych emisji CO2 w Europie."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Piotr Wójcik (waga 3) zauważa, że opóźnienie inwestycji nie unieważnia jej sensu.",
+            "simInsideBranch": 0.594,
+            "simOutsideBranch": 0.783,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Wysoki współczynnik wykorzystania mocy nie oznacza elastyczności - reaktora nie da się szybko wyłączyć ani włączyć w reakcji na chwilowy nadmiar energii z OZE, co w praktyce utrudnia bilansowanie sieci."
+            },
+            "nearestOutsideBranch": {
+              "author": "Piotr Wójcik",
+              "content": "Opóźnienie inwestycji nie unieważnia jej sensu - część miksu energetycznego musi już dziś zakładać horyzont po 2035 roku."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Katarzyna Kowalczyk (waga 3) porównuje ilość odpadów wysokoaktywnych z całego cyklu życia reaktora do odpadów górniczych z wydobycia węgla.",
+            "simInsideBranch": 0.66,
+            "simOutsideBranch": 0.887,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Ilość odpadów wysokoaktywnych z całego cyklu życia reaktora jest, w przeliczeniu na wyprodukowaną energię, radykalnie mniejsza niż odpadów górniczych z wydobycia węgla."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Tomasz Kamiński (waga 3) wskazuje, że przekroczenia kosztorysów dotyczą głównie pierwszych bloków danej technologii.",
+            "simInsideBranch": 0.628,
+            "simOutsideBranch": 0.881,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Wysoki współczynnik wykorzystania mocy nie oznacza elastyczności - reaktora nie da się szybko wyłączyć ani włączyć w reakcji na chwilowy nadmiar energii z OZE, co w praktyce utrudnia bilansowanie sieci."
+            },
+            "nearestOutsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Przekroczenia kosztorysów dotyczą głównie pierwszych bloków danej technologii - kolejne bloki tego samego typu bywają budowane taniej i szybciej."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Magdalena Lewandowska (waga 3) zwraca uwagę na dywersyfikację dostawców paliwa jądrowego.",
+            "simInsideBranch": 0.683,
+            "simOutsideBranch": 0.767,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Stabilność mocy bazowej można też uzyskać magazynami energii i elastycznym zarządzaniem popytem, bez ryzyk właściwych energetyce jądrowej."
+            },
+            "nearestOutsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Dywersyfikacja dostawców paliwa jądrowego oraz zapasy strategiczne na lata pracy reaktora skutecznie ograniczają to ryzyko, czego nie da się powiedzieć o bieżących dostawach gazu."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Anna Kowalska (waga 2) argumentuje, że magazyny energii nie są w stanie pokryć wielodniowego deficytu wiatru i słońca.",
+            "simInsideBranch": 0.794,
+            "simOutsideBranch": 0.67,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Magazyny wystarczające na pokrycie wielodniowego deficytu wiatru i słońca wymagają skali, która dziś nie istnieje w żadnym kraju europejskim."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Zakładanie miksu po 2035 roku nie zwalnia z pytania, czym pokryjemy lukę mocy w najbliższej dekadzie, gdy stare bloki węglowe będą wygaszane."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Katarzyna Kowalczyk (waga 2) dodaje, że brak elastyczności nie jest przeszkodą, gdy elektrownia jądrowa pokrywa jedynie stabilne zapotrzebowanie bazowe.",
+            "simInsideBranch": 0.842,
+            "simOutsideBranch": 0.709,
+            "nearestInsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Brak elastyczności nie jest przeszkodą, gdy elektrownia jądrowa pokrywa jedynie stabilne zapotrzebowanie bazowe, a szczytowe wahania bilansuje się elastycznymi źródłami uzupełniającymi, na przykład gazowymi."
+            },
+            "nearestOutsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Lukę do 2035 roku można pokryć elastycznymi blokami gazowymi jako rozwiązaniem przejściowym, bez rezygnacji z docelowego miksu z udziałem atomu."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Tomasz Kamiński (waga 2) proponuje pokrycie luki do 2035 roku elastycznymi blokami gazowymi.",
+            "simInsideBranch": 0.701,
+            "simOutsideBranch": 0.816,
+            "nearestInsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Brak elastyczności nie jest przeszkodą, gdy elektrownia jądrowa pokrywa jedynie stabilne zapotrzebowanie bazowe, a szczytowe wahania bilansuje się elastycznymi źródłami uzupełniającymi, na przykład gazowymi."
+            },
+            "nearestOutsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Lukę do 2035 roku można pokryć elastycznymi blokami gazowymi jako rozwiązaniem przejściowym, bez rezygnacji z docelowego miksu z udziałem atomu."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Maria Wiśniewska (waga 6) zwraca uwagę, że budowa elektrowni jądrowej w Polsce trwa kilkanaście lat, więc nie pomoże osiągnąć celów klimatycznych na najbliższą dekadę.",
+            "simInsideBranch": 0.682,
+            "simOutsideBranch": 0.891,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Budowa elektrowni jądrowej w Polsce trwa kilkanaście lat, więc nie pomoże osiągnąć celów klimatycznych na najbliższą dekadę."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Piotr Wójcik (waga 5) podkreśla, że problem składowania odpadów wysokoaktywnych pozostaje nierozwiązany.",
+            "simInsideBranch": 0.619,
+            "simOutsideBranch": 0.81,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Magazyny wystarczające na pokrycie wielodniowego deficytu wiatru i słońca wymagają skali, która dziś nie istnieje w żadnym kraju europejskim."
+            },
+            "nearestOutsideBranch": {
+              "author": "Piotr Wójcik",
+              "content": "Problem składowania odpadów wysokoaktywnych pozostaje nierozwiązany w horyzoncie dziesiątek tysięcy lat."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Tomasz Kamiński (waga 4) argumentuje, że koszt budowy i finansowania elektrowni jądrowej systematycznie przekracza pierwotne kosztorysy.",
+            "simInsideBranch": 0.67,
+            "simOutsideBranch": 0.866,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw."
+            },
+            "nearestOutsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Koszt budowy i finansowania elektrowni jądrowej systematycznie przekracza pierwotne kosztorysy w większości realizowanych projektów."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Magdalena Lewandowska (waga 4) zwraca uwagę na uzależnienie od pojedynczego dostawcy technologii i paliwa jądrowego.",
+            "simInsideBranch": 0.679,
+            "simOutsideBranch": 0.808,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Stabilność mocy bazowej można też uzyskać magazynami energii i elastycznym zarządzaniem popytem, bez ryzyk właściwych energetyce jądrowej."
+            },
+            "nearestOutsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Uzależnienie od pojedynczego dostawcy technologii i paliwa jądrowego rodzi ryzyko geopolityczne porównywalne z dzisiejszym uzależnieniem od importu gazu."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Anna Kowalska (waga 4) proponuje uzyskanie stabilności mocy bazowej za pomocą magazynów energii i elastycznego zarządzania popytem.",
+            "simInsideBranch": 0.788,
+            "simOutsideBranch": 0.678,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Stabilność mocy bazowej można też uzyskać magazynami energii i elastycznym zarządzaniem popytem, bez ryzyk właściwych energetyce jądrowej."
+            },
+            "nearestOutsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Lukę do 2035 roku można pokryć elastycznymi blokami gazowymi jako rozwiązaniem przejściowym, bez rezygnacji z docelowego miksu z udziałem atomu."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Maria Wiśniewska (waga 3) zauważa, że mała powierzchnia zajęta przez sam reaktor nie uwzględnia stref bezpieczeństwa i infrastruktury towarzyszącej.",
+            "simInsideBranch": 0.69,
+            "simOutsideBranch": 0.862,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Wysoki współczynnik wykorzystania mocy nie oznacza elastyczności - reaktora nie da się szybko wyłączyć ani włączyć w reakcji na chwilowy nadmiar energii z OZE, co w praktyce utrudnia bilansowanie sieci."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Mała powierzchnia zajęta przez sam reaktor nie uwzględnia stref bezpieczeństwa i infrastruktury towarzyszącej, znacząco większej niż sama elektrownia."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Krzysztof Zieliński (waga 3) argumentuje, że sukces francuskiego modelu opierał się na scentralizowanym, państwowym programie budowy z lat 70. i 80.",
+            "simInsideBranch": 0.607,
+            "simOutsideBranch": 0.884,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw."
+            },
+            "nearestOutsideBranch": {
+              "author": "Krzysztof Zieliński",
+              "content": "Sukces francuskiego modelu opierał się na scentralizowanym, państwowym programie budowy z lat 70. i 80. - warunków politycznych i finansowych, które trudno dziś odtworzyć."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Jan Nowak (waga 2) zwraca uwagę, że wysoki współczynnik wykorzystania mocy nie oznacza elastyczności.",
+            "simInsideBranch": 0.774,
+            "simOutsideBranch": 0.65,
+            "nearestInsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Wysoki współczynnik wykorzystania mocy nie oznacza elastyczności - reaktora nie da się szybko wyłączyć ani włączyć w reakcji na chwilowy nadmiar energii z OZE, co w praktyce utrudnia bilansowanie sieci."
+            },
+            "nearestOutsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Lukę do 2035 roku można pokryć elastycznymi blokami gazowymi jako rozwiązaniem przejściowym, bez rezygnacji z docelowego miksu z udziałem atomu."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Maria Wiśniewska (waga 2) pyta, czym pokryjemy lukę mocy w najbliższej dekadzie, gdy stare bloki węglowe będą wygaszane.",
+            "simInsideBranch": 0.682,
+            "simOutsideBranch": 0.883,
+            "nearestInsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Brak elastyczności nie jest przeszkodą, gdy elektrownia jądrowa pokrywa jedynie stabilne zapotrzebowanie bazowe, a szczytowe wahania bilansuje się elastycznymi źródłami uzupełniającymi, na przykład gazowymi."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Zakładanie miksu po 2035 roku nie zwalnia z pytania, czym pokryjemy lukę mocy w najbliższej dekadzie, gdy stare bloki węglowe będą wygaszane."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Piotr Wójcik (waga 2) zauważa, że efekt uczenia się w kolejnych blokach nie wystąpił w większości europejskich projektów ostatniej dekady.",
+            "simInsideBranch": 0.608,
+            "simOutsideBranch": 0.874,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Magazyny wystarczające na pokrycie wielodniowego deficytu wiatru i słońca wymagają skali, która dziś nie istnieje w żadnym kraju europejskim."
+            },
+            "nearestOutsideBranch": {
+              "author": "Piotr Wójcik",
+              "content": "Efekt uczenia się w kolejnych blokach nie wystąpił w większości europejskich projektów ostatniej dekady, gdzie każdy kolejny blok wciąż przekraczał budżet."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Główne punkty tarcia dotyczą stabilności mocy, emisji dwutlenku węgla, kosztów budowy i finansowania elektrowni jądrowych, oraz ryzyka geopolitycznego.",
+            "simInsideBranch": 0.719,
+            "simOutsideBranch": 0.762,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Stabilność mocy bazowej można też uzyskać magazynami energii i elastycznym zarządzaniem popytem, bez ryzyk właściwych energetyce jądrowej."
+            },
+            "nearestOutsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Koszt budowy i finansowania elektrowni jądrowej systematycznie przekracza pierwotne kosztorysy w większości realizowanych projektów."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Argumenty oznaczone jako \"sporny\" dotyczą elastyczności elektrowni jądrowych i możliwości pokrycia luki do 2035 roku.",
+            "simInsideBranch": 0.759,
+            "simOutsideBranch": 0.814,
+            "nearestInsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Brak elastyczności nie jest przeszkodą, gdy elektrownia jądrowa pokrywa jedynie stabilne zapotrzebowanie bazowe, a szczytowe wahania bilansuje się elastycznymi źródłami uzupełniającymi, na przykład gazowymi."
+            },
+            "nearestOutsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Lukę do 2035 roku można pokryć elastycznymi blokami gazowymi jako rozwiązaniem przejściowym, bez rezygnacji z docelowego miksu z udziałem atomu."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji zgadzają się co do tego, że energia jądrowa może być ważnym elementem miksu energetycznego.",
+            "simInsideBranch": 0.741,
+            "simOutsideBranch": 0.726,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Stabilność mocy bazowej można też uzyskać magazynami energii i elastycznym zarządzaniem popytem, bez ryzyk właściwych energetyce jądrowej."
+            },
+            "nearestOutsideBranch": {
+              "author": "Krzysztof Zieliński",
+              "content": "Kraje takie jak Francja pokazują, że elektrownie jądrowe mogą dostarczać większość krajowej energii elektrycznej przy jednych z najniższych emisji CO2 w Europie."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Pytaniem otwartym pozostaje, w jaki sposób pokryć lukę mocy w najbliższej dekadzie, gdy stare bloki węglowe będą wygaszane, oraz czy energia jądrowa jest w stanie zapewnić stabilność mocy i zmniejszyć emisje dwutlenku węgla w sposób ekonomicznie uzasadniony.",
+            "simInsideBranch": 0.731,
+            "simOutsideBranch": 0.859,
+            "nearestInsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Brak elastyczności nie jest przeszkodą, gdy elektrownia jądrowa pokrywa jedynie stabilne zapotrzebowanie bazowe, a szczytowe wahania bilansuje się elastycznymi źródłami uzupełniającymi, na przykład gazowymi."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Zakładanie miksu po 2035 roku nie zwalnia z pytania, czym pokryjemy lukę mocy w najbliższej dekadzie, gdy stare bloki węglowe będą wygaszane."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          }
+        ],
+        "coverage": [
+          {
+            "argumentId": "5da5e24c-a82e-415e-8750-0509c75dc1cd",
+            "author": "Anna Kowalska",
+            "content": "Energia jądrowa dostarcza stabilną moc bazową niezależną od pogody, czego elektrownie wiatrowe i słoneczne nie są w stanie samodzielnie zagwarantować.",
+            "bestSimilarity": 0.825,
+            "bestSentence": "Anna Kowalska (waga 8) zwraca uwagę, że energia jądrowa dostarcza stabilną moc bazową niezależną od pogody.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "7e5a0d51-3824-4a4a-93ae-788b520b7adb",
+            "author": "Anna Kowalska",
+            "content": "Stabilność mocy bazowej można też uzyskać magazynami energii i elastycznym zarządzaniem popytem, bez ryzyk właściwych energetyce jądrowej.",
+            "bestSimilarity": 0.788,
+            "bestSentence": "Anna Kowalska (waga 4) proponuje uzyskanie stabilności mocy bazowej za pomocą magazynów energii i elastycznego zarządzania popytem.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "f54f74c7-8183-4b79-8675-9787eb5b94fc",
+            "author": "Jan Nowak",
+            "content": "Elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%, podczas gdy farmy wiatrowe i fotowoltaiczne w Polsce wykorzystują nominalną moc jedynie okresowo, co bezpośrednio potwierdza przewagę stabilności dostaw.",
+            "bestSimilarity": 0.839,
+            "bestSentence": "Jan Nowak (waga 4) dodaje, że elektrownia jądrowa osiąga współczynnik wykorzystania mocy przekraczający 90%.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "dc67ce7f-84cc-4b0b-802a-c0f7c8702e86",
+            "author": "Anna Kowalska",
+            "content": "Magazyny wystarczające na pokrycie wielodniowego deficytu wiatru i słońca wymagają skali, która dziś nie istnieje w żadnym kraju europejskim.",
+            "bestSimilarity": 0.794,
+            "bestSentence": "Anna Kowalska (waga 2) argumentuje, że magazyny energii nie są w stanie pokryć wielodniowego deficytu wiatru i słońca.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "c904d394-aead-4b68-a732-c5ac76d3945c",
+            "author": "Jan Nowak",
+            "content": "Wysoki współczynnik wykorzystania mocy nie oznacza elastyczności - reaktora nie da się szybko wyłączyć ani włączyć w reakcji na chwilowy nadmiar energii z OZE, co w praktyce utrudnia bilansowanie sieci.",
+            "bestSimilarity": 0.774,
+            "bestSentence": "Jan Nowak (waga 2) zwraca uwagę, że wysoki współczynnik wykorzystania mocy nie oznacza elastyczności.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "dfcc3fa9-932c-473a-bc12-b5a8bcf36d9a",
+            "author": "Katarzyna Kowalczyk",
+            "content": "Brak elastyczności nie jest przeszkodą, gdy elektrownia jądrowa pokrywa jedynie stabilne zapotrzebowanie bazowe, a szczytowe wahania bilansuje się elastycznymi źródłami uzupełniającymi, na przykład gazowymi.",
+            "bestSimilarity": 0.842,
+            "bestSentence": "Katarzyna Kowalczyk (waga 2) dodaje, że brak elastyczności nie jest przeszkodą, gdy elektrownia jądrowa pokrywa jedynie stabilne zapotrzebowanie bazowe.",
+            "proposedCovered": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "debate": "praca",
+    "debateId": "70d2279c-4614-4bd8-b5ee-19d717a7f3bf",
+    "thesis": "Praca zdalna powinna być domyślnym modelem zatrudnienia w branży IT.",
+    "branchRootId": "d8b7ac9a-b981-443a-b878-fa422504b1aa",
+    "branchRootContent": "Praca zdalna zwiększa produktywność programistów, ponieważ eliminuje przerywniki charakterystyczne dla open space'ów i pozwala pracować w głębokim skupieniu.",
+    "branchSize": 6,
+    "debateSize": 20,
+    "variants": [
+      {
+        "kind": "subgraph",
+        "inputArguments": 6,
+        "promptChars": 4629,
+        "latencyMs": 11574,
+        "usage": {
+          "prompt_tokens": 1784,
+          "completion_tokens": 799,
+          "total_tokens": 2583,
+          "cached_tokens": 0
+        },
+        "finishReason": "stop",
+        "text": "### O co toczy się spór\nZaznaczona część dyskusji dotyczy tezy, że praca zdalna powinna być domyślnym modelem zatrudnienia w branży IT. Uczestnicy dyskusji wymieniają się argumentami za i przeciw tej tezie, poruszając kwestie produktywności, struktury dnia i współpracy w zespole.\n\n### Argumenty za\nAnna Kowalska (waga 8) zwraca uwagę, że praca zdalna zwiększa produktywność programistów, ponieważ eliminuje przerywniki charakterystyczne dla open space'ów. Krzysztof Zieliński (waga 4) dodaje, że narzędzia do pracy asynchronicznej, takie jak nagrane demo i wspólna dokumentacja decyzji, w praktyce eliminują przerywniki lepiej niż jakiekolwiek biuro. Tomasz Kamiński (waga 3) uważa, że problem struktury dnia można rozwiązać poprzez jasne zasady zespołu, takie jak wspólne godziny dostępności, co nie wymaga fizycznej obecności w biurze.\n\n### Argumenty przeciw\nMagdalena Lewandowska (waga 4) twierdzi, że głębokie skupienie w domu bywa iluzoryczne, ponieważ bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin. Inny argument Magdaleny Lewandowskiej (waga 3) dotyczy tego, że dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji, która w biurze trwa dwie minuty, a zdalnie wymaga umówienia osobnej rozmowy. Maria Wiśniewska (waga 2) zwraca uwagę, że wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów.\n\n### Linie sporu\nGłówne punkty tarcia dotyczą kwestii, czy praca zdalna rzeczywiście zwiększa produktywność, oraz czy możliwe jest skuteczne rozwiązanie problemu struktury dnia i współpracy w zespole bez fizycznej obecności w biurze. Argument Marii Wiśniewskiej (waga 2) jest oznaczony jako sporny, co wskazuje na to, że nie ma jednomyślności co do tego, czy wspólne godziny dostępności są wystarczające do rozwiązania problemu nieformalnego uczenia się.\n\n### Punkty wspólne i pytania otwarte\nUczestnicy dyskusji zgadzają się co do tego, że praca zdalna wymaga skutecznych narzędzi i zasad współpracy. Pytaniem otwartym pozostaje, czy możliwe jest stworzenie modelu pracy zdalnej, który będzie w pełni efektywny i zastąpi fizyczną obecność w biurze, oraz jakie są optymalne rozwiązania dla różnych zespołów i organizacji.",
+        "sentences": [
+          {
+            "sentence": "Zaznaczona część dyskusji dotyczy tezy, że praca zdalna powinna być domyślnym modelem zatrudnienia w branży IT.",
+            "simInsideBranch": 0.746,
+            "simOutsideBranch": 0.767,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Praca zdalna zwiększa produktywność programistów, ponieważ eliminuje przerywniki charakterystyczne dla open space'ów i pozwala pracować w głębokim skupieniu."
+            },
+            "nearestOutsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Model zdalny otwiera dostęp do globalnego rynku talentów, dzięki czemu firmy IT nie są ograniczone lokalnym rynkiem pracy."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji wymieniają się argumentami za i przeciw tej tezie, poruszając kwestie produktywności, struktury dnia i współpracy w zespole.",
+            "simInsideBranch": 0.752,
+            "simOutsideBranch": 0.734,
+            "nearestInsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Problem struktury dnia rozwiązują jasne zasady zespołu, takie jak wspólne godziny dostępności, a nie fizyczna obecność w biurze."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Zniesienie dojazdów realnie zwiększa czas dostępny na pracę głęboką i regenerację, co przekłada się na mniejszą rotację kadr."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Anna Kowalska (waga 8) zwraca uwagę, że praca zdalna zwiększa produktywność programistów, ponieważ eliminuje przerywniki charakterystyczne dla open space'ów.",
+            "simInsideBranch": 0.849,
+            "simOutsideBranch": 0.699,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Praca zdalna zwiększa produktywność programistów, ponieważ eliminuje przerywniki charakterystyczne dla open space'ów i pozwala pracować w głębokim skupieniu."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Zniesienie dojazdów realnie zwiększa czas dostępny na pracę głęboką i regenerację, co przekłada się na mniejszą rotację kadr."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Krzysztof Zieliński (waga 4) dodaje, że narzędzia do pracy asynchronicznej, takie jak nagrane demo i wspólna dokumentacja decyzji, w praktyce eliminują przerywniki lepiej niż jakiekolwiek biuro.",
+            "simInsideBranch": 0.916,
+            "simOutsideBranch": 0.745,
+            "nearestInsideBranch": {
+              "author": "Krzysztof Zieliński",
+              "content": "Narzędzia do pracy asynchronicznej, takie jak nagrane demo i wspólna dokumentacja decyzji, w praktyce eliminują przerywniki lepiej niż jakiekolwiek biuro."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Współczesne narzędzia, takie jak wspólne tablice i sesje pair-programming online, skutecznie zastępują spontaniczne rozmowy przy biurku."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Tomasz Kamiński (waga 3) uważa, że problem struktury dnia można rozwiązać poprzez jasne zasady zespołu, takie jak wspólne godziny dostępności, co nie wymaga fizycznej obecności w biurze.",
+            "simInsideBranch": 0.861,
+            "simOutsideBranch": 0.684,
+            "nearestInsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Problem struktury dnia rozwiązują jasne zasady zespołu, takie jak wspólne godziny dostępności, a nie fizyczna obecność w biurze."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Zniesienie dojazdów realnie zwiększa czas dostępny na pracę głęboką i regenerację, co przekłada się na mniejszą rotację kadr."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Magdalena Lewandowska (waga 4) twierdzi, że głębokie skupienie w domu bywa iluzoryczne, ponieważ bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin.",
+            "simInsideBranch": 0.86,
+            "simOutsideBranch": 0.716,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Głębokie skupienie w domu bywa iluzoryczne - bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Zniesienie dojazdów realnie zwiększa czas dostępny na pracę głęboką i regenerację, co przekłada się na mniejszą rotację kadr."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Inny argument Magdaleny Lewandowskiej (waga 3) dotyczy tego, że dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji, która w biurze trwa dwie minuty, a zdalnie wymaga umówienia osobnej rozmowy.",
+            "simInsideBranch": 0.905,
+            "simOutsideBranch": 0.709,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji, która w biurze trwa dwie minuty, a zdalnie wymaga umówienia osobnej rozmowy."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Współczesne narzędzia, takie jak wspólne tablice i sesje pair-programming online, skutecznie zastępują spontaniczne rozmowy przy biurku."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Maria Wiśniewska (waga 2) zwraca uwagę, że wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów.",
+            "simInsideBranch": 0.897,
+            "simOutsideBranch": 0.73,
+            "nearestInsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów."
+            },
+            "nearestOutsideBranch": {
+              "author": "Piotr Wójcik",
+              "content": "Bez fizycznej obecności trudniej o spontaniczną wymianę wiedzy między zespołami, co spowalnia rozwiązywanie problemów międzyzespołowych."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Główne punkty tarcia dotyczą kwestii, czy praca zdalna rzeczywiście zwiększa produktywność, oraz czy możliwe jest skuteczne rozwiązanie problemu struktury dnia i współpracy w zespole bez fizycznej obecności w biurze.",
+            "simInsideBranch": 0.754,
+            "simOutsideBranch": 0.746,
+            "nearestInsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Problem struktury dnia rozwiązują jasne zasady zespołu, takie jak wspólne godziny dostępności, a nie fizyczna obecność w biurze."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Praca zdalna osłabia budowanie kultury organizacyjnej i utrudnia wdrażanie nowych, mniej doświadczonych pracowników."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Argument Marii Wiśniewskiej (waga 2) jest oznaczony jako sporny, co wskazuje na to, że nie ma jednomyślności co do tego, czy wspólne godziny dostępności są wystarczające do rozwiązania problemu nieformalnego uczenia się.",
+            "simInsideBranch": 0.757,
+            "simOutsideBranch": 0.663,
+            "nearestInsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów."
+            },
+            "nearestOutsideBranch": {
+              "author": "Piotr Wójcik",
+              "content": "Bez fizycznej obecności trudniej o spontaniczną wymianę wiedzy między zespołami, co spowalnia rozwiązywanie problemów międzyzespołowych."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji zgadzają się co do tego, że praca zdalna wymaga skutecznych narzędzi i zasad współpracy.",
+            "simInsideBranch": 0.73,
+            "simOutsideBranch": 0.775,
+            "nearestInsideBranch": {
+              "author": "Krzysztof Zieliński",
+              "content": "Narzędzia do pracy asynchronicznej, takie jak nagrane demo i wspólna dokumentacja decyzji, w praktyce eliminują przerywniki lepiej niż jakiekolwiek biuro."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Współczesne narzędzia, takie jak wspólne tablice i sesje pair-programming online, skutecznie zastępują spontaniczne rozmowy przy biurku."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Pytaniem otwartym pozostaje, czy możliwe jest stworzenie modelu pracy zdalnej, który będzie w pełni efektywny i zastąpi fizyczną obecność w biurze, oraz jakie są optymalne rozwiązania dla różnych zespołów i organizacji.",
+            "simInsideBranch": 0.719,
+            "simOutsideBranch": 0.706,
+            "nearestInsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Problem struktury dnia rozwiązują jasne zasady zespołu, takie jak wspólne godziny dostępności, a nie fizyczna obecność w biurze."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Praca zdalna osłabia budowanie kultury organizacyjnej i utrudnia wdrażanie nowych, mniej doświadczonych pracowników."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          }
+        ],
+        "coverage": [
+          {
+            "argumentId": "d8b7ac9a-b981-443a-b878-fa422504b1aa",
+            "author": "Anna Kowalska",
+            "content": "Praca zdalna zwiększa produktywność programistów, ponieważ eliminuje przerywniki charakterystyczne dla open space'ów i pozwala pracować w głębokim skupieniu.",
+            "bestSimilarity": 0.849,
+            "bestSentence": "Anna Kowalska (waga 8) zwraca uwagę, że praca zdalna zwiększa produktywność programistów, ponieważ eliminuje przerywniki charakterystyczne dla open space'ów.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "008d3127-f835-4859-97b0-b5ffef2c1712",
+            "author": "Magdalena Lewandowska",
+            "content": "Głębokie skupienie w domu bywa iluzoryczne - bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin.",
+            "bestSimilarity": 0.86,
+            "bestSentence": "Magdalena Lewandowska (waga 4) twierdzi, że głębokie skupienie w domu bywa iluzoryczne, ponieważ bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "7eb4cfcc-bd2f-4c3b-9c6c-66be0ef9dc25",
+            "author": "Krzysztof Zieliński",
+            "content": "Narzędzia do pracy asynchronicznej, takie jak nagrane demo i wspólna dokumentacja decyzji, w praktyce eliminują przerywniki lepiej niż jakiekolwiek biuro.",
+            "bestSimilarity": 0.916,
+            "bestSentence": "Krzysztof Zieliński (waga 4) dodaje, że narzędzia do pracy asynchronicznej, takie jak nagrane demo i wspólna dokumentacja decyzji, w praktyce eliminują przerywniki lepiej niż jakiekolwiek biuro.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "27645640-9ddc-4ce2-b596-7e1fa5a7b15a",
+            "author": "Tomasz Kamiński",
+            "content": "Problem struktury dnia rozwiązują jasne zasady zespołu, takie jak wspólne godziny dostępności, a nie fizyczna obecność w biurze.",
+            "bestSimilarity": 0.861,
+            "bestSentence": "Tomasz Kamiński (waga 3) uważa, że problem struktury dnia można rozwiązać poprzez jasne zasady zespołu, takie jak wspólne godziny dostępności, co nie wymaga fizycznej obecności w biurze.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "bf9adbec-4f0d-40b0-8017-e8ca39570b0d",
+            "author": "Magdalena Lewandowska",
+            "content": "Dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji, która w biurze trwa dwie minuty, a zdalnie wymaga umówienia osobnej rozmowy.",
+            "bestSimilarity": 0.905,
+            "bestSentence": "Inny argument Magdaleny Lewandowskiej (waga 3) dotyczy tego, że dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji, która w biurze trwa dwie minuty, a zdalnie wymaga umówienia osobnej rozmowy.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "30a93d33-f8cc-4bdc-b43f-68dd508f0929",
+            "author": "Maria Wiśniewska",
+            "content": "Wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów.",
+            "bestSimilarity": 0.897,
+            "bestSentence": "Maria Wiśniewska (waga 2) zwraca uwagę, że wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów.",
+            "proposedCovered": true
+          }
+        ]
+      },
+      {
+        "kind": "whole",
+        "inputArguments": 20,
+        "promptChars": 9800,
+        "latencyMs": 17030,
+        "usage": {
+          "prompt_tokens": 3846,
+          "completion_tokens": 1366,
+          "total_tokens": 5212,
+          "cached_tokens": 0
+        },
+        "finishReason": "stop",
+        "text": "### O co toczy się spór\nZaznaczona część dyskusji dotyczy tezy, że praca zdalna powinna być domyślnym modelem zatrudnienia w branży IT. Uczestnicy dyskusji wymieniają się argumentami za i przeciw tej tezie, poruszając kwestie produktywności, kultury organizacyjnej, rekrutacji i rozwoju zawodowego.\n\n### Argumenty za\nAnna Kowalska (waga 8) zwraca uwagę, że praca zdalna zwiększa produktywność programistów, eliminując przerywniki charakterystyczne dla open space'ów. Jan Nowak (waga 6) argumentuje, że model zdalny otwiera dostęp do globalnego rynku talentów, co pozwala firmom IT na wybór najlepszych specjalistów. Katarzyna Kowalczyk (waga 5) podkreśla, że zniesienie dojazdów zwiększa czas dostępny na pracę głęboką i regenerację, co przekłada się na mniejszą rotację kadr. Krzysztof Zieliński (waga 4) wskazuje, że narzędzia do pracy asynchronicznej eliminują przerywniki lepiej niż biuro. Jan Nowak (waga 4) argumentuje, że kulturę organizacyjną da się budować rytuałami zdalnymi. Maria Wiśniewska (waga 3) podkreśla, że współczesne narzędzia skutecznie zastępują spontaniczne rozmowy przy biurku. Katarzyna Kowalczyk (waga 3) wskazuje, że ustrukturyzowane rozmowy rekrutacyjne oceniają dopasowanie skuteczniej niż subiektywne wrażenie z rozmowy w biurze. Tomasz Kamiński (waga 3) argumentuje, że problem struktury dnia rozwiązują jasne zasady zespołu. Krzysztof Zieliński (waga 2) podkreśla, że presja płacowa dotyczy głównie ról juniorskich, a specjalistów o unikalnych kompetencjach globalny rynek premiuje wyższymi stawkami. Anna Kowalska (waga 2) wskazuje, że wypalenie wynika z braku granic organizacyjnych, a nie z samej zdalności.\n\n### Argumenty przeciw\nMaria Wiśniewska (waga 6) argumentuje, że praca zdalna osłabia budowanie kultury organizacyjnej i utrudnia wdrażanie nowych pracowników. Piotr Wójcik (waga 5) podkreśla, że bez fizycznej obecności trudniej o spontaniczną wymianę wiedzy między zespołami. Tomasz Kamiński (waga 4) wskazuje, że zdalna rekrutacja utrudnia ocenę dopasowania kulturowego kandydata. Magdalena Lewandowska (waga 4) argumentuje, że głębokie skupienie w domu bywa iluzoryczne, a bez rytmu biura część pracowników traci strukturę dnia. Anna Kowalska (waga 4) podkreśla, że globalna rekrutacja oznacza też globalną konkurencję płacową, która w dłuższej perspektywie obniża stawki lokalnych specjalistów. Piotr Wójcik (waga 3) wskazuje, że zniesienie dojazdów bywa równoważone przez zacieranie granicy między pracą a domem, co zwiększa ryzyko wypalenia zawodowego. Magdalena Lewandowska (waga 3) argumentuje, że dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji. Jan Nowak (waga 2) podkreśla, że próbki pracy oceniają kompetencje techniczne, ale nie przewidują, jak kandydat radzi sobie z presją w realnej sytuacji zespołowej. Maria Wiśniewska (waga 2) wskazuje, że wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów. Piotr Wójcik (waga 2) argumentuje, że nawet unikalni specjaliści z czasem stają się zastępowalni, gdy firma zbuduje wystarczająco dużą globalną pulę kandydatów o podobnym profilu.\n\n### Linie sporu\nGłówne punkty tarcia dotyczą kwestii produktywności, kultury organizacyjnej i rekrutacji. Argumenty oznaczone jako \"sporny\" dotyczą kwestii, czy wspólne godziny dostępności rozwiązują problem szybkiego kontaktu i czy odtwarzają nieformalne uczenie się przez obserwację pracy bardziej doświadczonych kolegów.\n\n### Punkty wspólne i pytania otwarte\nUczestnicy dyskusji zgadzają się, że praca zdalna ma zarówno zalety, jak i wady. Pytaniem otwartym pozostaje, w jaki sposób można skutecznie budować kulturę organizacyjną i zapewniać rozwój zawodowy pracownikom w modelu zdalnym.",
+        "sentences": [
+          {
+            "sentence": "Zaznaczona część dyskusji dotyczy tezy, że praca zdalna powinna być domyślnym modelem zatrudnienia w branży IT.",
+            "simInsideBranch": 0.746,
+            "simOutsideBranch": 0.767,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Praca zdalna zwiększa produktywność programistów, ponieważ eliminuje przerywniki charakterystyczne dla open space'ów i pozwala pracować w głębokim skupieniu."
+            },
+            "nearestOutsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Model zdalny otwiera dostęp do globalnego rynku talentów, dzięki czemu firmy IT nie są ograniczone lokalnym rynkiem pracy."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji wymieniają się argumentami za i przeciw tej tezie, poruszając kwestie produktywności, kultury organizacyjnej, rekrutacji i rozwoju zawodowego.",
+            "simInsideBranch": 0.676,
+            "simOutsideBranch": 0.751,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Praca zdalna zwiększa produktywność programistów, ponieważ eliminuje przerywniki charakterystyczne dla open space'ów i pozwala pracować w głębokim skupieniu."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Praca zdalna osłabia budowanie kultury organizacyjnej i utrudnia wdrażanie nowych, mniej doświadczonych pracowników."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Anna Kowalska (waga 8) zwraca uwagę, że praca zdalna zwiększa produktywność programistów, eliminując przerywniki charakterystyczne dla open space'ów.",
+            "simInsideBranch": 0.844,
+            "simOutsideBranch": 0.701,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Praca zdalna zwiększa produktywność programistów, ponieważ eliminuje przerywniki charakterystyczne dla open space'ów i pozwala pracować w głębokim skupieniu."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Zniesienie dojazdów realnie zwiększa czas dostępny na pracę głęboką i regenerację, co przekłada się na mniejszą rotację kadr."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Jan Nowak (waga 6) argumentuje, że model zdalny otwiera dostęp do globalnego rynku talentów, co pozwala firmom IT na wybór najlepszych specjalistów.",
+            "simInsideBranch": 0.678,
+            "simOutsideBranch": 0.87,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Praca zdalna zwiększa produktywność programistów, ponieważ eliminuje przerywniki charakterystyczne dla open space'ów i pozwala pracować w głębokim skupieniu."
+            },
+            "nearestOutsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Model zdalny otwiera dostęp do globalnego rynku talentów, dzięki czemu firmy IT nie są ograniczone lokalnym rynkiem pracy."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Katarzyna Kowalczyk (waga 5) podkreśla, że zniesienie dojazdów zwiększa czas dostępny na pracę głęboką i regenerację, co przekłada się na mniejszą rotację kadr.",
+            "simInsideBranch": 0.731,
+            "simOutsideBranch": 0.876,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Głębokie skupienie w domu bywa iluzoryczne - bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Zniesienie dojazdów realnie zwiększa czas dostępny na pracę głęboką i regenerację, co przekłada się na mniejszą rotację kadr."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Krzysztof Zieliński (waga 4) wskazuje, że narzędzia do pracy asynchronicznej eliminują przerywniki lepiej niż biuro.",
+            "simInsideBranch": 0.85,
+            "simOutsideBranch": 0.725,
+            "nearestInsideBranch": {
+              "author": "Krzysztof Zieliński",
+              "content": "Narzędzia do pracy asynchronicznej, takie jak nagrane demo i wspólna dokumentacja decyzji, w praktyce eliminują przerywniki lepiej niż jakiekolwiek biuro."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Współczesne narzędzia, takie jak wspólne tablice i sesje pair-programming online, skutecznie zastępują spontaniczne rozmowy przy biurku."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Jan Nowak (waga 4) argumentuje, że kulturę organizacyjną da się budować rytuałami zdalnymi.",
+            "simInsideBranch": 0.669,
+            "simOutsideBranch": 0.84,
+            "nearestInsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Problem struktury dnia rozwiązują jasne zasady zespołu, takie jak wspólne godziny dostępności, a nie fizyczna obecność w biurze."
+            },
+            "nearestOutsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Kulturę organizacyjną da się budować rytuałami zdalnymi, takimi jak regularne retrospektywy i jawna dokumentacja decyzji, niezależnie od lokalizacji zespołu."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Maria Wiśniewska (waga 3) podkreśla, że współczesne narzędzia skutecznie zastępują spontaniczne rozmowy przy biurku.",
+            "simInsideBranch": 0.707,
+            "simOutsideBranch": 0.79,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji, która w biurze trwa dwie minuty, a zdalnie wymaga umówienia osobnej rozmowy."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Współczesne narzędzia, takie jak wspólne tablice i sesje pair-programming online, skutecznie zastępują spontaniczne rozmowy przy biurku."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Katarzyna Kowalczyk (waga 3) wskazuje, że ustrukturyzowane rozmowy rekrutacyjne oceniają dopasowanie skuteczniej niż subiektywne wrażenie z rozmowy w biurze.",
+            "simInsideBranch": 0.644,
+            "simOutsideBranch": 0.871,
+            "nearestInsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Problem struktury dnia rozwiązują jasne zasady zespołu, takie jak wspólne godziny dostępności, a nie fizyczna obecność w biurze."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Ustrukturyzowane rozmowy rekrutacyjne i próbki pracy oceniają dopasowanie skuteczniej niż subiektywne wrażenie z rozmowy w biurze."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Tomasz Kamiński (waga 3) argumentuje, że problem struktury dnia rozwiązują jasne zasady zespołu.",
+            "simInsideBranch": 0.788,
+            "simOutsideBranch": 0.65,
+            "nearestInsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Problem struktury dnia rozwiązują jasne zasady zespołu, takie jak wspólne godziny dostępności, a nie fizyczna obecność w biurze."
+            },
+            "nearestOutsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Kulturę organizacyjną da się budować rytuałami zdalnymi, takimi jak regularne retrospektywy i jawna dokumentacja decyzji, niezależnie od lokalizacji zespołu."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Krzysztof Zieliński (waga 2) podkreśla, że presja płacowa dotyczy głównie ról juniorskich, a specjalistów o unikalnych kompetencjach globalny rynek premiuje wyższymi stawkami.",
+            "simInsideBranch": 0.607,
+            "simOutsideBranch": 0.883,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Głębokie skupienie w domu bywa iluzoryczne - bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin."
+            },
+            "nearestOutsideBranch": {
+              "author": "Krzysztof Zieliński",
+              "content": "Presja płacowa dotyczy głównie ról juniorskich - specjalistów o unikalnych kompetencjach globalny rynek premiuje wyższymi, nie niższymi stawkami."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Anna Kowalska (waga 2) wskazuje, że wypalenie wynika z braku granic organizacyjnych, a nie z samej zdalności.",
+            "simInsideBranch": 0.675,
+            "simOutsideBranch": 0.817,
+            "nearestInsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Problem struktury dnia rozwiązują jasne zasady zespołu, takie jak wspólne godziny dostępności, a nie fizyczna obecność w biurze."
+            },
+            "nearestOutsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Wypalenie wynika z braku granic organizacyjnych, nie z samej zdalności - firmy z jasną polityką braku spotkań po godzinach nie notują jego wzrostu."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Maria Wiśniewska (waga 6) argumentuje, że praca zdalna osłabia budowanie kultury organizacyjnej i utrudnia wdrażanie nowych pracowników.",
+            "simInsideBranch": 0.679,
+            "simOutsideBranch": 0.895,
+            "nearestInsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Praca zdalna osłabia budowanie kultury organizacyjnej i utrudnia wdrażanie nowych, mniej doświadczonych pracowników."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Piotr Wójcik (waga 5) podkreśla, że bez fizycznej obecności trudniej o spontaniczną wymianę wiedzy między zespołami.",
+            "simInsideBranch": 0.703,
+            "simOutsideBranch": 0.822,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji, która w biurze trwa dwie minuty, a zdalnie wymaga umówienia osobnej rozmowy."
+            },
+            "nearestOutsideBranch": {
+              "author": "Piotr Wójcik",
+              "content": "Bez fizycznej obecności trudniej o spontaniczną wymianę wiedzy między zespołami, co spowalnia rozwiązywanie problemów międzyzespołowych."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Tomasz Kamiński (waga 4) wskazuje, że zdalna rekrutacja utrudnia ocenę dopasowania kulturowego kandydata.",
+            "simInsideBranch": 0.657,
+            "simOutsideBranch": 0.874,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji, która w biurze trwa dwie minuty, a zdalnie wymaga umówienia osobnej rozmowy."
+            },
+            "nearestOutsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Zdalna rekrutacja utrudnia ocenę dopasowania kulturowego kandydata, co zwiększa ryzyko kosztownych błędów rekrutacyjnych."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Magdalena Lewandowska (waga 4) argumentuje, że głębokie skupienie w domu bywa iluzoryczne, a bez rytmu biura część pracowników traci strukturę dnia.",
+            "simInsideBranch": 0.842,
+            "simOutsideBranch": 0.708,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Głębokie skupienie w domu bywa iluzoryczne - bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin."
+            },
+            "nearestOutsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Zniesienie dojazdów realnie zwiększa czas dostępny na pracę głęboką i regenerację, co przekłada się na mniejszą rotację kadr."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Anna Kowalska (waga 4) podkreśla, że globalna rekrutacja oznacza też globalną konkurencję płacową, która w dłuższej perspektywie obniża stawki lokalnych specjalistów.",
+            "simInsideBranch": 0.604,
+            "simOutsideBranch": 0.881,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Głębokie skupienie w domu bywa iluzoryczne - bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin."
+            },
+            "nearestOutsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Globalna rekrutacja oznacza też globalną konkurencję płacową, która w dłuższej perspektywie obniża stawki lokalnych specjalistów."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Piotr Wójcik (waga 3) wskazuje, że zniesienie dojazdów bywa równoważone przez zacieranie granicy między pracą a domem, co zwiększa ryzyko wypalenia zawodowego.",
+            "simInsideBranch": 0.706,
+            "simOutsideBranch": 0.893,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Głębokie skupienie w domu bywa iluzoryczne - bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin."
+            },
+            "nearestOutsideBranch": {
+              "author": "Piotr Wójcik",
+              "content": "Zniesienie dojazdów bywa równoważone przez zacieranie granicy między pracą a domem, co zwiększa ryzyko wypalenia zawodowego."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Magdalena Lewandowska (waga 3) argumentuje, że dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji.",
+            "simInsideBranch": 0.806,
+            "simOutsideBranch": 0.651,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji, która w biurze trwa dwie minuty, a zdalnie wymaga umówienia osobnej rozmowy."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Współczesne narzędzia, takie jak wspólne tablice i sesje pair-programming online, skutecznie zastępują spontaniczne rozmowy przy biurku."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Jan Nowak (waga 2) podkreśla, że próbki pracy oceniają kompetencje techniczne, ale nie przewidują, jak kandydat radzi sobie z presją w realnej sytuacji zespołowej.",
+            "simInsideBranch": 0.629,
+            "simOutsideBranch": 0.894,
+            "nearestInsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów."
+            },
+            "nearestOutsideBranch": {
+              "author": "Jan Nowak",
+              "content": "Próbki pracy oceniają kompetencje techniczne, ale nie przewidują, jak kandydat radzi sobie z presją w realnej, nieprzewidywalnej sytuacji zespołowej."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Maria Wiśniewska (waga 2) wskazuje, że wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów.",
+            "simInsideBranch": 0.913,
+            "simOutsideBranch": 0.737,
+            "nearestInsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów."
+            },
+            "nearestOutsideBranch": {
+              "author": "Piotr Wójcik",
+              "content": "Bez fizycznej obecności trudniej o spontaniczną wymianę wiedzy między zespołami, co spowalnia rozwiązywanie problemów międzyzespołowych."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Piotr Wójcik (waga 2) argumentuje, że nawet unikalni specjaliści z czasem stają się zastępowalni, gdy firma zbuduje wystarczająco dużą globalną pulę kandydatów o podobnym profilu.",
+            "simInsideBranch": 0.604,
+            "simOutsideBranch": 0.922,
+            "nearestInsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów."
+            },
+            "nearestOutsideBranch": {
+              "author": "Piotr Wójcik",
+              "content": "Nawet unikalni specjaliści z czasem stają się zastępowalni, gdy firma zbuduje wystarczająco dużą globalną pulę kandydatów o podobnym profilu."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Główne punkty tarcia dotyczą kwestii produktywności, kultury organizacyjnej i rekrutacji.",
+            "simInsideBranch": 0.662,
+            "simOutsideBranch": 0.717,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Głębokie skupienie w domu bywa iluzoryczne - bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Praca zdalna osłabia budowanie kultury organizacyjnej i utrudnia wdrażanie nowych, mniej doświadczonych pracowników."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Argumenty oznaczone jako \"sporny\" dotyczą kwestii, czy wspólne godziny dostępności rozwiązują problem szybkiego kontaktu i czy odtwarzają nieformalne uczenie się przez obserwację pracy bardziej doświadczonych kolegów.",
+            "simInsideBranch": 0.874,
+            "simOutsideBranch": 0.698,
+            "nearestInsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów."
+            },
+            "nearestOutsideBranch": {
+              "author": "Piotr Wójcik",
+              "content": "Bez fizycznej obecności trudniej o spontaniczną wymianę wiedzy między zespołami, co spowalnia rozwiązywanie problemów międzyzespołowych."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji zgadzają się, że praca zdalna ma zarówno zalety, jak i wady.",
+            "simInsideBranch": 0.696,
+            "simOutsideBranch": 0.741,
+            "nearestInsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Głębokie skupienie w domu bywa iluzoryczne - bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Praca zdalna osłabia budowanie kultury organizacyjnej i utrudnia wdrażanie nowych, mniej doświadczonych pracowników."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Pytaniem otwartym pozostaje, w jaki sposób można skutecznie budować kulturę organizacyjną i zapewniać rozwój zawodowy pracownikom w modelu zdalnym.",
+            "simInsideBranch": 0.673,
+            "simOutsideBranch": 0.831,
+            "nearestInsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Praca zdalna osłabia budowanie kultury organizacyjnej i utrudnia wdrażanie nowych, mniej doświadczonych pracowników."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          }
+        ],
+        "coverage": [
+          {
+            "argumentId": "d8b7ac9a-b981-443a-b878-fa422504b1aa",
+            "author": "Anna Kowalska",
+            "content": "Praca zdalna zwiększa produktywność programistów, ponieważ eliminuje przerywniki charakterystyczne dla open space'ów i pozwala pracować w głębokim skupieniu.",
+            "bestSimilarity": 0.844,
+            "bestSentence": "Anna Kowalska (waga 8) zwraca uwagę, że praca zdalna zwiększa produktywność programistów, eliminując przerywniki charakterystyczne dla open space'ów.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "008d3127-f835-4859-97b0-b5ffef2c1712",
+            "author": "Magdalena Lewandowska",
+            "content": "Głębokie skupienie w domu bywa iluzoryczne - bez rytmu biura część pracowników traci strukturę dnia i efektywnie pracuje mniej godzin.",
+            "bestSimilarity": 0.842,
+            "bestSentence": "Magdalena Lewandowska (waga 4) argumentuje, że głębokie skupienie w domu bywa iluzoryczne, a bez rytmu biura część pracowników traci strukturę dnia.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "7eb4cfcc-bd2f-4c3b-9c6c-66be0ef9dc25",
+            "author": "Krzysztof Zieliński",
+            "content": "Narzędzia do pracy asynchronicznej, takie jak nagrane demo i wspólna dokumentacja decyzji, w praktyce eliminują przerywniki lepiej niż jakiekolwiek biuro.",
+            "bestSimilarity": 0.85,
+            "bestSentence": "Krzysztof Zieliński (waga 4) wskazuje, że narzędzia do pracy asynchronicznej eliminują przerywniki lepiej niż biuro.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "27645640-9ddc-4ce2-b596-7e1fa5a7b15a",
+            "author": "Tomasz Kamiński",
+            "content": "Problem struktury dnia rozwiązują jasne zasady zespołu, takie jak wspólne godziny dostępności, a nie fizyczna obecność w biurze.",
+            "bestSimilarity": 0.788,
+            "bestSentence": "Tomasz Kamiński (waga 3) argumentuje, że problem struktury dnia rozwiązują jasne zasady zespołu.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "bf9adbec-4f0d-40b0-8017-e8ca39570b0d",
+            "author": "Magdalena Lewandowska",
+            "content": "Dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji, która w biurze trwa dwie minuty, a zdalnie wymaga umówienia osobnej rozmowy.",
+            "bestSimilarity": 0.806,
+            "bestSentence": "Magdalena Lewandowska (waga 3) argumentuje, że dokumentacja nie zastępuje szybkiej, nieplanowanej konsultacji.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "30a93d33-f8cc-4bdc-b43f-68dd508f0929",
+            "author": "Maria Wiśniewska",
+            "content": "Wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów.",
+            "bestSimilarity": 0.913,
+            "bestSentence": "Maria Wiśniewska (waga 2) wskazuje, że wspólne godziny dostępności rozwiązują problem szybkiego kontaktu, ale nie odtwarzają nieformalnego uczenia się przez obserwację pracy bardziej doświadczonych kolegów.",
+            "proposedCovered": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "debate": "studenci",
+    "debateId": "9d4f85f8-723c-4bc3-9506-e103f7a261ce",
+    "thesis": "Studenci powinni mieć prawo używać generatywnej AI przy pisaniu prac dyplomowych.",
+    "branchRootId": "8cdffb76-064e-4159-bc52-cae8ff2f6cb3",
+    "branchRootContent": "Generatywna AI to po prostu kolejne narzędzie pracy - jak edytor tekstu czy wyszukiwarka - które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu zamiast na żmudnym formatowaniu.",
+    "branchSize": 6,
+    "debateSize": 17,
+    "variants": [
+      {
+        "kind": "subgraph",
+        "inputArguments": 6,
+        "promptChars": 4739,
+        "latencyMs": 9593,
+        "usage": {
+          "prompt_tokens": 1844,
+          "completion_tokens": 684,
+          "total_tokens": 2528,
+          "cached_tokens": 0
+        },
+        "finishReason": "stop",
+        "text": "### O co toczy się spór\nZaznaczona część dyskusji dotyczy tezy, że studenci powinni mieć prawo używać generatywnej AI przy pisaniu prac dyplomowych. Uczestnicy dyskusji przedstawiają swoje argumenty za i przeciw tej tezie, poruszając kwestie związane z rolą AI w procesie twórczym i jej wpływem na umiejętności pisarskie studentów.\n\n### Argumenty za\nAnna Kowalska (waga 15) zwraca uwagę, że generatywna AI jest po prostu kolejnym narzędziem pracy, które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu. Tomasz Kamiński (waga 4) zgadza się z tym stanowiskiem, podkreślając, że AI jest naturalną warstwą narzędzi badacza, podobnie jak wyszukiwarka i menedżer cytowań. Marek Woźniak (waga 4) dodaje, że nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie, a nie na narzędziu.\n\n### Argumenty przeciw\nKatarzyna Kowalczyk (waga 5) przeciwstawia się tej tezie, argumentując, że AI tworzy treść merytoryczną, co jest jakościowo inne niż działanie kalkulatora czy wyszukiwarki. Joanna Dąbrowska (waga 3) podkreśla, że AI podaje gotową syntezę jako własną, co może być mylące i wpływać na proces twórczy. Łukasz Mazur (waga 2) zwraca uwagę, że masowe użycie AI może sprawić, że dyplom przestaje poświadczać o realnych umiejętnościach pisarskich studenta.\n\n### Linie sporu\nGłówne punkty tarcia dotyczą roli AI w procesie twórczym i jej wpływu na umiejętności pisarskie studentów. Uczestnicy dyskusji spierają się o to, czy AI jest po prostu kolejnym narzędziem pracy, czy też ma większy wpływ na proces twórczy.\n\n### Punkty wspólne i pytania otwarte\nUczestnicy dyskusji nie zgadzają się co do roli AI w procesie twórczym, co prowadzi do pytania: Czy AI może być używana w sposób, który nie wpłynie negatywnie na umiejętności pisarskie studentów? Czy istnieją sposoby, aby zapewnić, że studenci używają AI w sposób odpowiedzialny i transparentny?",
+        "sentences": [
+          {
+            "sentence": "Zaznaczona część dyskusji dotyczy tezy, że studenci powinni mieć prawo używać generatywnej AI przy pisaniu prac dyplomowych.",
+            "simInsideBranch": 0.821,
+            "simOutsideBranch": 0.782,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji przedstawiają swoje argumenty za i przeciw tej tezie, poruszając kwestie związane z rolą AI w procesie twórczym i jej wpływem na umiejętności pisarskie studentów.",
+            "simInsideBranch": 0.813,
+            "simOutsideBranch": 0.798,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Jan Nowak",
+              "content": "AI wyrównuje szanse studentów nieanglojęzycznych oraz osób z dysleksją, czyniąc proces pisania pracy bardziej dostępnym."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Anna Kowalska (waga 15) zwraca uwagę, że generatywna AI jest po prostu kolejnym narzędziem pracy, które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu.",
+            "simInsideBranch": 0.857,
+            "simOutsideBranch": 0.715,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Generatywna AI to po prostu kolejne narzędzie pracy - jak edytor tekstu czy wyszukiwarka - które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu zamiast na żmudnym formatowaniu."
+            },
+            "nearestOutsideBranch": {
+              "author": "Marek Demo",
+              "content": "Generatywna AI pomaga rozbić pracę dyplomową na mniejsze, zarządzalne etapy i zaproponować harmonogram, co realnie ułatwia planowanie pracy nad dużym projektem badawczym."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Tomasz Kamiński (waga 4) zgadza się z tym stanowiskiem, podkreślając, że AI jest naturalną warstwą narzędzi badacza, podobnie jak wyszukiwarka i menedżer cytowań.",
+            "simInsideBranch": 0.798,
+            "simOutsideBranch": 0.718,
+            "nearestInsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Tak jak nikt dziś nie pisze pracy bez wyszukiwarki i menedżera cytowań, AI to kolejna naturalna warstwa narzędzi badacza - zakaz cofa nas do epoki maszyny do pisania."
+            },
+            "nearestOutsideBranch": {
+              "author": "Paweł Kozłowski",
+              "content": "Uczelnie mogą wykupić licencje grupowe na narzędzia AI, tak jak dziś finansują dostęp do baz Scopus, JSTOR czy Web of Science."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Marek Woźniak (waga 4) dodaje, że nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie, a nie na narzędziu.",
+            "simInsideBranch": 0.878,
+            "simOutsideBranch": 0.753,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Katarzyna Kowalczyk (waga 5) przeciwstawia się tej tezie, argumentując, że AI tworzy treść merytoryczną, co jest jakościowo inne niż działanie kalkulatora czy wyszukiwarki.",
+            "simInsideBranch": 0.802,
+            "simOutsideBranch": 0.647,
+            "nearestInsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Porównanie do kalkulatora jest mylne - kalkulator wykonuje zdefiniowaną operację, a AI tworzy treść merytoryczną, czyli dokładnie to, co praca dyplomowa ma weryfikować."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Joanna Dąbrowska (waga 3) podkreśla, że AI podaje gotową syntezę jako własną, co może być mylące i wpływać na proces twórczy.",
+            "simInsideBranch": 0.774,
+            "simOutsideBranch": 0.7,
+            "nearestInsideBranch": {
+              "author": "Joanna Dąbrowska",
+              "content": "Wyszukiwarka pokazuje cudze źródła do samodzielnej oceny, a AI podaje gotową syntezę jako własną - to jakościowo inna ingerencja w proces twórczy."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Łukasz Mazur (waga 2) zwraca uwagę, że masowe użycie AI może sprawić, że dyplom przestaje poświadczać o realnych umiejętnościach pisarskich studenta.",
+            "simInsideBranch": 0.86,
+            "simOutsideBranch": 0.774,
+            "nearestInsideBranch": {
+              "author": "Łukasz Mazur",
+              "content": "Skoro odpowiedzialność i tak jest po stronie studenta, to przy masowym użyciu AI sam dyplom przestaje cokolwiek poświadczać o jego realnych umiejętnościach pisarskich."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Główne punkty tarcia dotyczą roli AI w procesie twórczym i jej wpływu na umiejętności pisarskie studentów.",
+            "simInsideBranch": 0.783,
+            "simOutsideBranch": 0.761,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji spierają się o to, czy AI jest po prostu kolejnym narzędziem pracy, czy też ma większy wpływ na proces twórczy.",
+            "simInsideBranch": 0.751,
+            "simOutsideBranch": 0.699,
+            "nearestInsideBranch": {
+              "author": "Joanna Dąbrowska",
+              "content": "Wyszukiwarka pokazuje cudze źródła do samodzielnej oceny, a AI podaje gotową syntezę jako własną - to jakościowo inna ingerencja w proces twórczy."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji nie zgadzają się co do roli AI w procesie twórczym, co prowadzi do pytania: Czy AI może być używana w sposób, który nie wpłynie negatywnie na umiejętności pisarskie studentów?",
+            "simInsideBranch": 0.783,
+            "simOutsideBranch": 0.78,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Jan Nowak",
+              "content": "AI wyrównuje szanse studentów nieanglojęzycznych oraz osób z dysleksją, czyniąc proces pisania pracy bardziej dostępnym."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Czy istnieją sposoby, aby zapewnić, że studenci używają AI w sposób odpowiedzialny i transparentny?",
+            "simInsideBranch": 0.786,
+            "simOutsideBranch": 0.77,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          }
+        ],
+        "coverage": [
+          {
+            "argumentId": "8cdffb76-064e-4159-bc52-cae8ff2f6cb3",
+            "author": "Anna Kowalska",
+            "content": "Generatywna AI to po prostu kolejne narzędzie pracy - jak edytor tekstu czy wyszukiwarka - które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu zamiast na żmudnym formatowaniu.",
+            "bestSimilarity": 0.857,
+            "bestSentence": "Anna Kowalska (waga 15) zwraca uwagę, że generatywna AI jest po prostu kolejnym narzędziem pracy, które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "2c93ae61-14d7-46a0-aaa1-f2e8f9042a9c",
+            "author": "Katarzyna Kowalczyk",
+            "content": "Porównanie do kalkulatora jest mylne - kalkulator wykonuje zdefiniowaną operację, a AI tworzy treść merytoryczną, czyli dokładnie to, co praca dyplomowa ma weryfikować.",
+            "bestSimilarity": 0.802,
+            "bestSentence": "Katarzyna Kowalczyk (waga 5) przeciwstawia się tej tezie, argumentując, że AI tworzy treść merytoryczną, co jest jakościowo inne niż działanie kalkulatora czy wyszukiwarki.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "f6e4ec16-00ad-48b9-b6be-9e8d8da2308f",
+            "author": "Tomasz Kamiński",
+            "content": "Tak jak nikt dziś nie pisze pracy bez wyszukiwarki i menedżera cytowań, AI to kolejna naturalna warstwa narzędzi badacza - zakaz cofa nas do epoki maszyny do pisania.",
+            "bestSimilarity": 0.798,
+            "bestSentence": "Tomasz Kamiński (waga 4) zgadza się z tym stanowiskiem, podkreślając, że AI jest naturalną warstwą narzędzi badacza, podobnie jak wyszukiwarka i menedżer cytowań.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "cb819b48-11b6-4254-be1a-3dccdba8c114",
+            "author": "Marek Woźniak",
+            "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego.",
+            "bestSimilarity": 0.878,
+            "bestSentence": "Marek Woźniak (waga 4) dodaje, że nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie, a nie na narzędziu.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "53a19cd0-e34d-44dc-b3fd-15f508a91732",
+            "author": "Joanna Dąbrowska",
+            "content": "Wyszukiwarka pokazuje cudze źródła do samodzielnej oceny, a AI podaje gotową syntezę jako własną - to jakościowo inna ingerencja w proces twórczy.",
+            "bestSimilarity": 0.774,
+            "bestSentence": "Joanna Dąbrowska (waga 3) podkreśla, że AI podaje gotową syntezę jako własną, co może być mylące i wpływać na proces twórczy.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "f729e69d-a81d-4060-8f62-3dce67633c7d",
+            "author": "Łukasz Mazur",
+            "content": "Skoro odpowiedzialność i tak jest po stronie studenta, to przy masowym użyciu AI sam dyplom przestaje cokolwiek poświadczać o jego realnych umiejętnościach pisarskich.",
+            "bestSimilarity": 0.86,
+            "bestSentence": "Łukasz Mazur (waga 2) zwraca uwagę, że masowe użycie AI może sprawić, że dyplom przestaje poświadczać o realnych umiejętnościach pisarskich studenta.",
+            "proposedCovered": true
+          }
+        ]
+      },
+      {
+        "kind": "whole",
+        "inputArguments": 17,
+        "promptChars": 8681,
+        "latencyMs": 14960,
+        "usage": {
+          "prompt_tokens": 3386,
+          "completion_tokens": 1220,
+          "total_tokens": 4606,
+          "cached_tokens": 0
+        },
+        "finishReason": "stop",
+        "text": "### O co toczy się spór\nZaznaczona część dyskusji dotyczy tezy, że studenci powinni mieć prawo używać generatywnej AI przy pisaniu prac dyplomowych. Uczestnicy dyskusji przedstawiają argumenty za i przeciw tej tezie, poruszając kwestie związane z dostępnością, rzetelnością oceny, umiejętnościami studentów i rolą AI w procesie twórczym.\n\n### Argumenty za\nAnna Kowalska (waga 15) zwraca uwagę, że generatywna AI jest po prostu kolejnym narzędziem pracy, które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu. Jan Nowak (waga 8) argumentuje, że AI wyrównuje szanse studentów nieanglojęzycznych oraz osób z dysleksją, czyniąc proces pisania pracy bardziej dostępnym. Tomasz Kamiński (waga 4) porównuje AI do innych narzędzi badacza, takich jak wyszukiwarka i menedżer cytowań, które są powszechnie akceptowane. Krzysztof Zieliński (waga 4) uważa, że problem oceny rozwiązuje obrona ustna, podczas której student musi obronić swoje tezy. Agnieszka Szymańska (waga 3) zwraca uwagę, że halucynacje generowane przez AI mogą być rozwiązane poprzez nauczenie studentów sprawdzania źródeł. Marek Woźniak (waga 4) argumentuje, że finalna odpowiedzialność i obrona spoczywają na studencie, a nie na narzędziu AI. Barbara Krawczyk (waga 3) uważa, że licencje grupowe na narzędzia AI nie zlikwidują luki kompetencyjnej między studentami. Marek Demo (waga 0) proponuje, aby AI pomagała studentom w planowaniu pracy dyplomowej i rozkładaniu jej na etapy.\n\n### Argumenty przeciw\nMaria Wiśniewska (waga 7) argumentuje, że korzystanie z AI podważa rzetelność oceny, ponieważ promotor nie wie, czyje kompetencje ocenia: studenta czy modelu językowego. Piotr Wójcik (waga 6) zwraca uwagę, że modele generują przekonująco brzmiące, ale nieistniejące źródła, co zatruwa warsztat naukowy młodych badaczy. Katarzyna Kowalczyk (waga 5) porównuje AI do kalkulatora, ale uważa, że AI tworzy treść merytoryczną, co jest jakościowo inne niż proste obliczenia. Magdalena Lewandowska (waga 5) argumentuje, że dostępność AI jest pozorna, ponieważ najlepsze modele są płatne, co pogłębia przepaść między zamożnymi a uboższymi studentami. Joanna Dąbrowska (waga 3) uważa, że AI podaje gotową syntezę jako własną, co jest jakościowo inna ingerencja w proces twórczy niż wyszukiwarka. Paweł Kozłowski (waga 4) proponuje, aby uczelnie wykupiły licencje grupowe na narzędzia AI, aby zapewnić równy dostęp do nich. Małgorzata Jankowska (waga 3) argumentuje, że obrona ustna nie sprawdza umiejętności samodzielnego prowadzenia pisemnego wywodu, co jest kluczową kompetencją absolwenta. Łukasz Mazur (waga 2) uważa, że masowe użycie AI spowoduje, że dyplom przestanie poświadczać o realnych umiejętnościach pisarskich studenta.\n\n### Linie sporu\nGłówne punkty tarcia dotyczą kwestii dostępności, rzetelności oceny i umiejętności studentów. Uczestnicy dyskusji mają różne opinie na temat tego, czy AI powinna być traktowana jako narzędzie badacza, czy jako źródło problemów w procesie twórczym.\n\n### Punkty wspólne i pytania otwarte\nUczestnicy dyskusji zgadzają się co do tego, że AI ma potencjał pomagać studentom w procesie twórczym, ale mają różne opinie na temat tego, jak powinna być wykorzystywana. Pytaniem otwartym pozostaje, w jaki sposób można zapewnić równy dostęp do AI i jak można rozwiązać problem rzetelności oceny w kontekście korzystania z AI.",
+        "sentences": [
+          {
+            "sentence": "Zaznaczona część dyskusji dotyczy tezy, że studenci powinni mieć prawo używać generatywnej AI przy pisaniu prac dyplomowych.",
+            "simInsideBranch": 0.821,
+            "simOutsideBranch": 0.782,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji przedstawiają argumenty za i przeciw tej tezie, poruszając kwestie związane z dostępnością, rzetelnością oceny, umiejętnościami studentów i rolą AI w procesie twórczym.",
+            "simInsideBranch": 0.795,
+            "simOutsideBranch": 0.791,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Anna Kowalska (waga 15) zwraca uwagę, że generatywna AI jest po prostu kolejnym narzędziem pracy, które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu.",
+            "simInsideBranch": 0.857,
+            "simOutsideBranch": 0.715,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Generatywna AI to po prostu kolejne narzędzie pracy - jak edytor tekstu czy wyszukiwarka - które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu zamiast na żmudnym formatowaniu."
+            },
+            "nearestOutsideBranch": {
+              "author": "Marek Demo",
+              "content": "Generatywna AI pomaga rozbić pracę dyplomową na mniejsze, zarządzalne etapy i zaproponować harmonogram, co realnie ułatwia planowanie pracy nad dużym projektem badawczym."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Jan Nowak (waga 8) argumentuje, że AI wyrównuje szanse studentów nieanglojęzycznych oraz osób z dysleksją, czyniąc proces pisania pracy bardziej dostępnym.",
+            "simInsideBranch": 0.719,
+            "simOutsideBranch": 0.892,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Generatywna AI to po prostu kolejne narzędzie pracy - jak edytor tekstu czy wyszukiwarka - które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu zamiast na żmudnym formatowaniu."
+            },
+            "nearestOutsideBranch": {
+              "author": "Jan Nowak",
+              "content": "AI wyrównuje szanse studentów nieanglojęzycznych oraz osób z dysleksją, czyniąc proces pisania pracy bardziej dostępnym."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Tomasz Kamiński (waga 4) porównuje AI do innych narzędzi badacza, takich jak wyszukiwarka i menedżer cytowań, które są powszechnie akceptowane.",
+            "simInsideBranch": 0.821,
+            "simOutsideBranch": 0.727,
+            "nearestInsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Tak jak nikt dziś nie pisze pracy bez wyszukiwarki i menedżera cytowań, AI to kolejna naturalna warstwa narzędzi badacza - zakaz cofa nas do epoki maszyny do pisania."
+            },
+            "nearestOutsideBranch": {
+              "author": "Paweł Kozłowski",
+              "content": "Uczelnie mogą wykupić licencje grupowe na narzędzia AI, tak jak dziś finansują dostęp do baz Scopus, JSTOR czy Web of Science."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Krzysztof Zieliński (waga 4) uważa, że problem oceny rozwiązuje obrona ustna, podczas której student musi obronić swoje tezy.",
+            "simInsideBranch": 0.682,
+            "simOutsideBranch": 0.823,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Krzysztof Zieliński",
+              "content": "Problem oceny rozwiązuje obrona ustna - jeśli student potrafi obronić każdą tezę swojej pracy, sposób jej powstania jest drugorzędny."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Agnieszka Szymańska (waga 3) zwraca uwagę, że halucynacje generowane przez AI mogą być rozwiązane poprzez nauczenie studentów sprawdzania źródeł.",
+            "simInsideBranch": 0.716,
+            "simOutsideBranch": 0.862,
+            "nearestInsideBranch": {
+              "author": "Łukasz Mazur",
+              "content": "Skoro odpowiedzialność i tak jest po stronie studenta, to przy masowym użyciu AI sam dyplom przestaje cokolwiek poświadczać o jego realnych umiejętnościach pisarskich."
+            },
+            "nearestOutsideBranch": {
+              "author": "Agnieszka Szymańska",
+              "content": "Halucynacje to kwestia braku weryfikacji - nauczenie studentów sprawdzania źródeł podanych przez AI jest cenną kompetencją samą w sobie."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Marek Woźniak (waga 4) argumentuje, że finalna odpowiedzialność i obrona spoczywają na studencie, a nie na narzędziu AI.",
+            "simInsideBranch": 0.856,
+            "simOutsideBranch": 0.76,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Barbara Krawczyk (waga 3) uważa, że licencje grupowe na narzędzia AI nie zlikwidują luki kompetencyjnej między studentami.",
+            "simInsideBranch": 0.706,
+            "simOutsideBranch": 0.806,
+            "nearestInsideBranch": {
+              "author": "Łukasz Mazur",
+              "content": "Skoro odpowiedzialność i tak jest po stronie studenta, to przy masowym użyciu AI sam dyplom przestaje cokolwiek poświadczać o jego realnych umiejętnościach pisarskich."
+            },
+            "nearestOutsideBranch": {
+              "author": "Barbara Krawczyk",
+              "content": "Licencje grupowe nie zlikwidują luki kompetencyjnej - student płacący za prywatny, mocniejszy model i tak ćwiczy z nim więcej niż ten korzystający tylko z dostępu uczelnianego."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Marek Demo (waga 0) proponuje, aby AI pomagała studentom w planowaniu pracy dyplomowej i rozkładaniu jej na etapy.",
+            "simInsideBranch": 0.752,
+            "simOutsideBranch": 0.867,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Marek Demo",
+              "content": "Dzięki AI student może łatwiej zaplanować harmonogram pisania pracy dyplomowej, rozkładając ją na etapy, co pomaga uniknąć typowego pisania wszystkiego na ostatnią chwilę."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Maria Wiśniewska (waga 7) argumentuje, że korzystanie z AI podważa rzetelność oceny, ponieważ promotor nie wie, czyje kompetencje ocenia: studenta czy modelu językowego.",
+            "simInsideBranch": 0.796,
+            "simOutsideBranch": 0.891,
+            "nearestInsideBranch": {
+              "author": "Łukasz Mazur",
+              "content": "Skoro odpowiedzialność i tak jest po stronie studenta, to przy masowym użyciu AI sam dyplom przestaje cokolwiek poświadczać o jego realnych umiejętnościach pisarskich."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Piotr Wójcik (waga 6) zwraca uwagę, że modele generują przekonująco brzmiące, ale nieistniejące źródła, co zatruwa warsztat naukowy młodych badaczy.",
+            "simInsideBranch": 0.698,
+            "simOutsideBranch": 0.866,
+            "nearestInsideBranch": {
+              "author": "Joanna Dąbrowska",
+              "content": "Wyszukiwarka pokazuje cudze źródła do samodzielnej oceny, a AI podaje gotową syntezę jako własną - to jakościowo inna ingerencja w proces twórczy."
+            },
+            "nearestOutsideBranch": {
+              "author": "Piotr Wójcik",
+              "content": "Modele generują przekonująco brzmiące, ale nieistniejące źródła (halucynacje), co zatruwa warsztat naukowy młodych badaczy."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Katarzyna Kowalczyk (waga 5) porównuje AI do kalkulatora, ale uważa, że AI tworzy treść merytoryczną, co jest jakościowo inne niż proste obliczenia.",
+            "simInsideBranch": 0.833,
+            "simOutsideBranch": 0.649,
+            "nearestInsideBranch": {
+              "author": "Katarzyna Kowalczyk",
+              "content": "Porównanie do kalkulatora jest mylne - kalkulator wykonuje zdefiniowaną operację, a AI tworzy treść merytoryczną, czyli dokładnie to, co praca dyplomowa ma weryfikować."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Magdalena Lewandowska (waga 5) argumentuje, że dostępność AI jest pozorna, ponieważ najlepsze modele są płatne, co pogłębia przepaść między zamożnymi a uboższymi studentami.",
+            "simInsideBranch": 0.688,
+            "simOutsideBranch": 0.891,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Generatywna AI to po prostu kolejne narzędzie pracy - jak edytor tekstu czy wyszukiwarka - które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu zamiast na żmudnym formatowaniu."
+            },
+            "nearestOutsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Dostępność jest pozorna - najlepsze modele są płatne, więc AI pogłębia przepaść między zamożnymi a uboższymi studentami."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Joanna Dąbrowska (waga 3) uważa, że AI podaje gotową syntezę jako własną, co jest jakościowo inna ingerencja w proces twórczy niż wyszukiwarka.",
+            "simInsideBranch": 0.848,
+            "simOutsideBranch": 0.673,
+            "nearestInsideBranch": {
+              "author": "Joanna Dąbrowska",
+              "content": "Wyszukiwarka pokazuje cudze źródła do samodzielnej oceny, a AI podaje gotową syntezę jako własną - to jakościowo inna ingerencja w proces twórczy."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Paweł Kozłowski (waga 4) proponuje, aby uczelnie wykupiły licencje grupowe na narzędzia AI, aby zapewnić równy dostęp do nich.",
+            "simInsideBranch": 0.714,
+            "simOutsideBranch": 0.826,
+            "nearestInsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Tak jak nikt dziś nie pisze pracy bez wyszukiwarki i menedżera cytowań, AI to kolejna naturalna warstwa narzędzi badacza - zakaz cofa nas do epoki maszyny do pisania."
+            },
+            "nearestOutsideBranch": {
+              "author": "Paweł Kozłowski",
+              "content": "Uczelnie mogą wykupić licencje grupowe na narzędzia AI, tak jak dziś finansują dostęp do baz Scopus, JSTOR czy Web of Science."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Małgorzata Jankowska (waga 3) argumentuje, że obrona ustna nie sprawdza umiejętności samodzielnego prowadzenia pisemnego wywodu, co jest kluczową kompetencją absolwenta.",
+            "simInsideBranch": 0.718,
+            "simOutsideBranch": 0.891,
+            "nearestInsideBranch": {
+              "author": "Łukasz Mazur",
+              "content": "Skoro odpowiedzialność i tak jest po stronie studenta, to przy masowym użyciu AI sam dyplom przestaje cokolwiek poświadczać o jego realnych umiejętnościach pisarskich."
+            },
+            "nearestOutsideBranch": {
+              "author": "Małgorzata Jankowska",
+              "content": "Obrona ustna sprawdza zrozumienie tematu, ale nie umiejętność samodzielnego prowadzenia pisemnego wywodu - kluczowej kompetencji absolwenta."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Łukasz Mazur (waga 2) uważa, że masowe użycie AI spowoduje, że dyplom przestanie poświadczać o realnych umiejętnościach pisarskich studenta.",
+            "simInsideBranch": 0.855,
+            "simOutsideBranch": 0.77,
+            "nearestInsideBranch": {
+              "author": "Łukasz Mazur",
+              "content": "Skoro odpowiedzialność i tak jest po stronie studenta, to przy masowym użyciu AI sam dyplom przestaje cokolwiek poświadczać o jego realnych umiejętnościach pisarskich."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Główne punkty tarcia dotyczą kwestii dostępności, rzetelności oceny i umiejętności studentów.",
+            "simInsideBranch": 0.669,
+            "simOutsideBranch": 0.727,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Krzysztof Zieliński",
+              "content": "Problem oceny rozwiązuje obrona ustna - jeśli student potrafi obronić każdą tezę swojej pracy, sposób jej powstania jest drugorzędny."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji mają różne opinie na temat tego, czy AI powinna być traktowana jako narzędzie badacza, czy jako źródło problemów w procesie twórczym.",
+            "simInsideBranch": 0.742,
+            "simOutsideBranch": 0.714,
+            "nearestInsideBranch": {
+              "author": "Tomasz Kamiński",
+              "content": "Tak jak nikt dziś nie pisze pracy bez wyszukiwarki i menedżera cytowań, AI to kolejna naturalna warstwa narzędzi badacza - zakaz cofa nas do epoki maszyny do pisania."
+            },
+            "nearestOutsideBranch": {
+              "author": "Maria Wiśniewska",
+              "content": "Korzystanie z AI podważa rzetelność oceny - promotor nie wie już, czyje kompetencje ocenia: studenta czy modelu językowego."
+            },
+            "proposedOutsideBranch": false,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Uczestnicy dyskusji zgadzają się co do tego, że AI ma potencjał pomagać studentom w procesie twórczym, ale mają różne opinie na temat tego, jak powinna być wykorzystywana.",
+            "simInsideBranch": 0.759,
+            "simOutsideBranch": 0.762,
+            "nearestInsideBranch": {
+              "author": "Anna Kowalska",
+              "content": "Generatywna AI to po prostu kolejne narzędzie pracy - jak edytor tekstu czy wyszukiwarka - które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu zamiast na żmudnym formatowaniu."
+            },
+            "nearestOutsideBranch": {
+              "author": "Jan Nowak",
+              "content": "AI wyrównuje szanse studentów nieanglojęzycznych oraz osób z dysleksją, czyniąc proces pisania pracy bardziej dostępnym."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          },
+          {
+            "sentence": "Pytaniem otwartym pozostaje, w jaki sposób można zapewnić równy dostęp do AI i jak można rozwiązać problem rzetelności oceny w kontekście korzystania z AI.",
+            "simInsideBranch": 0.684,
+            "simOutsideBranch": 0.764,
+            "nearestInsideBranch": {
+              "author": "Marek Woźniak",
+              "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego."
+            },
+            "nearestOutsideBranch": {
+              "author": "Magdalena Lewandowska",
+              "content": "Dostępność jest pozorna - najlepsze modele są płatne, więc AI pogłębia przepaść między zamożnymi a uboższymi studentami."
+            },
+            "proposedOutsideBranch": true,
+            "proposedUnsupported": false
+          }
+        ],
+        "coverage": [
+          {
+            "argumentId": "8cdffb76-064e-4159-bc52-cae8ff2f6cb3",
+            "author": "Anna Kowalska",
+            "content": "Generatywna AI to po prostu kolejne narzędzie pracy - jak edytor tekstu czy wyszukiwarka - które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu zamiast na żmudnym formatowaniu.",
+            "bestSimilarity": 0.857,
+            "bestSentence": "Anna Kowalska (waga 15) zwraca uwagę, że generatywna AI jest po prostu kolejnym narzędziem pracy, które przyspiesza zbieranie materiałów i pozwala studentowi skupić się na krytycznym myśleniu.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "2c93ae61-14d7-46a0-aaa1-f2e8f9042a9c",
+            "author": "Katarzyna Kowalczyk",
+            "content": "Porównanie do kalkulatora jest mylne - kalkulator wykonuje zdefiniowaną operację, a AI tworzy treść merytoryczną, czyli dokładnie to, co praca dyplomowa ma weryfikować.",
+            "bestSimilarity": 0.833,
+            "bestSentence": "Katarzyna Kowalczyk (waga 5) porównuje AI do kalkulatora, ale uważa, że AI tworzy treść merytoryczną, co jest jakościowo inne niż proste obliczenia.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "f6e4ec16-00ad-48b9-b6be-9e8d8da2308f",
+            "author": "Tomasz Kamiński",
+            "content": "Tak jak nikt dziś nie pisze pracy bez wyszukiwarki i menedżera cytowań, AI to kolejna naturalna warstwa narzędzi badacza - zakaz cofa nas do epoki maszyny do pisania.",
+            "bestSimilarity": 0.821,
+            "bestSentence": "Tomasz Kamiński (waga 4) porównuje AI do innych narzędzi badacza, takich jak wyszukiwarka i menedżer cytowań, które są powszechnie akceptowane.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "cb819b48-11b6-4254-be1a-3dccdba8c114",
+            "author": "Marek Woźniak",
+            "content": "Nawet jeśli AI tworzy treść, finalna odpowiedzialność i obrona spoczywają na studencie - narzędzie nie zdaje za niego egzaminu dyplomowego.",
+            "bestSimilarity": 0.856,
+            "bestSentence": "Marek Woźniak (waga 4) argumentuje, że finalna odpowiedzialność i obrona spoczywają na studencie, a nie na narzędziu AI.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "53a19cd0-e34d-44dc-b3fd-15f508a91732",
+            "author": "Joanna Dąbrowska",
+            "content": "Wyszukiwarka pokazuje cudze źródła do samodzielnej oceny, a AI podaje gotową syntezę jako własną - to jakościowo inna ingerencja w proces twórczy.",
+            "bestSimilarity": 0.848,
+            "bestSentence": "Joanna Dąbrowska (waga 3) uważa, że AI podaje gotową syntezę jako własną, co jest jakościowo inna ingerencja w proces twórczy niż wyszukiwarka.",
+            "proposedCovered": true
+          },
+          {
+            "argumentId": "f729e69d-a81d-4060-8f62-3dce67633c7d",
+            "author": "Łukasz Mazur",
+            "content": "Skoro odpowiedzialność i tak jest po stronie studenta, to przy masowym użyciu AI sam dyplom przestaje cokolwiek poświadczać o jego realnych umiejętnościach pisarskich.",
+            "bestSimilarity": 0.855,
+            "bestSentence": "Łukasz Mazur (waga 2) uważa, że masowe użycie AI spowoduje, że dyplom przestanie poświadczać o realnych umiejętnościach pisarskich studenta.",
+            "proposedCovered": true
+          }
+        ]
+      }
+    ]
+  }
+]

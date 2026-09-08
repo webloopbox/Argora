@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { StatsDto } from '@brainstorm/core';
-import { IsNull, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Argument } from '../arguments/argument.entity';
+import { activeWhere } from '../common/repository/soft-delete';
 import { Debate } from '../debates/debate.entity';
 import { User } from '../users/user.entity';
 import { Vote } from '../votes/vote.entity';
@@ -26,10 +27,10 @@ export class StatsService {
 
     const [activeDebates, participants, argCount, voteCount] =
       await Promise.all([
-        this.debates.count({ where: { archivedOn: IsNull() } }),
-        this.users.count({ where: { archivedOn: IsNull() } }),
-        this.args.count({ where: { archivedOn: IsNull() } }),
-        this.votes.count({ where: { archivedOn: IsNull() } }),
+        this.debates.count({ where: activeWhere<Debate>() }),
+        this.users.count({ where: activeWhere<User>() }),
+        this.args.count({ where: activeWhere<Argument>() }),
+        this.votes.count({ where: activeWhere<Vote>() }),
       ]);
 
     const value: StatsDto = {

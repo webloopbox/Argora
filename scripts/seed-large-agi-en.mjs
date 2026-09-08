@@ -570,6 +570,7 @@ async function main() {
     body: {
       thesis: "Artificial general intelligence (AGI) poses an existential threat to humanity.",
       visibility: "public",
+      language: "en",
     },
   });
   console.log(`    debate: ${debate.id}\n`);

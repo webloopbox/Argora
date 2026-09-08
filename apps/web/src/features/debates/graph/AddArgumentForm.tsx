@@ -25,7 +25,7 @@ import type {
   CreateArgumentDto,
   LlmProviderDto,
 } from "@brainstorm/core";
-import { ArgumentSide } from "@brainstorm/core";
+import { ARGUMENT_MAX, ARGUMENT_MIN, ArgumentSide } from "@brainstorm/core";
 import { createArgument } from "../../../api/arguments.api";
 import {
   checkArgumentSide,
@@ -40,8 +40,6 @@ import { MergeOrNuanceDialog } from "./MergeOrNuanceDialog";
 import { SideMismatchDialog } from "./SideMismatchDialog";
 import { ModelPicker } from "./ModelPicker";
 
-const CONTENT_MIN = 4;
-const CONTENT_MAX = 2000;
 
 interface AddArgumentFormProps {
   debateId: string;
@@ -75,6 +73,11 @@ export function AddArgumentForm({
   const [providers, setProviders] = useState<LlmProviderDto[]>([]);
   const [modelId, setModelId] = useState("");
   const [generating, setGenerating] = useState(false);
+  // Provenance of the text currently in the textarea, not the state of the
+  // toggle: an argument typed by hand while the panel happens to be open
+  // must not be badged as model output, and a proposal kept after the
+  // toggle is switched off still is one.
+  const [fromModel, setFromModel] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
 
   // Duplicate dialog
@@ -135,9 +138,9 @@ export function AddArgumentForm({
 
   function validate(): string | null {
     const trimmed = content.trim();
-    if (trimmed.length < CONTENT_MIN)
+    if (trimmed.length < ARGUMENT_MIN)
       return ui.debates.argumentForm.contentTooShort;
-    if (trimmed.length > CONTENT_MAX)
+    if (trimmed.length > ARGUMENT_MAX)
       return ui.debates.argumentForm.contentTooLong;
     return null;
   }
@@ -155,6 +158,7 @@ export function AddArgumentForm({
       });
       // Hold `generating` for the typewriter so the textarea stays locked
       // until the streaming animation completes.
+      setFromModel(true);
       animateContent(result.content, () => setGenerating(false));
     } catch (err) {
       setAiError(apiErrorMessage(err) ?? ui.debates.argumentForm.aiGenerateError);
@@ -168,6 +172,7 @@ export function AddArgumentForm({
     try {
       const created = await createArgument(debateId, payload);
       setContent("");
+      setFromModel(false);
       onCreated(created);
     } catch {
       setFormError(ui.debates.argumentForm.genericError);
@@ -218,7 +223,7 @@ export function AddArgumentForm({
       side: side === "pro" ? ArgumentSide.Pro : ArgumentSide.Against,
       content: content.trim(),
       parentArgumentId: parentId,
-      isAiGenerated: aiMode,
+      isAiGenerated: fromModel,
     };
 
     // Duplicate check gate
@@ -245,7 +250,7 @@ export function AddArgumentForm({
     await submitWithSideCheck(payload);
   }
 
-  const charsLeft = CONTENT_MAX - content.length;
+  const charsLeft = ARGUMENT_MAX - content.length;
   const submitLabel =
     side === "pro"
       ? ui.debates.argumentForm.submitPro
@@ -483,6 +488,7 @@ export function AddArgumentForm({
             setDuplicate(null);
             setPendingPayload(null);
             setContent("");
+            setFromModel(false);
             // Notify parent that the interaction is "done" - user chose merge
             // so no new argument is created; close the panel.
             onCancel?.();

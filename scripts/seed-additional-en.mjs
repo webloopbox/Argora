@@ -406,6 +406,7 @@ async function main() {
       body: {
         thesis: debateInfo.thesis,
         visibility: "public",
+        language: "en",
       },
     });
     createdDebateIds.push(debate.id);

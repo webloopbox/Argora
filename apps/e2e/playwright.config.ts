@@ -37,6 +37,9 @@ export default defineConfig({
   webServer: [
     {
       command: 'pnpm --filter ./apps/api dev',
+      // pnpm resolves a relative --filter path against the working directory,
+      // a Playwright webServer runs in the config directory, hence the repo root.
+      cwd: path.resolve(__dirname, '../..'),
       url: `${API_URL}/stats`,
       reuseExistingServer: !process.env.CI,
       timeout: 60_000,
@@ -54,6 +57,7 @@ export default defineConfig({
     },
     {
       command: 'pnpm --filter ./apps/web dev',
+      cwd: path.resolve(__dirname, '../..'),
       url: WEB_URL,
       reuseExistingServer: !process.env.CI,
       timeout: 60_000,

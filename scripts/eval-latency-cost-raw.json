@@ -1,0 +1,1182 @@
+{
+  "measuredAt": "2026-08-22T10:54:12.631Z",
+  "repeats": 3,
+  "pricingFetchedAt": "2026-08-22T10:54:12.630Z",
+  "pricing": {
+    "meta-llama/Llama-3.3-70B-Instruct-Turbo": {
+      "hourly": 0,
+      "input": 1.0399999999999998,
+      "output": 1.0399999999999998,
+      "base": 0,
+      "finetune": 0,
+      "image_pixel": 0,
+      "transcribe": 0,
+      "image": 0,
+      "video": 0
+    },
+    "deepseek-ai/DeepSeek-V4-Flash-0731": {
+      "hourly": 0,
+      "input": 0.13999999999999999,
+      "output": 0.27999999999999997,
+      "base": 0,
+      "finetune": 0,
+      "cached_input": 0.030000000000000002,
+      "image_pixel": 0,
+      "transcribe": 0,
+      "image": 0,
+      "video": 0
+    },
+    "google/gemma-4-31B-it": {
+      "hourly": 0,
+      "input": 0.39,
+      "output": 0.9700000000000001,
+      "base": 0,
+      "finetune": 0,
+      "image_pixel": 0,
+      "transcribe": 0,
+      "image": 0,
+      "video": 0
+    }
+  },
+  "material": [
+    {
+      "debate": "energia",
+      "debateId": "8b8230e5-6b18-4b04-9c2b-39602b4bc77e",
+      "arguments": 22,
+      "generatePromptChars": 284,
+      "synthesisPromptChars": 10712
+    },
+    {
+      "debate": "praca",
+      "debateId": "70d2279c-4614-4bd8-b5ee-19d717a7f3bf",
+      "arguments": 20,
+      "generatePromptChars": 273,
+      "synthesisPromptChars": 9800
+    },
+    {
+      "debate": "studenci",
+      "debateId": "9d4f85f8-723c-4bc3-9506-e103f7a261ce",
+      "arguments": 17,
+      "generatePromptChars": 286,
+      "synthesisPromptChars": 8681
+    }
+  ],
+  "calls": [
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "generate",
+      "debate": "energia",
+      "repetition": 1,
+      "latencyMs": 6518,
+      "promptTokens": 146,
+      "completionTokens": 183,
+      "totalTokens": 329,
+      "usage": {
+        "prompt_tokens": 146,
+        "completion_tokens": 183,
+        "total_tokens": 329,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 503
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "generate",
+      "debate": "energia",
+      "repetition": 2,
+      "latencyMs": 5696,
+      "promptTokens": 146,
+      "completionTokens": 181,
+      "totalTokens": 327,
+      "usage": {
+        "prompt_tokens": 146,
+        "completion_tokens": 181,
+        "total_tokens": 327,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 503
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "generate",
+      "debate": "energia",
+      "repetition": 3,
+      "latencyMs": 4740,
+      "promptTokens": 146,
+      "completionTokens": 183,
+      "totalTokens": 329,
+      "usage": {
+        "prompt_tokens": 146,
+        "completion_tokens": 183,
+        "total_tokens": 329,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 503
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "generate",
+      "debate": "praca",
+      "repetition": 1,
+      "latencyMs": 7005,
+      "promptTokens": 145,
+      "completionTokens": 133,
+      "totalTokens": 278,
+      "usage": {
+        "prompt_tokens": 145,
+        "completion_tokens": 133,
+        "total_tokens": 278,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 386
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "generate",
+      "debate": "praca",
+      "repetition": 2,
+      "latencyMs": 4541,
+      "promptTokens": 145,
+      "completionTokens": 144,
+      "totalTokens": 289,
+      "usage": {
+        "prompt_tokens": 145,
+        "completion_tokens": 144,
+        "total_tokens": 289,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 424
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "generate",
+      "debate": "praca",
+      "repetition": 3,
+      "latencyMs": 4707,
+      "promptTokens": 145,
+      "completionTokens": 148,
+      "totalTokens": 293,
+      "usage": {
+        "prompt_tokens": 145,
+        "completion_tokens": 148,
+        "total_tokens": 293,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 425
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "generate",
+      "debate": "studenci",
+      "repetition": 1,
+      "latencyMs": 4946,
+      "promptTokens": 146,
+      "completionTokens": 136,
+      "totalTokens": 282,
+      "usage": {
+        "prompt_tokens": 146,
+        "completion_tokens": 136,
+        "total_tokens": 282,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 411
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "generate",
+      "debate": "studenci",
+      "repetition": 2,
+      "latencyMs": 3098,
+      "promptTokens": 146,
+      "completionTokens": 127,
+      "totalTokens": 273,
+      "usage": {
+        "prompt_tokens": 146,
+        "completion_tokens": 127,
+        "total_tokens": 273,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 411
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "generate",
+      "debate": "studenci",
+      "repetition": 3,
+      "latencyMs": 6257,
+      "promptTokens": 146,
+      "completionTokens": 156,
+      "totalTokens": 302,
+      "usage": {
+        "prompt_tokens": 146,
+        "completion_tokens": 156,
+        "total_tokens": 302,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 472
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "synthesis",
+      "debate": "energia",
+      "repetition": 1,
+      "latencyMs": 30791,
+      "promptTokens": 4223,
+      "completionTokens": 1509,
+      "totalTokens": 5732,
+      "usage": {
+        "prompt_tokens": 4223,
+        "completion_tokens": 1509,
+        "total_tokens": 5732,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 4115
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "synthesis",
+      "debate": "energia",
+      "repetition": 2,
+      "latencyMs": 21676,
+      "promptTokens": 4223,
+      "completionTokens": 1491,
+      "totalTokens": 5714,
+      "usage": {
+        "prompt_tokens": 4223,
+        "completion_tokens": 1491,
+        "total_tokens": 5714,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 4083
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "synthesis",
+      "debate": "energia",
+      "repetition": 3,
+      "latencyMs": 19658,
+      "promptTokens": 4223,
+      "completionTokens": 1512,
+      "totalTokens": 5735,
+      "usage": {
+        "prompt_tokens": 4223,
+        "completion_tokens": 1512,
+        "total_tokens": 5735,
+        "cached_tokens": 4096
+      },
+      "finishReason": "stop",
+      "chars": 4146
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "synthesis",
+      "debate": "praca",
+      "repetition": 1,
+      "latencyMs": 27857,
+      "promptTokens": 3846,
+      "completionTokens": 1409,
+      "totalTokens": 5255,
+      "usage": {
+        "prompt_tokens": 3846,
+        "completion_tokens": 1409,
+        "total_tokens": 5255,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 3884
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "synthesis",
+      "debate": "praca",
+      "repetition": 2,
+      "latencyMs": 25537,
+      "promptTokens": 3846,
+      "completionTokens": 1459,
+      "totalTokens": 5305,
+      "usage": {
+        "prompt_tokens": 3846,
+        "completion_tokens": 1459,
+        "total_tokens": 5305,
+        "cached_tokens": 3840
+      },
+      "finishReason": "stop",
+      "chars": 4029
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "synthesis",
+      "debate": "praca",
+      "repetition": 3,
+      "latencyMs": 17308,
+      "promptTokens": 3846,
+      "completionTokens": 1356,
+      "totalTokens": 5202,
+      "usage": {
+        "prompt_tokens": 3846,
+        "completion_tokens": 1356,
+        "total_tokens": 5202,
+        "cached_tokens": 3840
+      },
+      "finishReason": "stop",
+      "chars": 3727
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "synthesis",
+      "debate": "studenci",
+      "repetition": 1,
+      "latencyMs": 17833,
+      "promptTokens": 3386,
+      "completionTokens": 1223,
+      "totalTokens": 4609,
+      "usage": {
+        "prompt_tokens": 3386,
+        "completion_tokens": 1223,
+        "total_tokens": 4609,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 3346
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "synthesis",
+      "debate": "studenci",
+      "repetition": 2,
+      "latencyMs": 13971,
+      "promptTokens": 3386,
+      "completionTokens": 1187,
+      "totalTokens": 4573,
+      "usage": {
+        "prompt_tokens": 3386,
+        "completion_tokens": 1187,
+        "total_tokens": 4573,
+        "cached_tokens": 3328
+      },
+      "finishReason": "stop",
+      "chars": 3242
+    },
+    {
+      "model": "Meta Llama 3.3",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "task": "synthesis",
+      "debate": "studenci",
+      "repetition": 3,
+      "latencyMs": 21752,
+      "promptTokens": 3386,
+      "completionTokens": 1213,
+      "totalTokens": 4599,
+      "usage": {
+        "prompt_tokens": 3386,
+        "completion_tokens": 1213,
+        "total_tokens": 4599,
+        "cached_tokens": 0
+      },
+      "finishReason": "stop",
+      "chars": 3341
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "generate",
+      "debate": "energia",
+      "repetition": 1,
+      "latencyMs": 5786,
+      "promptTokens": 106,
+      "completionTokens": 372,
+      "totalTokens": 478,
+      "usage": {
+        "prompt_tokens": 106,
+        "completion_tokens": 372,
+        "total_tokens": 478,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 240
+        }
+      },
+      "finishReason": "stop",
+      "chars": 428
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "generate",
+      "debate": "energia",
+      "repetition": 2,
+      "latencyMs": 3303,
+      "promptTokens": 106,
+      "completionTokens": 328,
+      "totalTokens": 434,
+      "usage": {
+        "prompt_tokens": 106,
+        "completion_tokens": 328,
+        "total_tokens": 434,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 209
+        }
+      },
+      "finishReason": "stop",
+      "chars": 368
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "generate",
+      "debate": "energia",
+      "repetition": 3,
+      "latencyMs": 2600,
+      "promptTokens": 106,
+      "completionTokens": 298,
+      "totalTokens": 404,
+      "usage": {
+        "prompt_tokens": 106,
+        "completion_tokens": 298,
+        "total_tokens": 404,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 194
+        }
+      },
+      "finishReason": "stop",
+      "chars": 303
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "generate",
+      "debate": "praca",
+      "repetition": 1,
+      "latencyMs": 2639,
+      "promptTokens": 105,
+      "completionTokens": 335,
+      "totalTokens": 440,
+      "usage": {
+        "prompt_tokens": 105,
+        "completion_tokens": 335,
+        "total_tokens": 440,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 220
+        }
+      },
+      "finishReason": "stop",
+      "chars": 359
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "generate",
+      "debate": "praca",
+      "repetition": 2,
+      "latencyMs": 5466,
+      "promptTokens": 105,
+      "completionTokens": 367,
+      "totalTokens": 472,
+      "usage": {
+        "prompt_tokens": 105,
+        "completion_tokens": 367,
+        "total_tokens": 472,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 273
+        }
+      },
+      "finishReason": "stop",
+      "chars": 297
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "generate",
+      "debate": "praca",
+      "repetition": 3,
+      "latencyMs": 2900,
+      "promptTokens": 105,
+      "completionTokens": 340,
+      "totalTokens": 445,
+      "usage": {
+        "prompt_tokens": 105,
+        "completion_tokens": 340,
+        "total_tokens": 445,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 220
+        }
+      },
+      "finishReason": "stop",
+      "chars": 383
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "generate",
+      "debate": "studenci",
+      "repetition": 1,
+      "latencyMs": 3313,
+      "promptTokens": 105,
+      "completionTokens": 321,
+      "totalTokens": 426,
+      "usage": {
+        "prompt_tokens": 105,
+        "completion_tokens": 321,
+        "total_tokens": 426,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 176
+        }
+      },
+      "finishReason": "stop",
+      "chars": 458
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "generate",
+      "debate": "studenci",
+      "repetition": 2,
+      "latencyMs": 3186,
+      "promptTokens": 105,
+      "completionTokens": 314,
+      "totalTokens": 419,
+      "usage": {
+        "prompt_tokens": 105,
+        "completion_tokens": 314,
+        "total_tokens": 419,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 176
+        }
+      },
+      "finishReason": "stop",
+      "chars": 489
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "generate",
+      "debate": "studenci",
+      "repetition": 3,
+      "latencyMs": 7924,
+      "promptTokens": 105,
+      "completionTokens": 440,
+      "totalTokens": 545,
+      "usage": {
+        "prompt_tokens": 105,
+        "completion_tokens": 440,
+        "total_tokens": 545,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 262
+        }
+      },
+      "finishReason": "stop",
+      "chars": 596
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "synthesis",
+      "debate": "energia",
+      "repetition": 1,
+      "latencyMs": 40223,
+      "promptTokens": 3812,
+      "completionTokens": 4836,
+      "totalTokens": 8648,
+      "usage": {
+        "prompt_tokens": 3812,
+        "completion_tokens": 4836,
+        "total_tokens": 8648,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3282
+        }
+      },
+      "finishReason": "stop",
+      "chars": 4688
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "synthesis",
+      "debate": "energia",
+      "repetition": 2,
+      "latencyMs": 22827,
+      "promptTokens": 3812,
+      "completionTokens": 3680,
+      "totalTokens": 7492,
+      "usage": {
+        "prompt_tokens": 3812,
+        "completion_tokens": 3680,
+        "total_tokens": 7492,
+        "prompt_tokens_details": {
+          "cached_tokens": 3811
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2134
+        }
+      },
+      "finishReason": "stop",
+      "chars": 4590
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "synthesis",
+      "debate": "energia",
+      "repetition": 3,
+      "latencyMs": 30652,
+      "promptTokens": 3812,
+      "completionTokens": 3408,
+      "totalTokens": 7220,
+      "usage": {
+        "prompt_tokens": 3812,
+        "completion_tokens": 3408,
+        "total_tokens": 7220,
+        "prompt_tokens_details": {
+          "cached_tokens": 3811
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1750
+        }
+      },
+      "finishReason": "stop",
+      "chars": 4954
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "synthesis",
+      "debate": "praca",
+      "repetition": 1,
+      "latencyMs": 35804,
+      "promptTokens": 3432,
+      "completionTokens": 4352,
+      "totalTokens": 7784,
+      "usage": {
+        "prompt_tokens": 3432,
+        "completion_tokens": 4352,
+        "total_tokens": 7784,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2955
+        }
+      },
+      "finishReason": "stop",
+      "chars": 4354
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "synthesis",
+      "debate": "praca",
+      "repetition": 2,
+      "latencyMs": 35466,
+      "promptTokens": 3432,
+      "completionTokens": 4210,
+      "totalTokens": 7642,
+      "usage": {
+        "prompt_tokens": 3432,
+        "completion_tokens": 4210,
+        "total_tokens": 7642,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2688
+        }
+      },
+      "finishReason": "stop",
+      "chars": 4731
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "synthesis",
+      "debate": "praca",
+      "repetition": 3,
+      "latencyMs": 49502,
+      "promptTokens": 3432,
+      "completionTokens": 5975,
+      "totalTokens": 9407,
+      "usage": {
+        "prompt_tokens": 3432,
+        "completion_tokens": 5975,
+        "total_tokens": 9407,
+        "prompt_tokens_details": {
+          "cached_tokens": 3431
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4850
+        }
+      },
+      "finishReason": "stop",
+      "chars": 3417
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "synthesis",
+      "debate": "studenci",
+      "repetition": 1,
+      "latencyMs": 39909,
+      "promptTokens": 3076,
+      "completionTokens": 6465,
+      "totalTokens": 9541,
+      "usage": {
+        "prompt_tokens": 3076,
+        "completion_tokens": 6465,
+        "total_tokens": 9541,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 5313
+        }
+      },
+      "finishReason": "stop",
+      "chars": 3467
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "synthesis",
+      "debate": "studenci",
+      "repetition": 2,
+      "latencyMs": 18672,
+      "promptTokens": 3076,
+      "completionTokens": 3275,
+      "totalTokens": 6351,
+      "usage": {
+        "prompt_tokens": 3076,
+        "completion_tokens": 3275,
+        "total_tokens": 6351,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1945
+        }
+      },
+      "finishReason": "stop",
+      "chars": 4026
+    },
+    {
+      "model": "DeepSeek V4 Flash",
+      "modelId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "task": "synthesis",
+      "debate": "studenci",
+      "repetition": 3,
+      "latencyMs": 9384,
+      "promptTokens": 3076,
+      "completionTokens": 1935,
+      "totalTokens": 5011,
+      "usage": {
+        "prompt_tokens": 3076,
+        "completion_tokens": 1935,
+        "total_tokens": 5011,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 615
+        }
+      },
+      "finishReason": "stop",
+      "chars": 3986
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "generate",
+      "debate": "energia",
+      "repetition": 1,
+      "latencyMs": 41998,
+      "promptTokens": 110,
+      "completionTokens": 581,
+      "totalTokens": 691,
+      "usage": {
+        "prompt_tokens": 110,
+        "total_tokens": 691,
+        "completion_tokens": 581
+      },
+      "finishReason": "stop",
+      "chars": 333
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "generate",
+      "debate": "energia",
+      "repetition": 2,
+      "latencyMs": 69869,
+      "promptTokens": 110,
+      "completionTokens": 1070,
+      "totalTokens": 1180,
+      "usage": {
+        "prompt_tokens": 110,
+        "total_tokens": 1180,
+        "completion_tokens": 1070,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "finishReason": "stop",
+      "chars": 336
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "generate",
+      "debate": "energia",
+      "repetition": 3,
+      "latencyMs": 35364,
+      "promptTokens": 110,
+      "completionTokens": 437,
+      "totalTokens": 547,
+      "usage": {
+        "prompt_tokens": 110,
+        "total_tokens": 547,
+        "completion_tokens": 437,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "finishReason": "stop",
+      "chars": 270
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "generate",
+      "debate": "praca",
+      "repetition": 1,
+      "latencyMs": 10003,
+      "promptTokens": 113,
+      "completionTokens": 619,
+      "totalTokens": 732,
+      "usage": {
+        "prompt_tokens": 113,
+        "total_tokens": 732,
+        "completion_tokens": 619
+      },
+      "finishReason": "stop",
+      "chars": 306
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "generate",
+      "debate": "praca",
+      "repetition": 2,
+      "latencyMs": 7397,
+      "promptTokens": 113,
+      "completionTokens": 500,
+      "totalTokens": 613,
+      "usage": {
+        "prompt_tokens": 113,
+        "total_tokens": 613,
+        "completion_tokens": 500,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "finishReason": "stop",
+      "chars": 272
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "generate",
+      "debate": "praca",
+      "repetition": 3,
+      "latencyMs": 10126,
+      "promptTokens": 113,
+      "completionTokens": 715,
+      "totalTokens": 828,
+      "usage": {
+        "prompt_tokens": 113,
+        "total_tokens": 828,
+        "completion_tokens": 715,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "finishReason": "stop",
+      "chars": 310
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "generate",
+      "debate": "studenci",
+      "repetition": 1,
+      "latencyMs": 8260,
+      "promptTokens": 112,
+      "completionTokens": 638,
+      "totalTokens": 750,
+      "usage": {
+        "prompt_tokens": 112,
+        "total_tokens": 750,
+        "completion_tokens": 638
+      },
+      "finishReason": "stop",
+      "chars": 412
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "generate",
+      "debate": "studenci",
+      "repetition": 2,
+      "latencyMs": 8837,
+      "promptTokens": 112,
+      "completionTokens": 612,
+      "totalTokens": 724,
+      "usage": {
+        "prompt_tokens": 112,
+        "total_tokens": 724,
+        "completion_tokens": 612
+      },
+      "finishReason": "stop",
+      "chars": 379
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "generate",
+      "debate": "studenci",
+      "repetition": 3,
+      "latencyMs": 8341,
+      "promptTokens": 112,
+      "completionTokens": 571,
+      "totalTokens": 683,
+      "usage": {
+        "prompt_tokens": 112,
+        "total_tokens": 683,
+        "completion_tokens": 571,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "finishReason": "stop",
+      "chars": 352
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "synthesis",
+      "debate": "energia",
+      "repetition": 1,
+      "latencyMs": 33354,
+      "promptTokens": 3491,
+      "completionTokens": 2418,
+      "totalTokens": 5909,
+      "usage": {
+        "prompt_tokens": 3491,
+        "total_tokens": 5909,
+        "completion_tokens": 2418
+      },
+      "finishReason": "stop",
+      "chars": 3628
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "synthesis",
+      "debate": "energia",
+      "repetition": 2,
+      "latencyMs": 170631,
+      "promptTokens": 3491,
+      "completionTokens": 2775,
+      "totalTokens": 6266,
+      "usage": {
+        "prompt_tokens": 3491,
+        "total_tokens": 6266,
+        "completion_tokens": 2775
+      },
+      "finishReason": "stop",
+      "chars": 4079
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "synthesis",
+      "debate": "energia",
+      "repetition": 3,
+      "latencyMs": 37309,
+      "promptTokens": 3491,
+      "completionTokens": 2688,
+      "totalTokens": 6179,
+      "usage": {
+        "prompt_tokens": 3491,
+        "total_tokens": 6179,
+        "completion_tokens": 2688,
+        "prompt_tokens_details": {
+          "cached_tokens": 3488
+        }
+      },
+      "finishReason": "stop",
+      "chars": 3951
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "synthesis",
+      "debate": "praca",
+      "repetition": 1,
+      "latencyMs": 56336,
+      "promptTokens": 3180,
+      "completionTokens": 2836,
+      "totalTokens": 6016,
+      "usage": {
+        "prompt_tokens": 3180,
+        "total_tokens": 6016,
+        "completion_tokens": 2836
+      },
+      "finishReason": "stop",
+      "chars": 3563
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "synthesis",
+      "debate": "praca",
+      "repetition": 2,
+      "latencyMs": 146300,
+      "promptTokens": 3180,
+      "completionTokens": 2773,
+      "totalTokens": 5953,
+      "usage": {
+        "prompt_tokens": 3180,
+        "total_tokens": 5953,
+        "completion_tokens": 2773
+      },
+      "finishReason": "stop",
+      "chars": 3599
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "synthesis",
+      "debate": "praca",
+      "repetition": 3,
+      "latencyMs": 260479,
+      "promptTokens": 3180,
+      "completionTokens": 3291,
+      "totalTokens": 6471,
+      "usage": {
+        "prompt_tokens": 3180,
+        "total_tokens": 6471,
+        "completion_tokens": 3291
+      },
+      "finishReason": "stop",
+      "chars": 3748
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "synthesis",
+      "debate": "studenci",
+      "repetition": 1,
+      "latencyMs": 95334,
+      "promptTokens": 2850,
+      "completionTokens": 2157,
+      "totalTokens": 5007,
+      "usage": {
+        "prompt_tokens": 2850,
+        "total_tokens": 5007,
+        "completion_tokens": 2157
+      },
+      "finishReason": "stop",
+      "chars": 3402
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "synthesis",
+      "debate": "studenci",
+      "repetition": 2,
+      "latencyMs": 124497,
+      "promptTokens": 2850,
+      "completionTokens": 2947,
+      "totalTokens": 5797,
+      "usage": {
+        "prompt_tokens": 2850,
+        "total_tokens": 5797,
+        "completion_tokens": 2947
+      },
+      "finishReason": "stop",
+      "chars": 3483
+    },
+    {
+      "model": "Google Gemma 4",
+      "modelId": "google/gemma-4-31B-it",
+      "task": "synthesis",
+      "debate": "studenci",
+      "repetition": 3,
+      "latencyMs": 66131,
+      "promptTokens": 2850,
+      "completionTokens": 2120,
+      "totalTokens": 4970,
+      "usage": {
+        "prompt_tokens": 2850,
+        "total_tokens": 4970,
+        "completion_tokens": 2120
+      },
+      "finishReason": "stop",
+      "chars": 3422
+    }
+  ]
+}

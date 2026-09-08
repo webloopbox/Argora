@@ -177,9 +177,9 @@ function DeleteButton({
 
       <ConfirmDialog
         isOpen={isConfirmOpen}
-        title="Usuń argument"
+        title={ui.debates.graph.deleteTitle}
         description={ui.debates.graph.deleteConfirm}
-        confirmLabel="Usuń"
+        confirmLabel={ui.common.delete}
         isPending={pending}
         onConfirm={handleConfirm}
         onCancel={() => setIsConfirmOpen(false)}

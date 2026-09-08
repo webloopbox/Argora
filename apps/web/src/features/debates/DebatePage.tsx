@@ -428,7 +428,7 @@ function FloatingThesisCard({
           <button
             type="button"
             onClick={() => setExpanded((v) => !v)}
-            aria-label={expanded ? "Zwiń" : "Rozwiń"}
+            aria-label={expanded ? ui.common.collapse : ui.common.expand}
             className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-default-500 transition-colors hover:bg-default-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:text-zinc-400 dark:hover:bg-zinc-800"
           >
             {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
@@ -500,9 +500,9 @@ function FloatingThesisCard({
 
       <ConfirmDialog
         isOpen={isConfirmOpen}
-        title="Usuń dyskusję"
+        title={ui.debates.detail.deleteTitle}
         description={ui.debates.detail.deleteConfirm}
-        confirmLabel="Usuń"
+        confirmLabel={ui.common.delete}
         isPending={isDeleting}
         onConfirm={handleConfirm}
         onCancel={() => setIsConfirmOpen(false)}

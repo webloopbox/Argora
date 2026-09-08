@@ -12,7 +12,9 @@
     "seed:ev": "node scripts/seed-demo-ev.mjs",
     "seed:ev:en": "node scripts/seed-demo-ev-en.mjs",
     "seed:additional:en": "node scripts/seed-additional-en.mjs",
-    "seed:agi:en": "node scripts/seed-large-agi-en.mjs"
+    "seed:agi:en": "node scripts/seed-large-agi-en.mjs",
+    "seed:remote:pl": "node scripts/seed-remote-work-pl.mjs",
+    "seed:nuclear:pl": "node scripts/seed-nuclear-pl.mjs"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

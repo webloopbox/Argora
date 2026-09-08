@@ -4,6 +4,8 @@
 // Switch locale at runtime with setGlobalLanguage() and re-render React tree.
 // ---------------------------------------------------------------------------
 
+import { ARGUMENT_MAX, ARGUMENT_MIN } from "@brainstorm/core";
+
 export type Lang = "pl" | "en";
 
 const STORAGE_KEY = "brainstorm.lang";
@@ -168,6 +170,7 @@ export interface UiDict {
       forbiddenBody: string;
       loadFailed: string;
       deleteAriaLabel: string;
+      deleteTitle: string;
       deleteConfirm: string;
       deleteFailed: string;
     };
@@ -199,6 +202,7 @@ export interface UiDict {
       deleteAriaLabel: string;
       deleteTooltipCan: string;
       deleteTooltipHasChildren: string;
+      deleteTitle: string;
       deleteConfirm: string;
       deleteFailed: string;
     };
@@ -236,6 +240,9 @@ export interface UiDict {
       synthesisStart: string;
       synthesisSending: string;
       synthesisEmpty: string;
+      // Cycled while the model is working. Five phrases in both locales so the
+      // index the panel rotates through is valid whichever locale is active.
+      synthesisLoadingPhrases: readonly [string, string, string, string, string];
       synthesisError: string;
       synthesisClose: string;
       synthesisAgain: string;
@@ -346,6 +353,10 @@ export interface UiDict {
     comingSoon: string;
     cancel: string;
     close: string;
+    confirm: string;
+    delete: string;
+    expand: string;
+    collapse: string;
   };
   toast: {
     networkError: string;
@@ -521,6 +532,7 @@ const pl: UiDict = {
         "Ta dyskusja jest prywatna. Poproś właściciela grupy o zaproszenie.",
       loadFailed: "Nie udało się wczytać dyskusji.",
       deleteAriaLabel: "Usuń dyskusję",
+      deleteTitle: "Usuń dyskusję",
       deleteConfirm:
         "Na pewno usunąć tę dyskusję? Usunięte zostaną również wszystkie umieszczone w niej argumenty.",
       deleteFailed: "Nie udało się usunąć dyskusji. Spróbuj ponownie.",
@@ -556,6 +568,7 @@ const pl: UiDict = {
       deleteTooltipCan: "Usuń swój argument",
       deleteTooltipHasChildren:
         "Nie można usunąć argumentu, który ma już odpowiedzi. Najpierw usuń wszystkie odpowiedzi.",
+      deleteTitle: "Usuń argument",
       deleteConfirm: "Na pewno usunąć ten argument?",
       deleteFailed: "Nie udało się usunąć argumentu.",
     },
@@ -576,8 +589,8 @@ const pl: UiDict = {
       requiresLogin:
         "Zaloguj się, aby dodawać argumenty do publicznej dyskusji.",
       signIn: "Zaloguj się",
-      contentTooShort: "Argument musi mieć co najmniej 4 znaki.",
-      contentTooLong: "Argument nie może przekraczać 2000 znaków.",
+      contentTooShort: `Argument musi mieć co najmniej ${ARGUMENT_MIN} znaki.`,
+      contentTooLong: `Argument nie może przekraczać ${ARGUMENT_MAX} znaków.`,
       genericError: "Nie udało się dodać argumentu. Spróbuj ponownie.",
       aiToggleLabel: "Wygeneruj przez AI",
       aiModelLabel: "Model",
@@ -597,6 +610,13 @@ const pl: UiDict = {
       synthesisSending: "Streszczam…",
       synthesisEmpty:
         "Zaznacz argumenty na grafie (lasso), a AI streści wybrany fragment dyskusji.",
+      synthesisLoadingPhrases: [
+        "Zbieranie przesłanek…",
+        "Analizowanie treści…",
+        "Ocenianie argumentów…",
+        "Synteza opinii…",
+        "Przygotowywanie wniosków…",
+      ],
       synthesisError:
         "Nie udało się przygotować streszczenia. Spróbuj ponownie.",
       synthesisClose: "Zamknij",
@@ -724,6 +744,10 @@ const pl: UiDict = {
     comingSoon: "W przygotowaniu",
     cancel: "Anuluj",
     close: "Zamknij",
+    confirm: "Potwierdź",
+    delete: "Usuń",
+    expand: "Rozwiń",
+    collapse: "Zwiń",
   },
   toast: {
     networkError:
@@ -900,6 +924,7 @@ const en: UiDict = {
         "This debate is private. Ask the group owner for an invitation.",
       loadFailed: "Failed to load debate.",
       deleteAriaLabel: "Delete debate",
+      deleteTitle: "Delete debate",
       deleteConfirm:
         "Are you sure you want to delete this debate? All arguments inside will also be deleted.",
       deleteFailed: "Failed to delete debate. Please try again.",
@@ -935,6 +960,7 @@ const en: UiDict = {
       deleteTooltipCan: "Delete your argument",
       deleteTooltipHasChildren:
         "Cannot delete an argument that already has replies. Delete all replies first.",
+      deleteTitle: "Delete argument",
       deleteConfirm: "Are you sure you want to delete this argument?",
       deleteFailed: "Failed to delete argument.",
     },
@@ -955,8 +981,8 @@ const en: UiDict = {
       requiresLogin:
         "Sign in to add arguments to a public debate.",
       signIn: "Sign in",
-      contentTooShort: "Argument must be at least 4 characters.",
-      contentTooLong: "Argument cannot exceed 2000 characters.",
+      contentTooShort: `Argument must be at least ${ARGUMENT_MIN} characters.`,
+      contentTooLong: `Argument cannot exceed ${ARGUMENT_MAX} characters.`,
       genericError: "Failed to add argument. Please try again.",
       aiToggleLabel: "Generate with AI",
       aiModelLabel: "Model",
@@ -976,6 +1002,13 @@ const en: UiDict = {
       synthesisSending: "Summarizing…",
       synthesisEmpty:
         "Select arguments on the graph (lasso) and AI will summarize the chosen part of the debate.",
+      synthesisLoadingPhrases: [
+        "Gathering arguments…",
+        "Analyzing content…",
+        "Evaluating arguments…",
+        "Synthesizing opinions…",
+        "Preparing conclusions…",
+      ],
       synthesisError:
         "Failed to prepare the summary. Please try again.",
       synthesisClose: "Close",
@@ -1103,6 +1136,10 @@ const en: UiDict = {
     comingSoon: "Coming soon",
     cancel: "Cancel",
     close: "Close",
+    confirm: "Confirm",
+    delete: "Delete",
+    expand: "Expand",
+    collapse: "Collapse",
   },
   toast: {
     networkError:

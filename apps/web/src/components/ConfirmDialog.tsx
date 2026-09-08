@@ -20,7 +20,7 @@ export function ConfirmDialog({
   isOpen,
   title,
   description,
-  confirmLabel = "Potwierdź",
+  confirmLabel = ui.common.confirm,
   cancelLabel = ui.common.cancel,
   isDestructive = true,
   isPending = false,

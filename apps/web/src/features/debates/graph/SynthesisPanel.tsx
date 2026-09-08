@@ -8,7 +8,6 @@ import { listProviders, synthesize } from "../../../api/ai.api";
 import { apiErrorMessage } from "../../../api/http-client";
 import { useTypewriter } from "../../../hooks/useTypewriter";
 import { ui } from "../../../texts/ui";
-import { useLanguage } from "../../../app-config/language-context";
 import { ModelPicker } from "./ModelPicker";
 
 interface SynthesisPanelProps {
@@ -28,9 +27,13 @@ export function SynthesisPanel({
 }: SynthesisPanelProps) {
   const [providers, setProviders] = useState<LlmProviderDto[]>([]);
   const [modelId, setModelId] = useState<string>("");
-  const { lang } = useLanguage();
   const [loadingTextIndex, setLoadingTextIndex] = useState(0);
   const [result, setResult] = useState<string | null>(null);
+  // Which model actually produced the text on screen, taken from the response
+  // rather than from the picker: the picker keeps accepting changes for the
+  // next run, so reading it would eventually caption a result with a model
+  // that never wrote it.
+  const [resultModelId, setResultModelId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,19 +48,7 @@ export function SynthesisPanel({
     return () => clearInterval(interval);
   }, [loading]);
 
-  const loadingPhrases = lang === "pl" ? [
-    "Zbieranie przesłanek...",
-    "Analizowanie treści...",
-    "Ocenianie argumentów...",
-    "Synteza opinii...",
-    "Przygotowywanie wniosków..."
-  ] : [
-    "Gathering arguments...",
-    "Analyzing content...",
-    "Evaluating arguments...",
-    "Synthesizing opinions...",
-    "Preparing conclusions..."
-  ];
+  const loadingPhrases = ui.debates.ai.synthesisLoadingPhrases;
 
   // Animate the synthesis text so it feels live-streamed even though the
   // API returns it in one shot. Adapter wraps the nullable setter.
@@ -69,6 +60,7 @@ export function SynthesisPanel({
     if (!isOpen) return;
     cancelTyping();
     setResult(null);
+    setResultModelId(null);
     setError(null);
     listProviders()
       .then((list) => {
@@ -84,6 +76,7 @@ export function SynthesisPanel({
     setError(null);
     try {
       const res = await synthesize({ debateId, argumentIds: selectedArgumentIds, modelId });
+      setResultModelId(res.modelId);
       animateResult(res.text);
     } catch (err) {
       setError(apiErrorMessage(err) ?? ui.debates.ai.synthesisError);
@@ -170,6 +163,11 @@ export function SynthesisPanel({
                   }
                 >
                   <ReactMarkdown>{result}</ReactMarkdown>
+                  <p className="mt-3 border-t border-violet-100 pt-2 text-[11px] text-default-500 dark:border-violet-900/40 dark:text-zinc-400">
+                    {ui.debates.ai.synthesisModelLabel}{" "}
+                    {providers.find((p) => p.id === resultModelId)?.name ??
+                      resultModelId}
+                  </p>
                 </div>
               ) : error ? (
                 <div
@@ -221,6 +219,7 @@ export function SynthesisPanel({
                   onPress={() => {
                     cancelTyping();
                     setResult(null);
+                    setResultModelId(null);
                   }}
                   className="w-full"
                 >

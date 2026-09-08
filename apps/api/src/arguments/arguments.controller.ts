@@ -45,18 +45,20 @@ export class ArgumentsController {
 
 // Archive endpoint scoped on the argument itself, separate from the
 // /debates/:debateId/arguments collection because the path doesn't need
-// a debate id when we already hold the argument id.
+// a debate id when we already hold the argument id. The param is named
+// `argumentId` rather than `id` so VisibilityGuard reaches the debate
+// through the argument instead of reading the value as a debate id.
 @Controller('arguments')
 export class ArgumentItemController {
   constructor(private readonly args: ArgumentsService) {}
 
-  @Delete(':id')
+  @Delete(':argumentId')
   @HttpCode(204)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, VisibilityGuard)
   async archive(
     @CurrentUser() user: User,
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('argumentId', new ParseUUIDPipe()) argumentId: string,
   ): Promise<void> {
-    await this.args.archive(id, user);
+    await this.args.archive(argumentId, user);
   }
 }

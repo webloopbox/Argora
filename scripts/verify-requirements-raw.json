@@ -1,0 +1,133 @@
+{
+  "api": "http://localhost:3000",
+  "executedAt": "2026-08-19T19:05:57.221Z",
+  "debateId": "7411bc6e-71a6-4e7e-a32c-82328d53f487",
+  "archivedArgumentId": "71c87ebe-b397-415d-b727-fcfea24ce14f",
+  "archivedDebateId": "42edb13d-cf7f-4cee-a533-4afaa1bc3b76",
+  "providers": [
+    {
+      "id": "gemini-2.5-flash",
+      "name": "Gemini 2.5 Flash",
+      "vendor": "google"
+    },
+    {
+      "id": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "name": "Meta Llama 3.3 (Together)",
+      "vendor": "meta"
+    },
+    {
+      "id": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "name": "DeepSeek V4 Flash (Together)",
+      "vendor": "deepseek"
+    },
+    {
+      "id": "google/gemma-4-31B-it",
+      "name": "Gemma 4 31B (Together)",
+      "vendor": "google"
+    }
+  ],
+  "generated": [
+    {
+      "model": "gemini-2.5-flash",
+      "ok": true,
+      "length": 380,
+      "returnedModel": "gemini-2.5-flash",
+      "status": 201
+    },
+    {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "ok": true,
+      "length": 547,
+      "returnedModel": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "status": 201
+    },
+    {
+      "model": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "ok": true,
+      "length": 503,
+      "returnedModel": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "status": 201
+    },
+    {
+      "model": "google/gemma-4-31B-it",
+      "ok": true,
+      "length": 430,
+      "returnedModel": "google/gemma-4-31B-it",
+      "status": 201
+    }
+  ],
+  "results": [
+    {
+      "wf": "WF1",
+      "name": "Utworzenie debaty z tezą, trybem widoczności i językiem",
+      "ok": true,
+      "detail": "teza zgodna, widoczność public, język pl oraz en dla drugiej debaty; brak punktu końcowego zmieniającego język"
+    },
+    {
+      "wf": "WF2",
+      "name": "Dodanie argumentu ze wskazaniem węzła nadrzędnego i strony sporu",
+      "ok": true,
+      "detail": "drzewo trzech poziomów zbudowane poprawnie, strona spoza słownika odrzucona kodem 400"
+    },
+    {
+      "wf": "WF3",
+      "name": "Prezentacja debaty jako grafu z kodowaniem kolorem",
+      "ok": null,
+      "detail": "zasób zwraca 3 węzłów z kompletnymi krawędziami i stroną sporu przy każdym; samo odwzorowanie na kolor rozstrzyga warstwa kliencka"
+    },
+    {
+      "wf": "WF4",
+      "name": "Głosowanie oraz waga jako suma obu rodzajów głosów",
+      "ok": true,
+      "detail": "waga 1+1 = 2 mimo wyniku netto zero, po trzecim głosie 3, po wycofaniu 2"
+    },
+    {
+      "wf": "WF5",
+      "name": "Wskaźnik sentymentu z wyróżnieniem wysokiej kontrowersji",
+      "ok": true,
+      "detail": "głosy 1:1 dają stan controversy, przewaga 2:1 stan pro, pojedynczy głos popierający stan pro; prezentacja odznaki należy do warstwy klienckiej"
+    },
+    {
+      "wf": "WF6",
+      "name": "Porównanie semantyczne nowego argumentu przed zapisem",
+      "ok": true,
+      "detail": "parafraza istniejącego argumentu rozpoznana przy podobieństwie 0.871 wobec progu 0.8, treść odrębna przepuszczona przy 0.718"
+    },
+    {
+      "wf": "WF7",
+      "name": "Wygenerowanie propozycji przesłanki w kontekście grafu",
+      "ok": true,
+      "detail": "4 z 4 modeli zwróciło niepustą przesłankę, długości 380, 547, 503, 430 znaków"
+    },
+    {
+      "wf": "WF10",
+      "name": "Wybór modelu spośród zarejestrowanych",
+      "ok": true,
+      "detail": "rejestr zwraca 4 modeli (gemini-2.5-flash, meta-llama/Llama-3.3-70B-Instruct-Turbo, deepseek-ai/DeepSeek-V4-Flash-0731, google/gemma-4-31B-it), każde wywołanie odpowiada identyfikatorem żądanego modelu, identyfikator nieznany odrzucony kodem 400"
+    },
+    {
+      "wf": "WF8",
+      "name": "Sygnalizowanie niezgodności treści z zadeklarowaną stroną",
+      "ok": true,
+      "detail": "treść przeciwna zgłoszona jako niezgodna z podpowiedzią strony against, treść zgodna przepuszczona bez ostrzeżenia"
+    },
+    {
+      "wf": "WF9",
+      "name": "Synteza wskazanego podgrafu oraz całej debaty",
+      "ok": true,
+      "detail": "synteza dwuwęzłowego podgrafu 1480 znaków, synteza 3 węzłów 1628 znaków, wyniki różne; sam gest lassa rozstrzyga warstwa kliencka"
+    },
+    {
+      "wf": "WF11",
+      "name": "Debaty publiczne oraz grupy prywatne z zaproszeniami",
+      "ok": true,
+      "detail": "zaproszony przed akceptacją 403, po akceptacji 200, osoba spoza grupy 403, debata publiczna czytana anonimowo 200, zapis anonimowy 401"
+    },
+    {
+      "wf": "WF12",
+      "name": "Zachowanie danych po wycofaniu z widoku",
+      "ok": true,
+      "detail": "argument zniknął z zasobu (3 → 2), wycofana debata zwraca 404 i nie występuje na liście; obecność wierszy w bazie sprawdza zapytanie SQL wypisane poniżej"
+    }
+  ]
+}

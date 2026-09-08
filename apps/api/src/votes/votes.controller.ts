@@ -10,11 +10,14 @@ import {
 import type { ArgumentDto, CastVoteDto } from '@brainstorm/core';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { VisibilityGuard } from '../common/guards/visibility.guard';
 import { User } from '../users/user.entity';
 import { VotesService } from './votes.service';
 
+// VisibilityGuard reaches the debate through `:argumentId`, so voting obeys
+// exactly the same access rule as every other debate-scoped route.
 @Controller('arguments/:argumentId/votes')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, VisibilityGuard)
 export class VotesController {
   constructor(private readonly votes: VotesService) {}
 

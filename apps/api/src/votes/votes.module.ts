@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ArgumentsModule } from '../arguments/arguments.module';
+import { VisibilityGuard } from '../common/guards/visibility.guard';
 import { Argument } from '../arguments/argument.entity';
 import { Debate } from '../debates/debate.entity';
 import { GroupMembership } from '../groups/group-membership.entity';
@@ -14,7 +15,7 @@ import { VotesService } from './votes.service';
     ArgumentsModule,
   ],
   controllers: [VotesController],
-  providers: [VotesService],
+  providers: [VotesService, VisibilityGuard],
   exports: [VotesService, TypeOrmModule],
 })
 export class VotesModule {}

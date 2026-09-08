@@ -9,8 +9,10 @@ import {
 } from 'class-validator';
 import { ArgumentSide } from '../enums/debate.enums';
 
-const ARGUMENT_MAX = 2000;
-const ARGUMENT_MIN = 4;
+// Shared with the web form and with the validation copy in `ui.ts`: the limit
+// is part of the contract, so it must not be restated as a literal anywhere.
+export const ARGUMENT_MAX = 2000;
+export const ARGUMENT_MIN = 4;
 
 export class CreateArgumentDto {
   @IsEnum(ArgumentSide)

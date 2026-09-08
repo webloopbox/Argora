@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import type {
@@ -36,8 +31,11 @@ import type {
   SynthesizeInput,
 } from './llm-provider.interface';
 
+// 0.80, not the more common round default of 0.75 - raised per the threshold
+// sweep in praca_pisemna.md §7.3.2, which found 0.80 the lowest threshold
+// that keeps recall at 1.00 while cutting false-positive detections sharply.
 const DUPLICATE_THRESHOLD = parseFloat(
-  process.env['DUPLICATE_THRESHOLD'] ?? '0.75',
+  process.env['DUPLICATE_THRESHOLD'] ?? '0.80',
 );
 
 @Injectable()
@@ -50,8 +48,6 @@ export class AiService {
     private readonly argumentsService: ArgumentsService,
     @InjectRepository(Argument)
     private readonly args: Repository<Argument>,
-    @InjectRepository(Debate)
-    private readonly debates: Repository<Debate>,
   ) {}
 
   getProviders(): LlmProviderDto[] {
@@ -212,18 +208,16 @@ export class AiService {
     return effectiveStance(parentArgumentId, (id) => byId.get(id));
   }
 
+  // `debate` comes from VisibilityGuard, like every other debate-scoped call
+  // here - the row the access decision was made on is the row the synthesis
+  // runs against, so the service never re-reads it.
   async synthesize(
-    debateId: string,
+    debate: Debate,
     argumentIds: string[],
     modelId: string,
   ): Promise<SynthesisResultDto> {
     const provider = this.registry.get(modelId);
     if (!provider) throw new BadRequestException(`Nieznany model: ${modelId}`);
-
-    const debate = await this.debates.findOne({
-      where: activeWhere<Debate>({ id: debateId }),
-    });
-    if (!debate) throw new NotFoundException('Debata nie istnieje.');
 
     if (argumentIds.length === 0)
       throw new BadRequestException('Brak argumentów do syntezy.');

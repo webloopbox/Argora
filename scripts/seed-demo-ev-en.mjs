@@ -181,6 +181,7 @@ async function main() {
       thesis:
         "Electric cars are the best solution for the future of transport.",
       visibility: "public",
+      language: "en",
     },
   });
   console.log(`    debate: ${debate.id}\n`);
