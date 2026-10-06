@@ -192,11 +192,10 @@ export function AddArgumentForm({
         debateId,
         selectedSide: payload.side,
         content: payload.content,
+        // The parent's text is the whole context the check needs: the model is
+        // asked whether the new argument supports or refutes this parent, which
+        // is exactly what `selectedSide` means here.
         parentContent: parent?.content,
-        // The server needs the id, not just the text: `selectedSide` is relative
-        // to this parent, while the model is asked about the thesis, and
-        // reconciling the two means walking the parent chain.
-        parentArgumentId: payload.parentArgumentId ?? null,
       });
       if (sideResult.isMismatch && sideResult.suggestedSide) {
         setSideMismatch(sideResult.suggestedSide);

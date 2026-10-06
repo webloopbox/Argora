@@ -71,18 +71,14 @@ export class CheckArgumentSideDto {
   @MinLength(4)
   content!: string;
 
+  // The text of the argument being replied to, and the frame the check runs in:
+  // `selectedSide` is relative to this parent, so the model is asked about it
+  // directly. Absent for an argument hanging straight off the thesis, where the
+  // thesis itself plays that role. The parent's id is deliberately not part of
+  // this contract - the check compares two texts and never walks the tree.
   @IsOptional()
   @IsString()
   parentContent?: string;
-
-  // Needed on top of `parentContent`: `selectedSide` is relative to the parent,
-  // while the classification prompt asks about the thesis. Resolving the two
-  // against each other means walking the parent chain, which needs the id, not
-  // just the text. Absent for arguments hanging straight off the thesis, where
-  // the local side already is the thesis-relative one.
-  @IsOptional()
-  @IsUUID()
-  parentArgumentId?: string | null;
 }
 
 export interface ArgumentSideCheckResultDto {

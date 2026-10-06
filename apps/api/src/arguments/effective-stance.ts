@@ -7,11 +7,10 @@ import { ArgumentSide } from '@brainstorm/core';
  * thesis. The thesis-relative value - the effective stance - is derived by
  * walking up to the root and flipping polarity on every Against link.
  *
- * Shared by the synthesis prompt (which labels each entry FOR/AGAINST the
- * thesis) and by the side check (which compares a thesis-relative model
- * verdict against a parent-relative user choice). Keeping one implementation
- * matters: the two used to disagree, and the side check reported a mismatch
- * for every reply supporting an anti-thesis argument.
+ * Used by the synthesis prompt, which labels each entry FOR/AGAINST the thesis.
+ * The side check does not go through here: it asks the model about the
+ * immediate parent, so its verdict is already in the same frame as the user's
+ * choice and needs no polarity conversion.
  */
 export interface StanceNode {
   side: ArgumentSide;
@@ -20,10 +19,6 @@ export interface StanceNode {
 
 // Guards against a cycle introduced by corrupt data; real trees are far shallower.
 const MAX_HOPS = 20;
-
-export function flipSide(side: ArgumentSide): ArgumentSide {
-  return side === ArgumentSide.Pro ? ArgumentSide.Against : ArgumentSide.Pro;
-}
 
 /**
  * Effective (thesis-relative) stance of the node identified by `startId`.
@@ -46,26 +41,4 @@ export function effectiveStance(
   }
 
   return pro ? ArgumentSide.Pro : ArgumentSide.Against;
-}
-
-/**
- * Thesis-relative stance implied by picking `localSide` under a parent whose
- * own effective stance is `parentStance`. Supporting an anti-thesis argument
- * argues against the thesis, and attacking one argues for it.
- */
-export function impliedEffectiveStance(
-  localSide: ArgumentSide,
-  parentStance: ArgumentSide | null,
-): ArgumentSide {
-  if (parentStance === null) return localSide;
-  return localSide === ArgumentSide.Pro ? parentStance : flipSide(parentStance);
-}
-
-/** Inverse of {@link impliedEffectiveStance}: the local side that yields `target`. */
-export function localSideFor(
-  target: ArgumentSide,
-  parentStance: ArgumentSide | null,
-): ArgumentSide {
-  if (parentStance === null) return target;
-  return target === parentStance ? ArgumentSide.Pro : ArgumentSide.Against;
 }

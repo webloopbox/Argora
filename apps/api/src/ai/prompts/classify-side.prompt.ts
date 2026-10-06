@@ -2,11 +2,18 @@ import { DebateLanguage } from '@brainstorm/core';
 import type { ClassifySideInput } from '../llm-provider.interface';
 
 /**
- * Builds the user prompt that asks an LLM to decide which side of the debate
- * an argument logically supports.  When the argument is a reply to a parent,
- * the parent's content is included so the model can judge whether the new
- * argument contradicts or supports that parent (and therefore which side of
- * the thesis it falls on).
+ * Builds the user prompt that asks an LLM which side the new argument takes.
+ *
+ * The question is always asked in the same frame the user picked the side in:
+ * against the immediate parent when the argument is a reply, against the thesis
+ * when it hangs straight off the root. Asking about the thesis for a nested
+ * reply is what this prompt used to do, and it was unreliable: the model only
+ * sees the immediate parent, so deciding a thesis-relative side several levels
+ * down requires walking a chain it was never given, and it falls back to
+ * surface wording ("opens access to a global market" reads pro-thesis even when
+ * the argument attacks its parent). Comparing two texts is a judgement the
+ * model can actually make, and its answer is then the local side directly - no
+ * polarity algebra, nothing to keep in sync with `effectiveStance`.
  *
  * The prompt is written in the debate's own language: the model has to reason
  * about user-authored content, and asking in one language about text in
@@ -22,45 +29,51 @@ export function buildClassifySidePrompt(input: ClassifySideInput): string {
 }
 
 function buildPolishPrompt(input: ClassifySideInput): string {
-  const lines: string[] = [`Teza debaty: "${input.thesis}"`];
-
   if (input.parentContent) {
-    lines.push(
-      `Argument nadrzędny (na który użytkownik odpowiada): "${input.parentContent}"`,
-    );
+    return [
+      `Kontekst (teza całej debaty, wyłącznie tło): "${input.thesis}"`,
+      '',
+      `Twierdzenie nadrzędne: "${input.parentContent}"`,
+      `Nowa wypowiedź: "${input.content}"`,
+      '',
+      'Czy nowa wypowiedź POPIERA (wzmacnia, uzasadnia, rozwija) TWIERDZENIE',
+      'NADRZĘDNE, czy je OBALA (podważa, osłabia, zaprzecza mu)?',
+      'Oceniaj wyłącznie relację do twierdzenia nadrzędnego, nie do tezy debaty.',
+      'Odpowiedz TYLKO jednym słowem: "ZA" lub "PRZECIW".',
+    ].join('\n');
   }
 
-  lines.push(
+  return [
+    `Teza debaty: "${input.thesis}"`,
     `Nowy argument użytkownika: "${input.content}"`,
     '',
-    'Biorąc pod uwagę tezę debaty' +
-      (input.parentContent ? ' oraz kontekst argumentu nadrzędnego' : '') +
-      ', czy nowy argument POPIERA czy OBALA tezę?',
+    'Czy nowy argument POPIERA czy OBALA tezę?',
     'Odpowiedz TYLKO jednym słowem: "ZA" lub "PRZECIW".',
-  );
-
-  return lines.join('\n');
+  ].join('\n');
 }
 
 function buildEnglishPrompt(input: ClassifySideInput): string {
-  const lines: string[] = [`Debate thesis: "${input.thesis}"`];
-
   if (input.parentContent) {
-    lines.push(
-      `Parent argument (the one the user is replying to): "${input.parentContent}"`,
-    );
+    return [
+      `Context (the debate's thesis, background only): "${input.thesis}"`,
+      '',
+      `Parent claim: "${input.parentContent}"`,
+      `New statement: "${input.content}"`,
+      '',
+      'Does the new statement SUPPORT (reinforce, justify, extend) the PARENT',
+      'CLAIM, or REFUTE it (undermine, weaken, contradict it)?',
+      'Judge only the relation to the parent claim, not to the debate thesis.',
+      'Answer with ONE word only: "FOR" or "AGAINST".',
+    ].join('\n');
   }
 
-  lines.push(
+  return [
+    `Debate thesis: "${input.thesis}"`,
     `The user's new argument: "${input.content}"`,
     '',
-    'Considering the debate thesis' +
-      (input.parentContent ? ' and the context of the parent argument' : '') +
-      ', does the new argument SUPPORT or REFUTE the thesis?',
+    'Does the new argument SUPPORT or REFUTE the thesis?',
     'Answer with ONE word only: "FOR" or "AGAINST".',
-  );
-
-  return lines.join('\n');
+  ].join('\n');
 }
 
 // Keyword sets for both languages are checked unconditionally rather than
