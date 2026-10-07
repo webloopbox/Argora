@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 340" width="1240" height="340" role="img" aria-label="Argora, an interactive AI-assisted debate platform built on argumentation trees">
+  <defs>
+    <linearGradient id="heroBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0e1c"/>
+      <stop offset="0.55" stop-color="#101a38"/>
+      <stop offset="1" stop-color="#17123a"/>
+    </linearGradient>
+    <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0f62fe"/>
+      <stop offset="0.5" stop-color="#8a5cf6"/>
+      <stop offset="1" stop-color="#08bdba"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1240" height="340" fill="url(#heroBg)"/>
+  <rect x="0" y="0" width="1240" height="4" fill="url(#rule)"/>
+
+  <g opacity="0.85">
+    <line x1="1010" y1="120" x2="930" y2="196" stroke="#2f3b6e" stroke-width="2"/>
+    <line x1="1010" y1="120" x2="1092" y2="196" stroke="#2f3b6e" stroke-width="2"/>
+    <line x1="930" y1="196" x2="884" y2="268" stroke="#2f3b6e" stroke-width="2"/>
+    <line x1="930" y1="196" x2="976" y2="268" stroke="#2f3b6e" stroke-width="2"/>
+    <line x1="1092" y1="196" x2="1138" y2="268" stroke="#2f3b6e" stroke-width="2"/>
+    <rect x="982" y="96" width="56" height="48" rx="8" fill="#e8ecf6"/>
+    <circle cx="930" cy="196" r="22" fill="#42be65"/>
+    <circle cx="1092" cy="196" r="22" fill="#fa4d56"/>
+    <circle cx="884" cy="268" r="15" fill="#fa4d56" opacity="0.9"/>
+    <circle cx="976" cy="268" r="15" fill="#42be65" opacity="0.9"/>
+    <circle cx="1138" cy="268" r="15" fill="#a56eff" opacity="0.9"/>
+    <circle cx="1138" cy="268" r="26" fill="none" stroke="#a56eff" stroke-width="2" stroke-dasharray="5 5"/>
+  </g>
+
+  <text x="64" y="104" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" letter-spacing="4" fill="#78a9ff">AI-ASSISTED DEBATE PLATFORM</text>
+  <text x="60" y="186" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="6" fill="#ffffff">ARGORA</text>
+  <rect x="64" y="208" width="88" height="4" rx="2" fill="#0f62fe"/>
+  <text x="64" y="248" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="21" fill="#c6cde0">Online debate rebuilt on argumentation trees, not outrage.</text>
+
+  <g font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12">
+    <rect x="64" y="276" width="104" height="30" rx="15" fill="#111b36" stroke="#2f3b6e"/>
+    <text x="82" y="296" fill="#a8b0c0">NestJS 11</text>
+    <rect x="178" y="276" width="104" height="30" rx="15" fill="#111b36" stroke="#2f3b6e"/>
+    <text x="196" y="296" fill="#a8b0c0">React 19</text>
+    <rect x="292" y="276" width="124" height="30" rx="15" fill="#111b36" stroke="#2f3b6e"/>
+    <text x="310" y="296" fill="#a8b0c0">PostgreSQL</text>
+    <rect x="426" y="276" width="128" height="30" rx="15" fill="#111b36" stroke="#2f3b6e"/>
+    <text x="444" y="296" fill="#a8b0c0">watsonx.ai</text>
+    <rect x="564" y="276" width="132" height="30" rx="15" fill="#111b36" stroke="#2f3b6e"/>
+    <text x="582" y="296" fill="#a8b0c0">embeddings</text>
+    <rect x="706" y="276" width="124" height="30" rx="15" fill="#111b36" stroke="#2f3b6e"/>
+    <text x="724" y="296" fill="#a8b0c0">React Flow</text>
+  </g>
+</svg>

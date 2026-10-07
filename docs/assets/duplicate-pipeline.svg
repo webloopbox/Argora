@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 470" width="1240" height="470" role="img" aria-label="Duplicate detection pipeline from submission through embedding and cosine comparison to the merge or nuance gate">
+  <defs>
+    <linearGradient id="dupBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#121a33"/>
+    </linearGradient>
+    <marker id="dArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4589ff"/>
+    </marker>
+    <marker id="dArrowP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#be95ff"/>
+    </marker>
+    <marker id="dArrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#42be65"/>
+    </marker>
+  </defs>
+
+  <rect width="1240" height="470" fill="url(#dupBg)"/>
+  <rect x="0" y="0" width="1240" height="3" fill="#0f62fe"/>
+
+  <text x="48" y="54" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" letter-spacing="3" fill="#78a9ff">MANDATORY GATE &#183; RUNS BEFORE EVERY INSERT</text>
+  <text x="48" y="92" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#f4f4f4">No argument reaches the graph twice</text>
+
+  <rect x="48" y="134" width="212" height="112" rx="10" fill="#111831" stroke="#263056"/>
+  <text x="68" y="162" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#6f7691">01 &#183; SUBMIT</text>
+  <text x="68" y="190" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#f4f4f4">User sends text</text>
+  <text x="68" y="214" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">POST /ai/arguments/</text>
+  <text x="68" y="232" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">check-duplicate</text>
+
+  <rect x="292" y="134" width="212" height="112" rx="10" fill="#111831" stroke="#263056"/>
+  <text x="312" y="162" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#3ddbd9">02 &#183; EMBED</text>
+  <text x="312" y="190" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#f4f4f4">Text &#8594; vector</text>
+  <text x="312" y="214" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">768 floats, multilingual</text>
+  <text x="312" y="232" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">vendor down &#8594; null &#8594; pass</text>
+
+  <rect x="536" y="134" width="236" height="112" rx="10" fill="#111831" stroke="#263056"/>
+  <text x="556" y="162" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#78a9ff">03 &#183; CANDIDATES</text>
+  <text x="556" y="190" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#f4f4f4">Narrow in SQL</text>
+  <text x="556" y="214" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">same debate &#183; same side</text>
+  <text x="556" y="232" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">parent excluded &#183; vector set</text>
+
+  <rect x="804" y="134" width="212" height="112" rx="10" fill="#111831" stroke="#263056"/>
+  <text x="824" y="162" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#f1c21b">04 &#183; COMPARE</text>
+  <text x="824" y="190" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#f4f4f4">Max cosine</text>
+  <text x="824" y="214" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">best match wins</text>
+  <text x="824" y="232" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">compare &#8805; 0.80</text>
+
+  <rect x="1048" y="134" width="144" height="112" rx="10" fill="#161029" stroke="#5b3a7a"/>
+  <text x="1068" y="162" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#be95ff">05 &#183; GATE</text>
+  <text x="1068" y="192" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#f4f4f4">Human</text>
+  <text x="1068" y="212" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#f4f4f4">decides</text>
+  <text x="1068" y="234" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">never auto</text>
+
+  <line x1="262" y1="190" x2="288" y2="190" stroke="#4589ff" stroke-width="2.5" marker-end="url(#dArrow)"/>
+  <line x1="506" y1="190" x2="532" y2="190" stroke="#4589ff" stroke-width="2.5" marker-end="url(#dArrow)"/>
+  <line x1="774" y1="190" x2="800" y2="190" stroke="#4589ff" stroke-width="2.5" marker-end="url(#dArrow)"/>
+  <line x1="1018" y1="190" x2="1044" y2="190" stroke="#be95ff" stroke-width="2.5" marker-end="url(#dArrowP)"/>
+
+  <path d="M910 246 L910 300 L372 300 L372 332" fill="none" stroke="#42be65" stroke-width="2.5" marker-end="url(#dArrowG)"/>
+  <text x="640" y="292" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#42be65">similarity &lt; 0.80</text>
+
+  <path d="M1120 246 L1120 300 L900 300 L900 332" fill="none" stroke="#be95ff" stroke-width="2.5" marker-end="url(#dArrowP)"/>
+  <text x="1010" y="292" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#be95ff">&#8805; 0.80</text>
+
+  <rect x="212" y="332" width="320" height="100" rx="10" fill="#0f2318" stroke="#2f7a4a"/>
+  <text x="236" y="362" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#42be65">NO MATCH</text>
+  <text x="236" y="390" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#f4f4f4">Argument is persisted</text>
+  <text x="236" y="414" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8d93a5">Embedding is computed after the response.</text>
+
+  <rect x="620" y="332" width="560" height="100" rx="10" fill="#1a1228" stroke="#5b3a7a"/>
+  <text x="644" y="362" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#be95ff">NEAR-DUPLICATE &#8594; DIALOG</text>
+  <text x="644" y="392" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#f4f4f4">Merge: vote on the twin, raising its weight</text>
+  <text x="644" y="416" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#f4f4f4">Nuance: publish, because it adds something new</text>
+</svg>

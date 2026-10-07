@@ -1,165 +1,244 @@
-# Brainstorm
+<p align="center">
+  <img src="docs/assets/hero.svg" alt="Argora - an AI-assisted debate platform built on argumentation trees" width="100%">
+</p>
 
-Interactive platform for online debates with visual argument mapping. Multi-model AI generates and analyses arguments; debates are rendered as interactive Pro/Against graphs.
+<p align="center">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white">
+  <img alt="NestJS" src="https://img.shields.io/badge/NestJS-11-E0234E?style=flat-square&logo=nestjs&logoColor=white">
+  <img alt="React" src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black">
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-16%20%2B%20pgvector-4169E1?style=flat-square&logo=postgresql&logoColor=white">
+  <img alt="IBM watsonx.ai" src="https://img.shields.io/badge/IBM-watsonx.ai-0F62FE?style=flat-square&logo=ibm&logoColor=white">
+  <img alt="Built with Claude Code" src="https://img.shields.io/badge/built%20with-Claude%20Code-D97757?style=flat-square&logo=anthropic&logoColor=white">
+  <img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-6E7681?style=flat-square">
+</p>
 
-**Stack:** pnpm monorepo · NestJS (`apps/api`) · React + Vite (`apps/web`) · PostgreSQL · `@brainstorm/core` shared DTOs/enums.
+<p align="center">
+  <a href="https://youtu.be/Fgw38GYoWFg"><b>Video walkthrough</b></a> &nbsp;·&nbsp;
+  <a href="#how-the-ai-works"><b>How the AI works</b></a> &nbsp;·&nbsp;
+  <a href="#architecture"><b>Architecture</b></a> &nbsp;·&nbsp;
+  <a href="#built-with-an-ai-pair-programmer"><b>AI-assisted engineering</b></a> &nbsp;·&nbsp;
+  <a href="#run-it-locally"><b>Run it locally</b></a>
+</p>
 
 ---
 
-## Prerequisites
+## The problem this solves
 
-- **Node.js** ≥ 22
-- **pnpm** ≥ 10 (`npm i -g pnpm`)
-- **Docker Desktop** (for PostgreSQL)
+A comment thread is a **timeline**. It rewards whoever posts loudest and most often, it forgets what was already said, and after two hundred replies nobody can tell you what the disagreement actually is.
+
+Argora replaces the timeline with a **tree**. Every claim attaches to the claim it answers, so the shape of the discussion carries meaning: a deep branch marks the real axis of conflict, a missing child marks an objection nobody answered. On top of that structure sit three AI capabilities that are only possible *because* the structure exists - semantic de-duplication, region-scoped synthesis, and context-aware generation.
+
+The model proposes. The human decides. Nothing enters the graph unattended.
+
+> Built as the engineering artefact of an MSc thesis, and presented at the **IBM Innovation Project - Country Challenge 2026**. A [video walkthrough](https://youtu.be/Fgw38GYoWFg) shows the running application end to end.
 
 ---
 
-## Quick start
+## See it
+
+<p align="center">
+  <img src="docs/assets/screens/02-argument-graph.png" alt="The argument graph: a thesis with pro and against branches, weights and sentiment badges" width="100%">
+</p>
+
+<table>
+<tr>
+<td width="50%"><img src="docs/assets/screens/04-synthesis-result.png" alt="A lasso-selected region summarised by the chosen model"></td>
+<td width="50%"><img src="docs/assets/screens/05-duplicate-gate.png" alt="Near-duplicate detected: merge into the existing argument or add as a nuance"></td>
+</tr>
+<tr>
+<td><b>Lasso &rarr; synthesis.</b> Circle any region of the graph; the model summarises exactly those nodes.</td>
+<td><b>Duplicate gate.</b> A near-identical claim is caught before it is written, and the author chooses what happens.</td>
+</tr>
+</table>
+
+---
+
+## How the AI works
+
+Three jobs, each with a different failure mode, each handled explicitly.
+
+### 1. Semantic de-duplication
+
+The same claim phrased two ways is the single most common way a debate graph rots. Keyword matching cannot catch it: *"commuting eats hours of my week"* and *"remote work gives people their time back"* share no words and mean the same thing.
+
+Every argument is embedded into a multilingual vector, and closeness is measured as the **cosine of the angle** between vectors - magnitude tracks text length, which is not meaning, so it is divided out.
+
+<p align="center">
+  <img src="docs/assets/cosine-similarity.svg" alt="Cosine similarity between two argument embeddings and the 0.80 duplicate threshold" width="100%">
+</p>
+
+```ts
+// apps/api/src/ai/embedding.service.ts
+cosineSimilarity(a: number[], b: number[]): number {
+  let dot = 0, normA = 0, normB = 0;
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i];
+    normA += a[i] * a[i];
+    normB += b[i] * b[i];
+  }
+  if (normA === 0 || normB === 0) return 0;
+  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+```
+
+The threshold is **0.80**, not the rounder 0.75: a sweep reported in the thesis found 0.80 the lowest cut that keeps recall at 1.00 while sharply cutting false positives. It stays overridable through `DUPLICATE_THRESHOLD`, because the right value depends on the embedding model.
+
+<p align="center">
+  <img src="docs/assets/duplicate-pipeline.svg" alt="Duplicate detection pipeline: submit, embed, narrow candidates, compare, human gate" width="100%">
+</p>
+
+Details that matter more than the formula:
+
+- **The comparison set is narrowed in SQL**, not in memory: same debate, same stored side, embedding present, and the parent excluded - a reply naturally echoes the wording of what it answers, so comparing against it would flag every rebuttal.
+- **A dead embedding vendor must not block a user.** `EmbeddingService.embed` returns `null` on failure and the gate degrades to "no similarity found".
+- **The gate never decides.** Above the threshold the user is shown both texts and picks: *merge* casts a vote that raises the existing argument's weight, *nuance* publishes anyway.
+- **Embeddings are computed after the response.** The write path stays fast; the vector lands asynchronously.
+
+### 2. Lasso context extraction
+
+Summarising a whole debate is a blunt instrument. The interesting question is usually about one corner of the graph.
+
+<p align="center">
+  <img src="docs/assets/lasso-synthesis.svg" alt="A freehand lasso maps canvas coordinates to argument ids, which the API resolves into an enriched subgraph" width="100%">
+</p>
+
+The hit test runs on the client against React Flow canvas coordinates; the API receives **ids only** and intersects them with the debate's own arguments, dropping anything foreign. Each selected node is handed to the model with its author, vote counts, weight, sentiment, parent text and thesis-relative stance - so the parent-child relations survive without nesting the prompt.
+
+Whole-debate summarisation is the same endpoint with every id passed in. One synthesis path, no second implementation to drift.
+
+### 3. Generation, and the stance problem
+
+Generated text arrives as a **proposal in the textarea**, badged as model output only when it really came from a model, and that badge is cleared the moment the argument is sent. Before publishing, a second model call checks the argument against the side the author picked and offers a switch if they disagree - and when every provider fails, the submission proceeds rather than blocking.
+
+The subtle part is what "side" even means:
+
+<p align="center">
+  <img src="docs/assets/effective-stance.svg" alt="Stored side is relative to the parent; thesis-relative stance is derived by flipping polarity on every against link" width="100%">
+</p>
+
+A node's stored `side` is relative to its **immediate parent**. Read it as a thesis label and an objection to an objection gets filed as opposition to the thesis - which would put speakers on the side they spent the whole thread arguing against. One helper walks the parent chain and flips polarity on every *against* link; the synthesis prompt uses it and tells the model the resulting label is binding.
+
+---
+
+## Architecture
+
+<p align="center">
+  <img src="docs/assets/architecture.svg" alt="System architecture: React client, NestJS API, PostgreSQL, pluggable LLM and embedding layers" width="100%">
+</p>
+
+### Decisions worth defending
+
+| Decision | Why it is this way |
+| --- | --- |
+| **Contracts live in `@brainstorm/core`** | Every DTO, enum and limit is declared once and imported by both sides. The argument length bounds are exported constants, so the form check, the server validator and the error copy cannot disagree. |
+| **One `VisibilityGuard` for every debate-scoped route** | It resolves the debate from the route param, from an `:argumentId`, or from the request body, then attaches the row. Services read `req.debate` instead of re-fetching and re-checking - a second copy of an access rule is how two copies drift apart. |
+| **Provider-agnostic AI layer** | One `LlmProvider` interface, one class per vendor. The registry instantiates whatever the environment has credentials for, so an empty registry is a valid boot state and the AI features simply go quiet. |
+| **Embeddings are a single active vendor** | Vectors from different models are not comparable, so this is a process-wide choice rather than a per-request one. Switching means re-embedding the corpus, and there is a script for exactly that. |
+| **Archive, never delete** | Every table carries `archivedOn`. Reads go through one `activeWhere` helper; archiving cascades to child rows inside one transaction. The full history stays queryable for analysis. |
+| **Two partial unique indexes in raw SQL** | "One pending invitation per pair" and "one active vote per pair" are conditional constraints. TypeORM cannot express them, so they live in `db/init.sql` where the database enforces them. |
+| **Per-route rate limits** | Each AI route owns one named throttle bucket and explicitly skips the other three, because a shared guard otherwise applies the strictest limit everywhere. |
+| **Vendor errors never surface raw** | Every provider call funnels through one wrapper that maps throttling to 429 and anything else to 503, with a user-facing message instead of an SDK string. |
+| **The debate's language, not the reader's** | A generated premise is persisted as a node, so it must match the tree it joins. Prompt builders take the debate's language and a missing variant is a compile error, not a silent fallback. |
+
+### Interface, in two languages
+
+Every user-visible string - 286 keys - lives in one dictionary that declares the contract once and implements it for Polish and English independently, so a missing translation fails the type check instead of silently falling back. Pro/against/controversy colours are reserved tokens: green, red, and orange used for nothing else.
+
+---
+
+## Built with an AI pair-programmer
+
+This repository is written with [Claude Code](https://claude.com/claude-code), and the interesting part is not that an agent wrote code - it is what had to exist for that to be safe.
+
+<p align="center">
+  <img src="docs/assets/ai-workflow.svg" alt="CLAUDE.md files as machine-readable constraints, the invariants they protect, and how changes are proven" width="100%">
+</p>
+
+Four `CLAUDE.md` files act as a machine-readable architecture document: the root one owns the domain rules and guardrails, and each workspace adds its own. They are not style notes. They are the invariants that keep an agent - or a new contributor - from quietly re-implementing something that already exists:
+
+- contracts belong to `@brainstorm/core`, never duplicated across apps;
+- one guard owns debate access, and no service re-checks membership inline;
+- the lasso and the whole-debate summary share one endpoint;
+- every user-visible string goes through the dictionary, in both locales;
+- orange means "controversy" and nothing else.
+
+Every rule records **why** it exists, which is what makes it arguable instead of cargo-cult. The one deliberate duplication in the codebase - a sentiment constant mirrored on the client for optimistic UI - is documented as deliberate, in both places.
+
+Behaviour-preserving work is held to a matching standard. The last refactor pass was accepted only after the new code was shown to behave like the code it replaced: property-based equivalence tests against the pre-refactor implementations, and a differential run of the refactored build against a build of `HEAD` comparing rendered layout and feature output side by side.
+
+---
+
+## Evaluation
+
+The AI features are measured, not asserted. `scripts/` holds the evaluation harness used for the thesis chapter:
+
+| Script | What it measures |
+| --- | --- |
+| `eval-duplicate-detection.mjs` | Threshold sweep for cosine similarity against a labelled set, with a lexical (Jaccard) baseline for comparison. |
+| `eval-model-comparison.mjs` | Generation quality and side-classification accuracy across registry models. |
+| `eval-subgraph-synthesis.mjs` | Whether a synthesis covers every selected argument and attributes it to the right author and side. |
+| `eval-latency-cost.mjs` | Median latency and billed tokens per task, per model, with pricing pulled at measurement time. |
+
+Shared helpers live in `scripts/lib/` - the prompt copy used by the evaluations is kept byte-identical to the production prompt, because a reworded prompt makes a published measurement unreproducible.
+
+---
+
+## Run it locally
+
+**Prerequisites:** Node ≥ 22, pnpm ≥ 10, Docker Desktop.
 
 ```bash
-# 1. Install all workspace dependencies
 pnpm install
-
-# 2. Create local env (defaults work for dev)
-cp .env.example .env
-
-# 3. Start PostgreSQL
-docker compose up -d
-
-# 4. Build the shared package (api/web import from its dist/)
+cp .env.example .env            # defaults work for local development
+docker compose up -d            # PostgreSQL 16 + pgvector on :5432
 pnpm --filter @brainstorm/core build
 
-# 5. Run api + web in two terminals
-pnpm dev:api   # http://localhost:3000
-pnpm dev:web   # http://localhost:5173
+pnpm dev:api                    # http://localhost:3000
+pnpm dev:web                    # http://localhost:5173
 ```
 
-That's it. The API auto-creates tables on first boot (`synchronize: true` in dev).
-
-> Touching `packages/core` source? Run `pnpm --filter @brainstorm/core dev` in a third terminal - it watches and recompiles automatically.
-
----
-
-## Project layout
-
-```
-brainstorm/
-├── apps/
-│   ├── api/          # NestJS backend (auth, debates, AI, groups)
-│   ├── web/          # React frontend (Vite, HeroUI, React Flow)
-│   └── e2e/          # Playwright E2E smoke tests
-├── packages/
-│   └── core/         # Shared DTOs, enums, types - single source of truth
-├── docker-compose.yml
-├── .env.example
-├── .env.test         # E2E test environment (DATABASE_URL → brainstorm_test)
-└── planning.md       # Implementation roadmap (10 batches)
-```
-
----
-
-## Useful commands
-
-| Command                                | What it does                            |
-| -------------------------------------- | --------------------------------------- |
-| `pnpm install`                         | Install all workspace deps              |
-| `pnpm dev:api`                         | Start API in watch mode                 |
-| `pnpm dev:web`                         | Start frontend (Vite dev server)        |
-| `pnpm build`                           | Build every package recursively         |
-| `pnpm --filter @brainstorm/core build` | Build only the shared package           |
-| `pnpm --filter @brainstorm/core dev`   | Watch + recompile shared package        |
-| `pnpm test:e2e`                        | Run E2E tests (Playwright, headless)    |
-| `docker compose up -d`                 | Start PostgreSQL                        |
-| `docker compose down -v`               | Stop DB **and wipe data** (clean reset) |
-
----
-
-## E2E tests (Playwright)
-
-Four smoke specs cover: auth (register → logout → login), debate creation with arguments, AI duplicate-detection dialog (mocked), and group invitations.
-
-### One-time setup
+Tables are created on first boot. AI features activate per vendor: add `IBM_CLOUD_API_KEY` + `WATSONX_PROJECT_ID` + `WATSONX_URL`, `TOGETHER_API_KEY`, or `GEMINI_API_KEY` to `.env` and the registry picks up whatever is present. With no keys at all the app still runs - the model picker is simply empty.
 
 ```bash
-# 1. Make sure Postgres is running
-docker compose up -d
-
-# 2. Create the test database (inside the Docker container)
-docker exec -it brainstorm-db psql -U brainstorm -c "CREATE DATABASE brainstorm_test;"
-
-# 3. .env.test already exists at the repo root with sensible defaults - verify
-#    DATABASE_URL points at brainstorm_test:
-#    DATABASE_URL=postgres://brainstorm:brainstorm@localhost:5432/brainstorm_test
-
-# 4. Install Playwright browsers (first time only)
-pnpm --filter ./apps/e2e exec playwright install
+pnpm seed:nuclear:pl            # a 4-level Polish debate
+pnpm seed:agi:en                # a large English debate
+pnpm test:e2e                   # Playwright smoke suite
 ```
 
-> No migration step needed. The API runs with `synchronize: true` outside of production, so TypeORM creates all tables automatically when Playwright starts the API process against the test DB.
+Full setup, test-database preparation and troubleshooting: **[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)**.
 
-### Running
+---
 
-```bash
-# Headless (default)
-pnpm test:e2e
+## Repository layout
 
-# With visible browser
-pnpm --filter ./apps/e2e test:headed
-
-# Interactive Playwright UI
-pnpm --filter ./apps/e2e test:ui
-
-# Open HTML report from the last run
-pnpm --filter ./apps/e2e exec playwright show-report
+```text
+apps/
+  api/          NestJS: auth, debates, arguments, votes, groups, AI
+  web/          React 19 + Vite: graph canvas, panels, i18n dictionary
+  e2e/          Playwright smoke specs
+packages/
+  core/         DTOs, enums, limits - the contract both apps import
+scripts/        Seeding + evaluation harness (plain Node, .mjs)
+  lib/          Shared .env reader, HTTP client, domain mirrors, prompt copy
+db/init.sql     pgvector extension and the partial unique indexes
+docs/assets/    Diagrams and screenshots used by this README
 ```
 
-Playwright auto-starts both `dev:api` and `dev:web` if they are not already running (`reuseExistingServer: true`). `global-setup` truncates all tables (`votes`, `arguments`, `debates`, `groups`, `group_memberships`, `group_invitations`, `users`) before each full run so every execution starts from a clean state.
+Roughly 13k lines of TypeScript across the apps and the shared package, 28 HTTP endpoints, 5 LLM provider implementations plus 2 embedding providers.
 
 ---
 
-## Verify the API works
+## Roadmap
 
-```bash
-# Register
-curl -X POST http://localhost:3000/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"email":"a@b.pl","password":"haslo123","displayName":"Test"}'
-# → {"accessToken":"eyJ..."}
-
-# Use the token
-curl http://localhost:3000/users/me \
-  -H "Authorization: Bearer <accessToken from above>"
-# → {"id":"...","email":"a@b.pl","displayName":"Test","createdAt":"..."}
-```
+- **Richer relation language** beyond pro/against: *condition*, *example with a source*, *refinement of scope*.
+- **Real-time collaboration** - several people shaping one graph live.
+- **Retrieval-backed verification** of the factual claims inside a thesis.
+- **pgvector-native search** - the extension is already enabled and embeddings move from `jsonb` to a `vector` column when the corpus outgrows in-process comparison.
 
 ---
 
-## Inspect the database (DBeaver)
+## About this repository
 
-**New Database Connection → PostgreSQL**, then:
+Argora is the engineering artefact of an MSc thesis in computer science, and the subject of a submission to the IBM Innovation Project - Country Challenge 2026. A [video walkthrough of the running application](https://youtu.be/Fgw38GYoWFg) is available.
 
-| Field    | Value        |
-| -------- | ------------ |
-| Host     | `localhost`  |
-| Port     | `5432`       |
-| Database | `brainstorm` |
-| Username | `brainstorm` |
-| Password | `brainstorm` |
-
-Test Connection → if prompted, **Download** the PostgreSQL JDBC driver → Finish.
-
-Tables live under `brainstorm → Schemas → public → Tables` (currently `users`; more arrive with later batches per `planning.md`).
-
----
-
-## Troubleshooting
-
-- **`ECONNREFUSED 127.0.0.1:5432`** - Docker Desktop isn't running, or `docker compose up -d` wasn't executed.
-- **`Cannot find module '@brainstorm/core'`** - run `pnpm --filter @brainstorm/core build` (api/web consume the compiled `dist/`, not source).
-- **API builds but emits nothing** - stale incremental cache. Delete `apps/api/tsconfig.build.tsbuildinfo` and rebuild.
-- **Database in a weird state** - `docker compose down -v` wipes the volume; next `up -d` gives you a clean DB and the API will recreate tables.
-- **E2E: `DATABASE_URL is not set`** - `.env.test` is missing or doesn't define `DATABASE_URL`. Recreate it from the example in the [E2E section](#e2e-tests-playwright).
-- **E2E: `database "brainstorm_test" does not exist`** - run the `docker exec ... CREATE DATABASE brainstorm_test;` step from the one-time setup.
-- **E2E: port 3000/5173 already in use** - Playwright reuses running servers by default; if they're stale, kill them or run `pnpm --filter ./apps/e2e exec playwright test` with `CI=1` to force a fresh start.
-
----
+Screenshots show the real interface with seeded demo data. Released under the [MIT licence](LICENSE).

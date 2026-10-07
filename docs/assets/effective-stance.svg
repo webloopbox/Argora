@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 430" width="1240" height="430" role="img" aria-label="A node's stored side is relative to its parent; the thesis-relative stance is derived by flipping polarity on every against link">
+  <defs>
+    <linearGradient id="stBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#121a33"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1240" height="430" fill="url(#stBg)"/>
+  <rect x="0" y="0" width="1240" height="3" fill="#0f62fe"/>
+
+  <text x="48" y="54" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" letter-spacing="3" fill="#78a9ff">EFFECTIVE STANCE</text>
+  <text x="48" y="92" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#f4f4f4">A node&#8217;s side is local. Its stance toward the thesis is derived.</text>
+
+  <rect x="430" y="128" width="190" height="44" rx="10" fill="#241a3d" stroke="#8a5cf6"/>
+  <text x="525" y="156" text-anchor="middle" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" fill="#be95ff">THESIS</text>
+
+  <line x1="525" y1="172" x2="525" y2="206" stroke="#fa4d56" stroke-width="2"/>
+  <rect x="430" y="206" width="190" height="44" rx="10" fill="#2a1216" stroke="#fa4d56"/>
+  <text x="525" y="234" text-anchor="middle" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" fill="#ff8389">side = against</text>
+
+  <line x1="525" y1="250" x2="525" y2="284" stroke="#42be65" stroke-width="2"/>
+  <rect x="430" y="284" width="190" height="44" rx="10" fill="#102a1c" stroke="#42be65"/>
+  <text x="525" y="312" text-anchor="middle" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" fill="#6fdc8c">side = pro</text>
+
+  <line x1="525" y1="328" x2="525" y2="362" stroke="#fa4d56" stroke-width="2"/>
+  <rect x="430" y="362" width="190" height="44" rx="10" fill="#2a1216" stroke="#fa4d56"/>
+  <text x="525" y="390" text-anchor="middle" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" fill="#ff8389">side = against</text>
+
+  <g font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13">
+    <text x="648" y="234" fill="#8d93a5">flip &#8594;</text>
+    <text x="710" y="234" fill="#ff8389">AGAINST the thesis</text>
+    <text x="648" y="312" fill="#8d93a5">keep &#8594;</text>
+    <text x="710" y="312" fill="#ff8389">AGAINST the thesis</text>
+    <text x="648" y="390" fill="#8d93a5">flip &#8594;</text>
+    <text x="710" y="390" fill="#6fdc8c">FOR the thesis</text>
+  </g>
+
+  <rect x="48" y="170" width="330" height="106" rx="10" fill="#111831" stroke="#263056"/>
+  <text x="70" y="200" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#6f7691">THE TRAP</text>
+  <text x="70" y="226" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#a8b0c0">Reading a deep node&#8217;s stored side as a</text>
+  <text x="70" y="246" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#a8b0c0">thesis label mislabels half the tree:</text>
+  <text x="70" y="268" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#ff8389">objection to an objection = support</text>
+
+  <rect x="48" y="294" width="330" height="112" rx="10" fill="#111831" stroke="#263056"/>
+  <text x="70" y="324" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#6f7691">THE RULE</text>
+  <text x="70" y="352" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#78a9ff">walk to the root, flip on every</text>
+  <text x="70" y="372" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#78a9ff">&#8220;against&#8221; link, cap the hops</text>
+  <text x="70" y="394" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8d93a5">One helper, shared by the synthesis prompt.</text>
+
+  <rect x="908" y="170" width="284" height="236" rx="10" fill="#0d1428" stroke="#2a3463"/>
+  <text x="930" y="200" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#6f7691">WHY IT MATTERS</text>
+  <text x="930" y="228" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#a8b0c0">The synthesis prompt labels every</text>
+  <text x="930" y="248" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#a8b0c0">entry FOR or AGAINST the thesis and</text>
+  <text x="930" y="268" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#a8b0c0">tells the model to treat that label</text>
+  <text x="930" y="288" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#a8b0c0">as binding.</text>
+  <text x="930" y="326" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#a8b0c0">Get this wrong and a summary puts</text>
+  <text x="930" y="346" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#a8b0c0">speakers on the side they spent the</text>
+  <text x="930" y="366" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#a8b0c0">thread arguing against.</text>
+</svg>

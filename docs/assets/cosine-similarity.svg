@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 560" width="1240" height="560" role="img" aria-label="Cosine similarity between argument embeddings and the 0.80 duplicate threshold">
+  <defs>
+    <linearGradient id="cosBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#121a33"/>
+    </linearGradient>
+    <linearGradient id="thrBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1f2947"/>
+      <stop offset="0.80" stop-color="#1f2947"/>
+      <stop offset="0.80" stop-color="#fa4d56"/>
+      <stop offset="1" stop-color="#ff8389"/>
+    </linearGradient>
+    <marker id="arrPro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#42be65"/>
+    </marker>
+    <marker id="arrBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4589ff"/>
+    </marker>
+    <marker id="arrMuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8d93a5"/>
+    </marker>
+  </defs>
+
+  <rect width="1240" height="560" fill="url(#cosBg)"/>
+  <rect x="0" y="0" width="1240" height="3" fill="#0f62fe"/>
+
+  <text x="48" y="58" font-family="IBM Plex Mono, ui-monospace, SFMono-Regular, monospace" font-size="14" letter-spacing="3" fill="#78a9ff">SEMANTIC DE-DUPLICATION</text>
+  <text x="48" y="96" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#f4f4f4">Cosine similarity over argument embeddings</text>
+
+  <!-- vector space -->
+  <g>
+    <circle cx="160" cy="420" r="250" fill="none" stroke="#263056" stroke-width="1" stroke-dasharray="4 6"/>
+    <line x1="160" y1="420" x2="520" y2="420" stroke="#39406b" stroke-width="1.5"/>
+    <line x1="160" y1="420" x2="160" y2="150" stroke="#39406b" stroke-width="1.5"/>
+    <text x="528" y="425" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#6f7691">dim i</text>
+    <text x="150" y="142" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#6f7691">dim j</text>
+
+    <!-- angle arc between A and B -->
+    <path d="M247.4 382.9 A 95 95 0 0 0 230.4 356.2" fill="none" stroke="#f1c21b" stroke-width="2"/>
+    <text x="258" y="356" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="15" fill="#f1c21b">&#952; = 19&#176;</text>
+
+    <!-- vectors -->
+    <line x1="160" y1="420" x2="390" y2="322" stroke="#42be65" stroke-width="3" marker-end="url(#arrPro)"/>
+    <line x1="160" y1="420" x2="345" y2="252" stroke="#4589ff" stroke-width="3" marker-end="url(#arrBlue)"/>
+    <line x1="160" y1="420" x2="117" y2="174" stroke="#8d93a5" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrMuted)"/>
+
+    <circle cx="160" cy="420" r="5" fill="#f4f4f4"/>
+
+    <text x="400" y="318" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#42be65">A &#183; new argument</text>
+    <text x="356" y="243" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#4589ff">B &#183; stored argument</text>
+    <text x="80" y="160" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#8d93a5">C &#183; unrelated</text>
+
+    <text x="48" y="498" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8d93a5">768-dimensional space, drawn in 2D. Only the angle matters -</text>
+    <text x="48" y="518" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8d93a5">length encodes text length, not meaning, so it is divided out.</text>
+  </g>
+
+  <!-- formula + decision -->
+  <g>
+    <rect x="600" y="140" width="596" height="128" rx="10" fill="#111831" stroke="#263056"/>
+    <text x="628" y="172" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" letter-spacing="2" fill="#6f7691">FORMULA</text>
+    <text x="628" y="212" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="22" fill="#f4f4f4">cos(&#952;) = (A &#183; B) / (&#8741;A&#8741; &#8741;B&#8741;)</text>
+    <text x="628" y="244" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="15" fill="#78a9ff">sim(A, B) = 0.94&#8195;&#8195;sim(A, C) = 0.23</text>
+
+    <!-- threshold bar -->
+    <text x="600" y="298" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" letter-spacing="2" fill="#6f7691">DECISION BAND</text>
+    <rect x="600" y="326" width="596" height="22" rx="11" fill="url(#thrBar)"/>
+    <line x1="1077" y1="316" x2="1077" y2="372" stroke="#f1c21b" stroke-width="2"/>
+    <text x="1012" y="392" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" fill="#f1c21b">0.80 threshold</text>
+    <text x="600" y="368" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#6f7691">0.00</text>
+    <text x="1170" y="368" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#6f7691">1.00</text>
+    <circle cx="737" cy="337" r="6" fill="#8d93a5" stroke="#0b1020" stroke-width="2"/>
+    <text x="722" y="320" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">0.23</text>
+    <circle cx="1160" cy="337" r="6" fill="#42be65" stroke="#0b1020" stroke-width="2"/>
+    <text x="1140" y="320" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#42be65">0.94</text>
+
+    <!-- outcomes -->
+    <rect x="600" y="412" width="288" height="112" rx="10" fill="#111831" stroke="#263056"/>
+    <text x="624" y="442" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" letter-spacing="2" fill="#8d93a5">BELOW THRESHOLD</text>
+    <text x="624" y="470" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#f4f4f4">Saved as a new node</text>
+    <text x="624" y="496" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8d93a5">The graph gains a genuinely</text>
+    <text x="624" y="514" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8d93a5">new claim.</text>
+
+    <rect x="908" y="412" width="288" height="112" rx="10" fill="#1a1228" stroke="#5b3a7a"/>
+    <text x="932" y="442" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" letter-spacing="2" fill="#be95ff">AT OR ABOVE</text>
+    <text x="932" y="470" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#f4f4f4">User picks: merge or nuance</text>
+    <text x="932" y="496" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8d93a5">Merge casts a vote on the twin;</text>
+    <text x="932" y="514" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8d93a5">nuance publishes anyway.</text>
+  </g>
+</svg>

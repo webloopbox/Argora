@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 470" width="1240" height="470" role="img" aria-label="AI-assisted engineering workflow: CLAUDE.md files as machine-readable constraints, enforced guardrails and a verification loop">
+  <defs>
+    <linearGradient id="aiBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#121a33"/>
+    </linearGradient>
+    <marker id="wArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4589ff"/>
+    </marker>
+    <marker id="wArrowBack" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#f1c21b"/>
+    </marker>
+  </defs>
+
+  <rect width="1240" height="470" fill="url(#aiBg)"/>
+  <rect x="0" y="0" width="1240" height="3" fill="#0f62fe"/>
+
+  <text x="48" y="54" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" letter-spacing="3" fill="#78a9ff">AI-ASSISTED ENGINEERING</text>
+  <text x="48" y="92" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#f4f4f4">The architecture is written down, so the agent cannot drift</text>
+
+  <rect x="48" y="132" width="350" height="268" rx="12" fill="#111831" stroke="#2f3b6e"/>
+  <rect x="48" y="132" width="350" height="4" rx="2" fill="#0f62fe"/>
+  <text x="72" y="170" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#78a9ff">01 &#183; THE CONSTITUTION</text>
+  <text x="72" y="200" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#f4f4f4">4 &#215; CLAUDE.md, 165 lines</text>
+  <text x="72" y="228" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">/CLAUDE.md&#8195;&#8195;&#8195;domain + guardrails</text>
+  <text x="72" y="252" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">apps/api/&#8195;&#8195;&#8195;&#8195;strategy, guards, SQL</text>
+  <text x="72" y="276" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">apps/web/&#8195;&#8195;&#8195;&#8195;i18n, visual coding</text>
+  <text x="72" y="300" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">packages/core/&#8195;contract ownership</text>
+  <rect x="72" y="320" width="302" height="62" rx="8" fill="#0d1428" stroke="#2a3463"/>
+  <text x="88" y="344" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">Every rule states the reason it exists, so</text>
+  <text x="88" y="364" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">a change can be argued with, not guessed at.</text>
+
+  <rect x="446" y="132" width="350" height="268" rx="12" fill="#111831" stroke="#263056"/>
+  <rect x="446" y="132" width="350" height="4" rx="2" fill="#be95ff"/>
+  <text x="470" y="170" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#be95ff">02 &#183; INVARIANTS IT PROTECTS</text>
+  <text x="470" y="202" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">&#8226; one DTO package, zero duplication</text>
+  <text x="470" y="228" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">&#8226; one guard owns debate access</text>
+  <text x="470" y="254" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">&#8226; one synthesis endpoint, no second path</text>
+  <text x="470" y="280" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">&#8226; every string in the pl/en dictionary</text>
+  <text x="470" y="306" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">&#8226; prompts implement both languages</text>
+  <text x="470" y="332" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">&#8226; green / red / orange are reserved</text>
+  <text x="470" y="358" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">&#8226; archive, never DELETE</text>
+  <text x="470" y="384" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#6f7691">documented duplication is marked as deliberate</text>
+
+  <rect x="844" y="132" width="348" height="268" rx="12" fill="#111831" stroke="#263056"/>
+  <rect x="844" y="132" width="348" height="4" rx="2" fill="#f1c21b"/>
+  <text x="868" y="170" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#f1c21b">03 &#183; HOW CHANGES ARE PROVEN</text>
+  <text x="868" y="202" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">tsc + eslint, zero findings</text>
+  <text x="868" y="228" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">Playwright smoke specs</text>
+  <text x="868" y="254" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">equivalence tests vs. the old code</text>
+  <text x="868" y="280" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">differential run: refactor vs. HEAD build</text>
+  <text x="868" y="306" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">evaluation scripts for every AI feature</text>
+  <rect x="868" y="326" width="300" height="56" rx="8" fill="#0d1428" stroke="#2a3463"/>
+  <text x="884" y="350" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">A refactor ships only when the new code</text>
+  <text x="884" y="370" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">is shown to behave like the code it replaced.</text>
+
+  <line x1="400" y1="266" x2="442" y2="266" stroke="#4589ff" stroke-width="2.5" marker-end="url(#wArrow)"/>
+  <line x1="798" y1="266" x2="840" y2="266" stroke="#4589ff" stroke-width="2.5" marker-end="url(#wArrow)"/>
+  <path d="M1018 400 L1018 432 L223 432 L223 404" fill="none" stroke="#f1c21b" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#wArrowBack)"/>
+  <text x="520" y="426" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#f1c21b">what the work teaches goes back into the rules</text>
+</svg>

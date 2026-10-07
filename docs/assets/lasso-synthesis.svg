@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 500" width="1240" height="500" role="img" aria-label="Lasso selection maps canvas coordinates to argument ids, which the API resolves into an enriched subgraph for synthesis">
+  <defs>
+    <linearGradient id="lasBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#121a33"/>
+    </linearGradient>
+    <marker id="lArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4589ff"/>
+    </marker>
+  </defs>
+
+  <rect width="1240" height="500" fill="url(#lasBg)"/>
+  <rect x="0" y="0" width="1240" height="3" fill="#0f62fe"/>
+
+  <text x="48" y="54" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" letter-spacing="3" fill="#78a9ff">LASSO CONTEXT EXTRACTION</text>
+  <text x="48" y="92" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#f4f4f4">Draw a region, summarise exactly that region</text>
+
+  <rect x="48" y="128" width="430" height="330" rx="12" fill="#0d1428" stroke="#263056"/>
+  <text x="70" y="156" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#6f7691">CLIENT &#183; REACT FLOW CANVAS</text>
+
+  <g fill="none" stroke-width="1.8" stroke-linecap="round">
+    <path d="M263 196 V210 Q263 216 257 216 H161 Q155 216 155 222 V236" stroke="#42be65"/>
+    <path d="M263 196 V210 Q263 216 269 216 H365 Q371 216 371 222 V236" stroke="#fa4d56"/>
+    <path d="M155 264 V278 Q155 284 149 284 H116 Q110 284 110 290 V304" stroke="#fa4d56"/>
+    <path d="M155 264 V278 Q155 284 161 284 H208 Q214 284 214 290 V304" stroke="#42be65"/>
+    <path d="M371 264 V304" stroke="#42be65"/>
+    <path d="M214 332 V372" stroke="#fa4d56"/>
+  </g>
+
+  <g>
+    <rect x="215" y="168" width="96" height="28" rx="7" fill="#241a3d" stroke="#8a5cf6"/>
+    <text x="263" y="186" text-anchor="middle" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" fill="#be95ff">thesis</text>
+
+    <rect x="107" y="236" width="96" height="28" rx="7" fill="#102a1c" stroke="#42be65"/>
+    <rect x="323" y="236" width="96" height="28" rx="7" fill="#2a1216" stroke="#fa4d56"/>
+    <rect x="62" y="304" width="96" height="28" rx="7" fill="#2a1216" stroke="#fa4d56"/>
+    <rect x="166" y="304" width="96" height="28" rx="7" fill="#102a1c" stroke="#42be65"/>
+    <rect x="323" y="304" width="96" height="28" rx="7" fill="#102a1c" stroke="#42be65"/>
+    <rect x="166" y="372" width="96" height="28" rx="7" fill="#2a1216" stroke="#fa4d56"/>
+  </g>
+
+  <path d="M68 232 C 38 300, 52 398, 148 414 C 246 428, 296 378, 288 300 C 282 240, 146 204, 68 232 Z" fill="rgba(138,92,246,0.12)" stroke="#a56eff" stroke-width="2.5" stroke-dasharray="7 5"/>
+
+  <text x="70" y="440" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#be95ff">freehand polygon &#183; point-in-polygon on node centres</text>
+
+  <line x1="492" y1="290" x2="534" y2="290" stroke="#4589ff" stroke-width="2.5" marker-end="url(#lArrow)"/>
+
+  <rect x="546" y="128" width="300" height="330" rx="12" fill="#111831" stroke="#263056"/>
+  <rect x="546" y="128" width="300" height="4" rx="2" fill="#0f62fe"/>
+  <text x="568" y="166" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#78a9ff">API &#183; RESOLVE SUBGRAPH</text>
+  <text x="568" y="196" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#f4f4f4">POST /ai/synthesize</text>
+  <text x="568" y="216" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#8d93a5">{ debateId, argumentIds[], modelId }</text>
+  <line x1="568" y1="232" x2="824" y2="232" stroke="#263056"/>
+  <text x="568" y="258" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">Intersect with the debate&#8217;s own</text>
+  <text x="568" y="276" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">arguments, drop anything foreign.</text>
+  <text x="568" y="306" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">Each entry carries author, votes,</text>
+  <text x="568" y="324" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">weight, sentiment, parent text and</text>
+  <text x="568" y="342" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">thesis-relative stance.</text>
+  <rect x="568" y="360" width="256" height="76" rx="8" fill="#0d1428" stroke="#2a3463"/>
+  <text x="584" y="384" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="1" fill="#6f7691">ONE PATH ONLY</text>
+  <text x="584" y="406" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#a8b0c0">Whole-debate summary reuses</text>
+  <text x="584" y="424" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#a8b0c0">this endpoint with every id.</text>
+
+  <line x1="860" y1="290" x2="902" y2="290" stroke="#4589ff" stroke-width="2.5" marker-end="url(#lArrow)"/>
+
+  <rect x="914" y="128" width="278" height="330" rx="12" fill="#111831" stroke="#263056"/>
+  <rect x="914" y="128" width="278" height="4" rx="2" fill="#be95ff"/>
+  <text x="936" y="166" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#be95ff">MODEL &#183; SELECTED BY USER</text>
+  <text x="936" y="198" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#f4f4f4">Markdown synthesis in the</text>
+  <text x="936" y="218" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#f4f4f4">debate&#8217;s own language</text>
+  <rect x="936" y="238" width="234" height="200" rx="8" fill="#0d1428" stroke="#2a3463"/>
+  <text x="952" y="264" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#78a9ff">### What is at stake</text>
+  <rect x="952" y="276" width="190" height="6" rx="3" fill="#2a3463"/>
+  <rect x="952" y="290" width="160" height="6" rx="3" fill="#2a3463"/>
+  <text x="952" y="322" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#42be65">### Arguments for</text>
+  <rect x="952" y="334" width="202" height="6" rx="3" fill="#2a3463"/>
+  <rect x="952" y="348" width="140" height="6" rx="3" fill="#2a3463"/>
+  <text x="952" y="380" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#fa4d56">### Arguments against</text>
+  <rect x="952" y="392" width="186" height="6" rx="3" fill="#2a3463"/>
+  <text x="952" y="424" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#f1c21b">### Lines of conflict</text>
+</svg>
