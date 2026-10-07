@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import type { LoginDto, RegisterDto, UserDto } from "@brainstorm/core";
+import type { LoginDto, RegisterDto, UserDto } from "@argora/core";
 import {
   fetchCurrentUser,
   loginRequest,

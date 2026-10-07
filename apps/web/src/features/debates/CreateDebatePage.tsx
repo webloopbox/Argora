@@ -15,8 +15,8 @@ import {
 } from "@heroui/react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Lock, Sparkles, Users } from "lucide-react";
-import type { CreateDebateDto, GroupDetailDto } from "@brainstorm/core";
-import { DebateLanguage, DebateVisibility } from "@brainstorm/core";
+import type { CreateDebateDto, GroupDetailDto } from "@argora/core";
+import { DebateLanguage, DebateVisibility } from "@argora/core";
 import { createDebate } from "../../api/debates.api";
 import { fetchGroupDetail } from "../../api/groups.api";
 import { useLanguage } from "../../app-config/language-context";

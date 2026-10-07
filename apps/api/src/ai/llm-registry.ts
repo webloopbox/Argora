@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { LlmProviderDto } from '@brainstorm/core';
+import type { LlmProviderDto } from '@argora/core';
 import type { LlmProvider } from './llm-provider.interface';
 import { WatsonxProvider } from './providers/watsonx.provider';
 import { GeminiProvider } from './providers/gemini.provider';

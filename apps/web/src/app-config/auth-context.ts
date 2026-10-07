@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { LoginDto, RegisterDto, UserDto } from "@brainstorm/core";
+import type { LoginDto, RegisterDto, UserDto } from "@argora/core";
 
 export type AuthStatus = "idle" | "loading" | "ready";
 

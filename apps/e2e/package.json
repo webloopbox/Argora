@@ -1,5 +1,5 @@
 {
-  "name": "@brainstorm/e2e",
+  "name": "@argora/e2e",
   "private": true,
   "scripts": {
     "test": "playwright test",

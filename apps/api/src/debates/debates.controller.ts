@@ -14,7 +14,7 @@ import {
   DebateDetailDto,
   DebateListQueryDto,
   DebatePreviewDto,
-} from '@brainstorm/core';
+} from '@argora/core';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from '../auth/optional-jwt-auth.guard';

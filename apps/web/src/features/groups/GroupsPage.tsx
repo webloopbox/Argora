@@ -8,7 +8,7 @@ import {
   Plus,
   Users,
 } from "lucide-react";
-import type { GroupDetailDto, GroupSummaryDto } from "@brainstorm/core";
+import type { GroupDetailDto, GroupSummaryDto } from "@argora/core";
 import { listMyGroups } from "../../api/groups.api";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { ui } from "../../texts/ui";

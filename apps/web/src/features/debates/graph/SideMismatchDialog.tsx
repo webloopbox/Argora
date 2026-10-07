@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertTriangle, ThumbsDown, ThumbsUp, X } from "lucide-react";
 import { Button } from "@heroui/react";
-import { ArgumentSide } from "@brainstorm/core";
+import { ArgumentSide } from "@argora/core";
 import { ui } from "../../../texts/ui";
 
 interface SideMismatchDialogProps {

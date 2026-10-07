@@ -1,4 +1,4 @@
-import type { InvitationDto } from "@brainstorm/core";
+import type { InvitationDto } from "@argora/core";
 import { httpClient } from "./http-client";
 
 export async function listMyInvitations(): Promise<InvitationDto[]> {

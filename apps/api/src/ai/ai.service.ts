@@ -10,8 +10,8 @@ import type {
   GeneratedArgumentDto,
   LlmProviderDto,
   SynthesisResultDto,
-} from '@brainstorm/core';
-import { ArgumentSide } from '@brainstorm/core';
+} from '@argora/core';
+import { ArgumentSide } from '@argora/core';
 import { Argument } from '../arguments/argument.entity';
 import { ArgumentsService } from '../arguments/arguments.service';
 import { effectiveStance } from '../arguments/effective-stance';

@@ -1,4 +1,4 @@
-# Brainstorm — demo video (Remotion)
+# Argora — demo video (Remotion)
 
 A competition-grade promo/demo built with [Remotion](https://remotion.dev):
 your **real screen recordings** composited with **animated IBM-Carbon

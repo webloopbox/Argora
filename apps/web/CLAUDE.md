@@ -1,6 +1,6 @@
-# apps/web - Brainstorm frontend
+# apps/web - Argora frontend
 
-React + TypeScript application. Consumes the backend through DTOs imported from `@brainstorm/core`.
+React + TypeScript application. Consumes the backend through DTOs imported from `@argora/core`.
 
 ## Landing surface
 
@@ -11,7 +11,7 @@ React + TypeScript application. Consumes the backend through DTOs imported from 
 
 ## Rules specific to the frontend
 
-- **Contracts come from `@brainstorm/core`.** Never re-declare a DTO, enum, or interface locally. If a shape is missing, add it in `packages/core` first and consume it here. This covers the numbers a contract enforces too: the argument length bounds are exported as `ARGUMENT_MIN` / `ARGUMENT_MAX` next to `CreateArgumentDto`, and both the form's client-side check and the validation copy in `ui.ts` interpolate them rather than restating a literal.
+- **Contracts come from `@argora/core`.** Never re-declare a DTO, enum, or interface locally. If a shape is missing, add it in `packages/core` first and consume it here. This covers the numbers a contract enforces too: the argument length bounds are exported as `ARGUMENT_MIN` / `ARGUMENT_MAX` next to `CreateArgumentDto`, and both the form's client-side check and the validation copy in `ui.ts` interpolate them rather than restating a literal.
 - **Visual coding is load-bearing.** Pro arguments are green, Against arguments are red. Do not repurpose these colors for unrelated UI states (errors, success toasts, etc.) - pick a different palette for those.
 - **Graph rendering** is the core UX and is built on React Flow (`@xyflow/react`). When touching the argument graph, preserve accessibility (keyboard navigation, focus outlines) and layout determinism (same tree should render the same way across reloads). Keep all React Flow configuration (node types, edge types, layout logic) in a single wrapper module - do not scatter it across feature components.
 - **Responsiveness is required, not optional.** The layout may simplify on smaller screens (e.g. collapsed panels, stacked views instead of side-by-side), but every user operation must remain reachable - nothing may be hidden or disabled based on screen size alone. The argument graph is the hardest part: on small screens consider a pan/zoom-only view with a slide-in panel for actions, rather than trying to fit the full desktop layout.

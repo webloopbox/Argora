@@ -1,5 +1,5 @@
 {
-  "name": "@brainstorm/api",
+  "name": "@argora/api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.97.1",
-    "@brainstorm/core": "workspace:*",
+    "@argora/core": "workspace:*",
     "@google/genai": "^2.6.0",
     "@ibm-cloud/watsonx-ai": "^1.7.15",
     "@nestjs/common": "^11.0.1",

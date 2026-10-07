@@ -15,7 +15,7 @@ import {
   GroupDetailDto,
   GroupSummaryDto,
   InvitationDto,
-} from '@brainstorm/core';
+} from '@argora/core';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { User } from '../users/user.entity';

@@ -42,7 +42,7 @@
   <text x="440" y="404" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#6f7691">10/min generate &#183; 20 dup &#183; 5 synthesis</text>
 
   <rect x="400" y="470" width="330" height="88" rx="12" fill="#161029" stroke="#5b3a7a"/>
-  <text x="424" y="500" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" letter-spacing="2" fill="#be95ff">@brainstorm/core</text>
+  <text x="424" y="500" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" letter-spacing="2" fill="#be95ff">@argora/core</text>
   <text x="424" y="526" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#f4f4f4">DTOs &#183; enums &#183; limits &#183; validation</text>
   <text x="424" y="547" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">imported by both sides, never duplicated</text>
 

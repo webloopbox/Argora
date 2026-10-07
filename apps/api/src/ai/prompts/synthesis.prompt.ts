@@ -1,4 +1,4 @@
-import { DebateLanguage } from '@brainstorm/core';
+import { DebateLanguage } from '@argora/core';
 import type {
   SynthesizeArgInput,
   SynthesizeInput,

@@ -1,4 +1,4 @@
-import type { ArgumentDto, CreateArgumentDto } from "@brainstorm/core";
+import type { ArgumentDto, CreateArgumentDto } from "@argora/core";
 import { httpClient } from "./http-client";
 
 export async function listArgumentsForDebate(

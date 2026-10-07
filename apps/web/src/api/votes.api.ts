@@ -1,4 +1,4 @@
-import type { ArgumentDto, VoteValue } from "@brainstorm/core";
+import type { ArgumentDto, VoteValue } from "@argora/core";
 import { httpClient } from "./http-client";
 
 // Vote controls render their own inline error (VoteControls.tsx) so the

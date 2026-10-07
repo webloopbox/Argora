@@ -7,7 +7,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import type { ArgumentDto, CastVoteDto } from '@brainstorm/core';
+import type { ArgumentDto, CastVoteDto } from '@argora/core';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { VisibilityGuard } from '../common/guards/visibility.guard';

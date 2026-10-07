@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { ArgumentDto } from "@brainstorm/core";
+import type { ArgumentDto } from "@argora/core";
 
 // Bridges interaction-time concerns (auth state, optimistic updates) from
 // DebatePage into the React Flow node components without smuggling

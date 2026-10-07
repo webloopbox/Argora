@@ -1,4 +1,4 @@
-import { DebateLanguage, DebateVisibility } from '@brainstorm/core';
+import { DebateLanguage, DebateVisibility } from '@argora/core';
 import {
   Check,
   Column,

@@ -4,7 +4,7 @@
 // Switch locale at runtime with setGlobalLanguage() and re-render React tree.
 // ---------------------------------------------------------------------------
 
-import { ARGUMENT_MAX, ARGUMENT_MIN } from "@brainstorm/core";
+import { ARGUMENT_MAX, ARGUMENT_MIN } from "@argora/core";
 
 export type Lang = "pl" | "en";
 

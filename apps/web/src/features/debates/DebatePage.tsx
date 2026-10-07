@@ -17,8 +17,8 @@ import {
   Trash2,
   Loader2,
 } from "lucide-react";
-import type { ArgumentDto, DebateDetailDto } from "@brainstorm/core";
-import { ArgumentSide, DebateVisibility } from "@brainstorm/core";
+import type { ArgumentDto, DebateDetailDto } from "@argora/core";
+import { ArgumentSide, DebateVisibility } from "@argora/core";
 import { toast } from "sonner";
 import { fetchDebateDetail, deleteDebate } from "../../api/debates.api";
 import { useAuth } from "../../app-config/auth-context";

@@ -1,7 +1,7 @@
 import { Button } from "@heroui/react";
 import { ArrowRight, Eye } from "lucide-react";
 import { motion } from "framer-motion";
-import type { DebatePreviewDto } from "@brainstorm/core";
+import type { DebatePreviewDto } from "@argora/core";
 import { ui } from "../../texts/ui";
 import { useLanguage } from "../../app-config/language-context";
 import { useAuth } from "../../app-config/auth-context";

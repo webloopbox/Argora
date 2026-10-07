@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Handle, Position } from "@xyflow/react";
 import type { NodeProps } from "@xyflow/react";
 import { Bot, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
-import { ArgumentSide } from "@brainstorm/core";
+import { ArgumentSide } from "@argora/core";
 import { deleteArgument } from "../../../api/arguments.api";
 import type { ArgumentNodeData } from "./useDebateGraph";
 import { useDebateGraphContext } from "./debate-graph-context";

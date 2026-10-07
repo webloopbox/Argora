@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Bot, Sparkles, X } from "lucide-react";
 import { Button } from "@heroui/react";
 import ReactMarkdown from "react-markdown";
-import type { LlmProviderDto } from "@brainstorm/core";
+import type { LlmProviderDto } from "@argora/core";
 import { listProviders, synthesize } from "../../../api/ai.api";
 import { apiErrorMessage } from "../../../api/http-client";
 import { useTypewriter } from "../../../hooks/useTypewriter";

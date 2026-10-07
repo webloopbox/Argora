@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import type { LlmProviderDto } from "@brainstorm/core";
+import type { LlmProviderDto } from "@argora/core";
 import { ui } from "../../../texts/ui";
 
 export interface ModelPickerProps {

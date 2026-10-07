@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Search, User as UserIcon, X } from "lucide-react";
-import type { UserSearchResultDto } from "@brainstorm/core";
+import type { UserSearchResultDto } from "@argora/core";
 import { searchUsers } from "../../api/users.api";
 import { ui } from "../../texts/ui";
 

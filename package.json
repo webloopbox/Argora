@@ -1,5 +1,5 @@
 {
-  "name": "brainstorm",
+  "name": "argora",
   "private": true,
   "scripts": {
     "dev:web": "pnpm --filter \"./apps/web\" dev",

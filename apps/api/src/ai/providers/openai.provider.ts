@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import type { LlmProviderDto } from '@brainstorm/core';
+import type { LlmProviderDto } from '@argora/core';
 import type {
   ClassifySideInput,
   GenerateInput,

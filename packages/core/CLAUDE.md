@@ -1,4 +1,4 @@
-# packages/core - `@brainstorm/core`
+# packages/core - `@argora/core`
 
 Shared library. Single source of truth for every API contract: DTOs, enums, and domain interfaces.
 
@@ -12,7 +12,7 @@ Shared library. Single source of truth for every API contract: DTOs, enums, and 
   - `src/dto/` - DTOs (request/response payloads with validation).
   - `src/enums/` - statuses, kinds, discriminators.
   - `src/types/` - pure domain interfaces (no decorators). Currently empty: the shapes the apps share are all response DTOs, so they live in `src/dto/` next to the request payloads they answer.
-- **Every public symbol must be re-exported** from the package entry point (`src/index.ts` re-exports `./dto`, `./enums` and `./types`), so consumers import from `@brainstorm/core` rather than from deep paths.
+- **Every public symbol must be re-exported** from the package entry point (`src/index.ts` re-exports `./dto`, `./enums` and `./types`), so consumers import from `@argora/core` rather than from deep paths.
 - **Both apps consume the built output, not the sources.** There is no path alias to `packages/core/src`, so a change here is invisible to `apps/api` and `apps/web` until the package is rebuilt. A type error that makes no sense against the code you are looking at is usually a stale `dist`.
 - **Breaking changes hurt both apps at once.** When renaming or restructuring a shared type, update `apps/api` and `apps/web` in the same change.
 

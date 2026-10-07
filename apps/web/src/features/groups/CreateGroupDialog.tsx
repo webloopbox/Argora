@@ -3,7 +3,7 @@ import type { FormEvent } from "react";
 import { Button, FieldError, Input, Label, TextField } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Users, X } from "lucide-react";
-import type { GroupDetailDto } from "@brainstorm/core";
+import type { GroupDetailDto } from "@argora/core";
 import { createGroup } from "../../api/groups.api";
 import { ui } from "../../texts/ui";
 

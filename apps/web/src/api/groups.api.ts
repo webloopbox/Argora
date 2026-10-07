@@ -4,7 +4,7 @@ import type {
   GroupSummaryDto,
   InvitationDto,
   CreateInvitationDto,
-} from "@brainstorm/core";
+} from "@argora/core";
 import { httpClient } from "./http-client";
 
 export async function listMyGroups(): Promise<GroupSummaryDto[]> {

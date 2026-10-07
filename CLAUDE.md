@@ -1,15 +1,15 @@
-# Brainstorm
+# Argora
 
 ## Project Overview
 
-**Brainstorm** is an interactive platform for conducting online debates with visual argument mapping. It uses AI to analyze, generate content, and visualize discussion flow.
+**Argora** is an interactive platform for conducting online debates with visual argument mapping. It uses AI to analyze, generate content, and visualize discussion flow.
 
 ## Technical Stack
 
 - **Workspace:** `pnpm` monorepo.
 - **Backend:** NestJS (`apps/api`).
 - **Frontend:** React + TypeScript (`apps/web`).
-- **Shared library:** `@brainstorm/core` (`packages/core`) - single source of truth for DTOs, Enums, and Interfaces.
+- **Shared library:** `@argora/core` (`packages/core`) - single source of truth for DTOs, Enums, and Interfaces.
 - **Database:** PostgreSQL for archiving and analysis.
 
 ## Core Logic & Features
@@ -33,7 +33,7 @@
 ## Development Guardrails
 
 - **Architecture:**
-  - Every API contract MUST be defined in `@brainstorm/core`. Never duplicate a DTO, enum, or interface between `apps/api` and `apps/web`.
+  - Every API contract MUST be defined in `@argora/core`. Never duplicate a DTO, enum, or interface between `apps/api` and `apps/web`.
   - The AI service must use a provider-agnostic Strategy Pattern to support multiple LLM vendors. Do not hard-code a single vendor in domain logic.
 - **Data flow:** all data from the backend must be archived in PostgreSQL for later analysis.
 - **UI/UX:** maintain strict visual coding - green for support, red for opposition. This mapping is load-bearing and must not be reused for other semantics. **Orange is reserved exclusively for the "high controversy / balanced votes" sentiment badge state** - do not reuse it for any other UI meaning.

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Clock, Mail, User as UserIcon, X } from "lucide-react";
-import type { InvitationDto } from "@brainstorm/core";
+import type { InvitationDto } from "@argora/core";
 import {
   acceptInvitation,
   declineInvitation,

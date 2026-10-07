@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import type { UserSearchResultDto } from '@brainstorm/core';
+import type { UserSearchResultDto } from '@argora/core';
 import * as bcrypt from 'bcrypt';
 import { IsNull, Repository } from 'typeorm';
 import { User } from './user.entity';

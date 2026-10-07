@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Flame, MessageSquareQuote, ThumbsUp, Users } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import type { StatsDto } from "@brainstorm/core";
+import type { StatsDto } from "@argora/core";
 import { fetchStats } from "../../api/stats.api";
 import { ui } from "../../texts/ui";
 

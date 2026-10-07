@@ -29,7 +29,7 @@ docker compose up -d
 
 # api and web import the compiled dist/ of the shared package,
 # so it has to be built before they start
-pnpm --filter @brainstorm/core build
+pnpm --filter @argora/core build
 
 # two terminals
 pnpm dev:api   # http://localhost:3000
@@ -39,7 +39,7 @@ pnpm dev:web   # http://localhost:5173
 The API runs with `synchronize: true` outside production, so TypeORM creates
 every table on first boot. No migration step.
 
-> Editing `packages/core`? Run `pnpm --filter @brainstorm/core dev` in a third
+> Editing `packages/core`? Run `pnpm --filter @argora/core dev` in a third
 > terminal - it watches and recompiles, otherwise the apps keep consuming the
 > previous build.
 
@@ -82,8 +82,8 @@ node scripts/reembed-existing.mjs
 | `pnpm dev:api` | API in watch mode |
 | `pnpm dev:web` | Frontend (Vite dev server) |
 | `pnpm build` | Build every workspace package |
-| `pnpm --filter @brainstorm/core build` | Build only the shared contract package |
-| `pnpm --filter @brainstorm/core dev` | Watch and recompile the shared package |
+| `pnpm --filter @argora/core build` | Build only the shared contract package |
+| `pnpm --filter @argora/core dev` | Watch and recompile the shared package |
 | `pnpm --filter ./apps/web lint` | ESLint over the frontend |
 | `pnpm --filter ./apps/api lint` | ESLint + Prettier over the backend (auto-fixes) |
 | `pnpm test:e2e` | Playwright suite, headless |
@@ -215,7 +215,7 @@ extension is enabled by `db/init.sql` ahead of the migration to a native
 | Symptom | Cause and fix |
 | --- | --- |
 | `ECONNREFUSED 127.0.0.1:5432` | Docker Desktop is not running, or `docker compose up -d` was never executed. |
-| `Cannot find module '@brainstorm/core'` | Build the shared package: `pnpm --filter @brainstorm/core build`. |
+| `Cannot find module '@argora/core'` | Build the shared package: `pnpm --filter @argora/core build`. |
 | API builds but emits nothing | Stale incremental cache: delete `apps/api/tsconfig.build.tsbuildinfo` and rebuild. |
 | Model picker is empty | No vendor credentials in `.env`. The registry skips vendors whose keys are absent. |
 | Duplicate detection never fires | No embedding provider configured, or existing rows have no vectors yet - run `scripts/reembed-existing.mjs`. |

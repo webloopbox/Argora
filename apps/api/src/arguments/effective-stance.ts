@@ -1,4 +1,4 @@
-import { ArgumentSide } from '@brainstorm/core';
+import { ArgumentSide } from '@argora/core';
 
 /**
  * A node's stored `side` is relative to its immediate parent (Kialo-style

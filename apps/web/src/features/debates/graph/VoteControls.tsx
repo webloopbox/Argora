@@ -5,7 +5,7 @@ import type {
   ArgumentDto,
   ArgumentSentiment,
   VoteValue,
-} from "@brainstorm/core";
+} from "@argora/core";
 import { castVote, retractVote } from "../../../api/votes.api";
 import { useDebateGraphContext } from "./debate-graph-context";
 import { ui } from "../../../texts/ui";

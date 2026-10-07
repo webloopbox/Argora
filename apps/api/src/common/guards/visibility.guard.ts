@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DebateVisibility } from '@brainstorm/core';
+import { DebateVisibility } from '@argora/core';
 import { Request } from 'express';
 import { Repository } from 'typeorm';
 import { Argument } from '../../arguments/argument.entity';

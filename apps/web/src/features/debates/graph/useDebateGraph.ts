@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Edge, Node } from "@xyflow/react";
-import type { ArgumentDto, DebateDetailDto } from "@brainstorm/core";
-import { ArgumentSide } from "@brainstorm/core";
+import type { ArgumentDto, DebateDetailDto } from "@argora/core";
+import { ArgumentSide } from "@argora/core";
 import { listArgumentsForDebate } from "../../../api/arguments.api";
 import { THESIS_NODE_ID } from "./graph-metrics";
 

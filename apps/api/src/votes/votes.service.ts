@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ArgumentDto, CastVoteDto } from '@brainstorm/core';
+import { ArgumentDto, CastVoteDto } from '@argora/core';
 import { Repository } from 'typeorm';
 import { ArgumentsService } from '../arguments/arguments.service';
 import { activeWhere } from '../common/repository/soft-delete';

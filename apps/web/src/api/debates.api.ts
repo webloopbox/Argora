@@ -2,7 +2,7 @@ import type {
   CreateDebateDto,
   DebateDetailDto,
   DebatePreviewDto,
-} from "@brainstorm/core";
+} from "@argora/core";
 import { httpClient } from "./http-client";
 
 export async function listPublicDebates(): Promise<DebatePreviewDto[]> {

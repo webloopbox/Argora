@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import type { AuthTokenDto, LoginDto, RegisterDto } from '@brainstorm/core';
+import type { AuthTokenDto, LoginDto, RegisterDto } from '@argora/core';
 import { UsersService } from '../users/users.service';
 
 @Injectable()

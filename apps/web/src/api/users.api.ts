@@ -1,4 +1,4 @@
-import type { UserSearchResultDto } from "@brainstorm/core";
+import type { UserSearchResultDto } from "@argora/core";
 import { httpClient } from "./http-client";
 
 export async function searchUsers(

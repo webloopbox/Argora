@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@heroui/react";
 import { motion } from "framer-motion";
 import { PlusCircle, Sparkles } from "lucide-react";
-import type { DebatePreviewDto } from "@brainstorm/core";
+import type { DebatePreviewDto } from "@argora/core";
 import { listPublicDebates } from "../../api/debates.api";
 import { useAuth } from "../../app-config/auth-context";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";

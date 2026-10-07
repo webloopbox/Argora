@@ -3,7 +3,7 @@ import type {
   LoginDto,
   RegisterDto,
   UserDto,
-} from "@brainstorm/core";
+} from "@argora/core";
 import { httpClient } from "./http-client";
 
 // All auth calls are `silent` - the login/register forms render inline

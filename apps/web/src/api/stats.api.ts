@@ -1,4 +1,4 @@
-import type { StatsDto } from "@brainstorm/core";
+import type { StatsDto } from "@argora/core";
 import { httpClient } from "./http-client";
 
 // Background polling - toast would be noise on a transient hiccup.

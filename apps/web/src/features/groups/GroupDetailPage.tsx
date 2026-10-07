@@ -18,8 +18,8 @@ import type {
   GroupDetailDto,
   InvitationDto,
   UserSearchResultDto,
-} from "@brainstorm/core";
-import { InvitationStatus } from "@brainstorm/core";
+} from "@argora/core";
+import { InvitationStatus } from "@argora/core";
 import { listGroupDebates } from "../../api/debates.api";
 import {
   archiveGroup,

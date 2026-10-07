@@ -11,7 +11,7 @@ import {
   CheckDuplicateDto,
   GenerateArgumentDto,
   SynthesizeDto,
-} from '@brainstorm/core';
+} from '@argora/core';
 import { AiService } from './ai.service';
 
 @Controller('ai')

@@ -1,5 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
-import type { LlmProviderDto } from '@brainstorm/core';
+import type { LlmProviderDto } from '@argora/core';
 import type {
   ClassifySideInput,
   GenerateInput,

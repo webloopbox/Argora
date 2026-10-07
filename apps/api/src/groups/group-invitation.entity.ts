@@ -1,4 +1,4 @@
-import { InvitationStatus } from '@brainstorm/core';
+import { InvitationStatus } from '@argora/core';
 import {
   Column,
   CreateDateColumn,

@@ -8,7 +8,7 @@ import type {
   LlmProviderDto,
   SynthesizeDto,
   SynthesisResultDto,
-} from "@brainstorm/core";
+} from "@argora/core";
 import { httpClient } from "./http-client";
 
 // The registry is built once at API boot from the configured credentials, so

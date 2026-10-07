@@ -10,7 +10,7 @@ import {
   CreateInvitationDto,
   InvitationDto,
   InvitationStatus,
-} from '@brainstorm/core';
+} from '@argora/core';
 import { DataSource, In, Repository } from 'typeorm';
 import { activeWhere } from '../common/repository/soft-delete';
 import { User } from '../users/user.entity';

@@ -24,8 +24,8 @@ import type {
   ArgumentDto,
   CreateArgumentDto,
   LlmProviderDto,
-} from "@brainstorm/core";
-import { ARGUMENT_MAX, ARGUMENT_MIN, ArgumentSide } from "@brainstorm/core";
+} from "@argora/core";
+import { ARGUMENT_MAX, ARGUMENT_MIN, ArgumentSide } from "@argora/core";
 import { createArgument } from "../../../api/arguments.api";
 import {
   checkArgumentSide,

@@ -1,4 +1,4 @@
-import type { DebateLanguage, LlmProviderDto } from '@brainstorm/core';
+import type { DebateLanguage, LlmProviderDto } from '@argora/core';
 
 /**
  * Language every prompt builder must honour. It is always the language of the

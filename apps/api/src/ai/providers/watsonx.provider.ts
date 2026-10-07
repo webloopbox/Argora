@@ -1,6 +1,6 @@
 import { WatsonXAI } from '@ibm-cloud/watsonx-ai';
 import { IamAuthenticator } from '@ibm-cloud/watsonx-ai/authentication';
-import type { LlmProviderDto } from '@brainstorm/core';
+import type { LlmProviderDto } from '@argora/core';
 import type {
   ClassifySideInput,
   GenerateInput,

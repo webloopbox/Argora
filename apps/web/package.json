@@ -1,5 +1,5 @@
 {
-  "name": "@brainstorm/web",
+  "name": "@argora/web",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@brainstorm/core": "workspace:*",
+    "@argora/core": "workspace:*",
     "@heroui/react": "^3.0.3",
     "@xyflow/react": "^12.10.2",
     "axios": "^1.16.1",

@@ -9,7 +9,7 @@ import {
   ArgumentDto,
   ArgumentSentiment,
   CreateArgumentDto,
-} from '@brainstorm/core';
+} from '@argora/core';
 import { In, Repository } from 'typeorm';
 import { activeWhere } from '../common/repository/soft-delete';
 import { EmbeddingService } from '../ai/embedding.service';

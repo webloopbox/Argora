@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { LoginDto, RegisterDto } from '@brainstorm/core';
+import { LoginDto, RegisterDto } from '@argora/core';
 import { AuthService } from './auth.service';
 
 @Controller('auth')

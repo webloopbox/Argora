@@ -1,4 +1,4 @@
-import { ArgumentSide } from '@brainstorm/core';
+import { ArgumentSide } from '@argora/core';
 import {
   Column,
   CreateDateColumn,

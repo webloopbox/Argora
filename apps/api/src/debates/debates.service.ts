@@ -10,7 +10,7 @@ import {
   DebateLanguage,
   DebatePreviewDto,
   DebateVisibility,
-} from '@brainstorm/core';
+} from '@argora/core';
 import { DataSource, In, Repository } from 'typeorm';
 import { Argument } from '../arguments/argument.entity';
 import { activeWhere } from '../common/repository/soft-delete';
