@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(python *)",
-      "Bash(xargs wc -l)"
-    ],
-    "defaultMode": "bypassPermissions"
-  }
-}

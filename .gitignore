@@ -36,4 +36,7 @@ Thumbs.db
 # NestJS
 /apps/api/dist/
 
+# Local agent session settings (machine-specific permissions)
+.claude/settings.local.json
+
 planning.md
