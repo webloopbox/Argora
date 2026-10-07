@@ -1,0 +1,18 @@
+# Language statistics on GitHub (github/linguist).
+#
+# The repository is a TypeScript monorepo; everything listed here is either a
+# generated artefact or a container file whose size says nothing about the work
+# in it. Without these rules a single 500 KB Playwright report rendered the
+# project as half HTML.
+
+# Generated artefacts - excluded from the language bar and collapsed in diffs.
+pnpm-lock.yaml                 linguist-generated=true
+apps/e2e/playwright-report/**  linguist-generated=true
+**/dist/**                     linguist-generated=true
+
+# The only HTML in the project is the Vite entry stub, which is scaffolding
+# rather than authored UI code.
+*.html linguist-detectable=false
+
+# Diagrams and screenshots are documentation assets.
+docs/assets/** linguist-documentation=true
