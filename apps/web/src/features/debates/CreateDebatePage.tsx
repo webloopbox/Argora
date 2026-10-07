@@ -54,35 +54,36 @@ export function CreateDebatePage() {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
-  const [group, setGroup] = useState<GroupDetailDto | null>(null);
-  const [groupLoading, setGroupLoading] = useState(false);
-  const [groupError, setGroupError] = useState<string | null>(null);
+  // The fetched group is stored together with the id it was fetched for, so
+  // "still loading" and "wrong group in state" are derived during render
+  // rather than kept in two extra flags an effect has to reset.
+  const [groupSnapshot, setGroupSnapshot] = useState<{
+    id: string;
+    group: GroupDetailDto | null;
+  } | null>(null);
 
   useEffect(() => {
-    if (!groupIdParam) {
-      setGroup(null);
-      setGroupError(null);
-      return;
-    }
+    if (!groupIdParam) return;
     let cancelled = false;
-    setGroupLoading(true);
-    setGroupError(null);
     fetchGroupDetail(groupIdParam)
       .then((g) => {
-        if (cancelled) return;
-        setGroup(g);
-        setGroupLoading(false);
+        if (!cancelled) setGroupSnapshot({ id: groupIdParam, group: g });
       })
       .catch(() => {
-        if (cancelled) return;
-        setGroup(null);
-        setGroupError(ui.debates.create.groupContextFailed);
-        setGroupLoading(false);
+        if (!cancelled) setGroupSnapshot({ id: groupIdParam, group: null });
       });
     return () => {
       cancelled = true;
     };
   }, [groupIdParam]);
+
+  const resolved = groupSnapshot?.id === groupIdParam ? groupSnapshot : null;
+  const group = resolved?.group ?? null;
+  const groupLoading = Boolean(groupIdParam) && resolved === null;
+  const groupError =
+    resolved !== null && resolved.group === null
+      ? ui.debates.create.groupContextFailed
+      : null;
 
   function validate(): FieldErrors {
     const next: FieldErrors = {};

@@ -12,21 +12,9 @@
 
 import { GoogleGenAI } from "@google/genai";
 import pg from "pg";
-import * as fs from "fs";
-import * as path from "path";
+import { loadEnv } from "./lib/env.mjs";
 
-const envPath = path.resolve(".env");
-if (fs.existsSync(envPath)) {
-  const envContent = fs.readFileSync(envPath, "utf8");
-  for (const line of envContent.split("\n")) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) continue;
-    const parts = trimmed.split("=");
-    const key = parts[0].trim();
-    const val = parts.slice(1).join("=").trim().replace(/^['"]|['"]$/g, "");
-    process.env[key] = val;
-  }
-}
+loadEnv();
 
 const debateId = process.argv[2] ?? null;
 const geminiKey = process.env.GEMINI_API_KEY;

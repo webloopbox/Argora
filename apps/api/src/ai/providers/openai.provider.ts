@@ -60,7 +60,9 @@ export class OpenAiProvider implements LlmProvider {
     return response.data[0].embedding;
   }
 
-  async classifySide(input: ClassifySideInput): Promise<'pro' | 'against' | null> {
+  async classifySide(
+    input: ClassifySideInput,
+  ): Promise<'pro' | 'against' | null> {
     const completion = await this.client.chat.completions.create({
       model: MODEL_ID,
       max_tokens: CLASSIFY_MAX_TOKENS,

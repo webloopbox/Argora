@@ -4,6 +4,17 @@ import type { UserSearchResultDto } from "@brainstorm/core";
 import { searchUsers } from "../../api/users.api";
 import { ui } from "../../texts/ui";
 
+// What the picker knows about one query: nothing yet (`pending`), the users it
+// returned, or that it failed. Keyed by the query itself, so "is this still the
+// answer to what the user has typed" is derived during render instead of kept
+// in a second flag an effect would have to hold in step.
+interface SearchSnapshot {
+  query: string;
+  pending: boolean;
+  users: UserSearchResultDto[] | null;
+  failed: boolean;
+}
+
 interface UserSearchPickerProps {
   selected: UserSearchResultDto | null;
   onSelect: (user: UserSearchResultDto | null) => void;
@@ -23,38 +34,44 @@ export function UserSearchPicker({
   autoFocus,
 }: UserSearchPickerProps) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<UserSearchResultDto[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [snapshot, setSnapshot] = useState<SearchSnapshot>({
+    query: "",
+    pending: false,
+    users: [],
+    failed: false,
+  });
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const excludeSet = useMemo(() => new Set(excludeIds ?? []), [excludeIds]);
 
+  const trimmed = query.trim();
+  const isSearchable = !selected && trimmed.length >= 2;
+
+  // Debounced lookup. Nothing is written to state while the user is still
+  // typing, so a keystroke does not cascade a render. The request marks itself
+  // pending when it actually goes out; without that, a retry of a query that
+  // failed before would show the old error for as long as it took to answer.
   useEffect(() => {
-    if (selected) return;
-    const trimmed = query.trim();
-    if (trimmed.length < 2) {
-      setResults([]);
-      setError(null);
-      setLoading(false);
-      return;
-    }
+    if (!isSearchable) return;
 
     let cancelled = false;
-    setLoading(true);
-    setError(null);
     const handle = setTimeout(() => {
+      if (cancelled) return;
+      setSnapshot({ query: trimmed, pending: true, users: null, failed: false });
       searchUsers(trimmed)
         .then((users) => {
-          if (cancelled) return;
-          setResults(users.filter((u) => !excludeSet.has(u.id)));
-          setLoading(false);
+          if (!cancelled)
+            setSnapshot({ query: trimmed, pending: false, users, failed: false });
         })
         .catch(() => {
-          if (cancelled) return;
-          setError(ui.users.searchError);
-          setLoading(false);
+          if (!cancelled)
+            setSnapshot({
+              query: trimmed,
+              pending: false,
+              users: null,
+              failed: true,
+            });
         });
     }, 220);
 
@@ -62,7 +79,18 @@ export function UserSearchPicker({
       cancelled = true;
       clearTimeout(handle);
     };
-  }, [query, selected, excludeSet]);
+  }, [trimmed, isSearchable]);
+
+  // Derived view of the snapshot: still waiting, failed, or a filtered hit
+  // list. Exclusions are applied here so a changed `excludeIds` does not
+  // re-trigger the request.
+  const isStale = snapshot.query !== trimmed;
+  const loading = isSearchable && (isStale || snapshot.pending);
+  const error = !isStale && snapshot.failed ? ui.users.searchError : null;
+  const results = useMemo(
+    () => (snapshot.users ?? []).filter((u) => !excludeSet.has(u.id)),
+    [snapshot.users, excludeSet],
+  );
 
   useEffect(() => {
     function onDocClick(event: MouseEvent) {

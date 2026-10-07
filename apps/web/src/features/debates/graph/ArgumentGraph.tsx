@@ -5,8 +5,11 @@ import {
   Controls,
   MiniMap,
   ReactFlow,
+  ReactFlowProvider,
+  useReactFlow,
 } from "@xyflow/react";
 import type { Edge, Node, NodeMouseHandler, NodeTypes } from "@xyflow/react";
+import { Loader2 } from "lucide-react";
 import { AgainstNode, ProNode } from "./ArgumentNode";
 import { ThesisNode } from "./ThesisNode";
 import { useGraphLayout } from "./useGraphLayout";
@@ -32,9 +35,29 @@ const nodeTypes: NodeTypes = {
   against: AgainstNode,
 };
 
-import { Loader2 } from "lucide-react";
+const MINIMAP_FILL: Record<string, string> = {
+  pro: "#4ade80",
+  against: "#f87171",
+};
+const MINIMAP_STROKE: Record<string, string> = {
+  pro: "#16a34a",
+  against: "#dc2626",
+};
+const MINIMAP_THESIS_FILL = "#a78bfa";
+const MINIMAP_THESIS_STROKE = "#7c3aed";
 
-export function ArgumentGraph({
+// The provider is mounted here rather than around <ReactFlow> itself so the
+// body below can call `useReactFlow` / `useViewport` directly - the lasso
+// needs the live viewport to map screen points onto canvas coordinates.
+export function ArgumentGraph(props: ArgumentGraphProps) {
+  return (
+    <ReactFlowProvider>
+      <ArgumentGraphBody {...props} />
+    </ReactFlowProvider>
+  );
+}
+
+function ArgumentGraphBody({
   nodes,
   edges,
   onArgumentSelect,
@@ -47,39 +70,41 @@ export function ArgumentGraph({
   const layout = useGraphLayout(nodes, edges);
   const containerRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
+  const { fitView } = useReactFlow();
   const maskColor =
     theme === "dark" ? "rgba(0,0,0,0.55)" : "rgba(180,180,190,0.5)";
 
   const [isReady, setIsReady] = useState(false);
 
-  // The lasso hook needs `useReactFlow` / `useViewport`, which require being
-  // inside <ReactFlow>. We render a `<LassoBridge>` child to call the hook,
-  // then mirror its event handlers to this outer container via local state
-  // so the pointer events can be captured on the wrapping div.
-  const [handlers, setHandlers] = useState<{
-    onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => void;
-    onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
-    onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => void;
-  } | null>(null);
-  const [lassoPolygon, setLassoPolygon] = useState<{ x: number; y: number }[]>(
-    [],
+  const handleLassoComplete = useCallback(
+    (ids: string[]) => {
+      onLassoComplete?.(ids);
+    },
+    [onLassoComplete],
   );
-  const [lassoDrawing, setLassoDrawing] = useState(false);
-  const [rfInstance, setRfInstance] = useState<any>(null);
 
+  const lasso = useLassoSelection(containerRef, handleLassoComplete);
+
+  // Drop a half-drawn polygon when the user leaves lasso mode.
+  const { reset: resetLasso } = lasso;
   useEffect(() => {
-    if (rfInstance && focusNodeId) {
-      // slight delay to let React Flow apply the new nodes and measure them
-      setTimeout(() => {
-        rfInstance.fitView({
-          nodes: [{ id: focusNodeId }],
-          duration: 800,
-          padding: 0.2,
-          maxZoom: 1.2
-        });
-      }, 50);
-    }
-  }, [rfInstance, focusNodeId]);
+    if (!lassoMode) resetLasso();
+  }, [lassoMode, resetLasso]);
+
+  // Centre a freshly created argument. The short delay lets React Flow apply
+  // and measure the new node before the viewport animates to it.
+  useEffect(() => {
+    if (!focusNodeId) return;
+    const timer = setTimeout(() => {
+      void fitView({
+        nodes: [{ id: focusNodeId }],
+        duration: 800,
+        padding: 0.2,
+        maxZoom: 1.2,
+      });
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [focusNodeId, fitView]);
 
   const decoratedNodes = useMemo(
     () =>
@@ -92,23 +117,12 @@ export function ArgumentGraph({
 
   const handleNodeClick: NodeMouseHandler = (_event, node) => {
     if (lassoMode) return;
-    if (node.type === "thesis") {
-      onArgumentSelect?.(null);
-      return;
-    }
-    onArgumentSelect?.(node.id);
+    onArgumentSelect?.(node.type === "thesis" ? null : node.id);
   };
 
   const handlePaneClick = () => {
     if (!lassoMode) onArgumentSelect?.(null);
   };
-
-  const handleLassoComplete = useCallback(
-    (ids: string[]) => {
-      onLassoComplete?.(ids);
-    },
-    [onLassoComplete],
-  );
 
   return (
     <div
@@ -118,9 +132,9 @@ export function ArgumentGraph({
         touchAction: lassoMode ? "none" : undefined,
         cursor: lassoMode ? "crosshair" : undefined,
       }}
-      onPointerDown={lassoMode ? handlers?.onPointerDown : undefined}
-      onPointerMove={lassoMode ? handlers?.onPointerMove : undefined}
-      onPointerUp={lassoMode ? handlers?.onPointerUp : undefined}
+      onPointerDown={lassoMode ? lasso.onPointerDown : undefined}
+      onPointerMove={lassoMode ? lasso.onPointerMove : undefined}
+      onPointerUp={lassoMode ? lasso.onPointerUp : undefined}
     >
       {!isReady && (
         <div className="absolute inset-0 z-50 flex items-center justify-center">
@@ -147,24 +161,14 @@ export function ArgumentGraph({
           fitView
           fitViewOptions={{ padding: 0.25, includeHiddenNodes: false }}
           proOptions={{ hideAttribution: true }}
-          onInit={(instance) => {
-            setRfInstance(instance);
-            // React Flow's fitView happens shortly after init when nodes are measured.
-            // Giving it a tiny timeout avoids the initial snap flicker.
+          onInit={() => {
+            // React Flow's fitView happens shortly after init when nodes are
+            // measured. A tiny timeout avoids the initial snap flicker.
             setTimeout(() => setIsReady(true), 50);
           }}
           onNodeClick={handleNodeClick}
           onPaneClick={handlePaneClick}
         >
-          <LassoBridge
-            containerRef={containerRef}
-            onHandlersReady={setHandlers}
-            onPolygonChange={setLassoPolygon}
-            onDrawingChange={setLassoDrawing}
-            onComplete={handleLassoComplete}
-            lassoMode={lassoMode}
-          />
-
           <Background
             variant={BackgroundVariant.Dots}
             gap={20}
@@ -180,110 +184,18 @@ export function ArgumentGraph({
               nodeStrokeWidth={1.5}
               maskColor={maskColor}
               className="rf-minimap-themed !hidden !rounded-xl md:!block"
-              nodeColor={(node) => {
-                if (node.type === "pro") return "#4ade80";
-                if (node.type === "against") return "#f87171";
-                return "#a78bfa";
-              }}
-              nodeStrokeColor={(node) => {
-                if (node.type === "pro") return "#16a34a";
-                if (node.type === "against") return "#dc2626";
-                return "#7c3aed";
-              }}
+              nodeColor={(node) =>
+                MINIMAP_FILL[node.type ?? ""] ?? MINIMAP_THESIS_FILL
+              }
+              nodeStrokeColor={(node) =>
+                MINIMAP_STROKE[node.type ?? ""] ?? MINIMAP_THESIS_STROKE
+              }
             />
           ) : null}
         </ReactFlow>
       </div>
 
-      {lassoMode ? (
-        <LassoOverlay
-          lasso={{ drawing: lassoDrawing, polygon: lassoPolygon }}
-        />
-      ) : null}
+      {lassoMode ? <LassoOverlay lasso={lasso.lasso} /> : null}
     </div>
   );
-}
-
-// Lives inside <ReactFlow> so `useLassoSelection` (which calls useReactFlow
-// + useViewport) finds the store. Mirrors the hook's handlers and current
-// polygon back to the outer ArgumentGraph via the props callbacks.
-function LassoBridge({
-  containerRef,
-  onHandlersReady,
-  onPolygonChange,
-  onDrawingChange,
-  onComplete,
-  lassoMode,
-}: {
-  containerRef: React.RefObject<HTMLDivElement | null>;
-  onHandlersReady: (handlers: {
-    onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => void;
-    onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
-    onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => void;
-  }) => void;
-  onPolygonChange: (polygon: { x: number; y: number }[]) => void;
-  onDrawingChange: (drawing: boolean) => void;
-  onComplete: (ids: string[]) => void;
-  lassoMode: boolean;
-}) {
-  const lasso = useLassoSelection(containerRef, onComplete);
-
-  // Forward stable handlers + reactive polygon state to the parent.
-  useStableHandlers({
-    onPointerDown: lasso.onPointerDown,
-    onPointerMove: lasso.onPointerMove,
-    onPointerUp: lasso.onPointerUp,
-    onHandlersReady,
-  });
-
-  // Mirror polygon + drawing flag so the overlay (rendered outside ReactFlow)
-  // can read them without subscribing to the hook itself.
-  useMirror(lasso.lasso.polygon, onPolygonChange);
-  useMirror(lasso.lasso.drawing, onDrawingChange);
-
-  // Reset polygon when leaving lasso mode.
-  useResetOnExit(lassoMode, lasso.reset);
-
-  return null;
-}
-
-function useStableHandlers(args: {
-  onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => void;
-  onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
-  onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => void;
-  onHandlersReady: (h: {
-    onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => void;
-    onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
-    onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => void;
-  }) => void;
-}) {
-  const { onPointerDown, onPointerMove, onPointerUp, onHandlersReady } = args;
-  // Run once per mount - handlers are stable via the hook's useCallback.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useMemoOnce(() => {
-    onHandlersReady({ onPointerDown, onPointerMove, onPointerUp });
-  });
-}
-
-function useMemoOnce(fn: () => void) {
-  const ranRef = useRef(false);
-  if (!ranRef.current) {
-    ranRef.current = true;
-    fn();
-  }
-}
-
-function useMirror<T>(value: T, setter: (next: T) => void) {
-  // Forward each value change to the consumer.
-  const prevRef = useRef<T>(value);
-  if (!Object.is(prevRef.current, value)) {
-    prevRef.current = value;
-    setter(value);
-  }
-}
-
-function useResetOnExit(active: boolean, reset: () => void) {
-  const prev = useRef(active);
-  if (prev.current && !active) reset();
-  prev.current = active;
 }

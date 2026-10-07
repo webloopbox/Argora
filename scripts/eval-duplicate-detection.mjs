@@ -16,22 +16,11 @@
 
 import { GoogleGenAI } from "@google/genai";
 import pg from "pg";
-import * as fs from "fs";
-import * as path from "path";
+import { cosineSimilarity } from "./lib/debate-model.mjs";
+import { loadEnv } from "./lib/env.mjs";
 import { DEBATES, submissions } from "./duplicate-eval-set.mjs";
 
-const envPath = path.resolve(".env");
-if (fs.existsSync(envPath)) {
-  const envContent = fs.readFileSync(envPath, "utf8");
-  for (const line of envContent.split("\n")) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) continue;
-    const parts = trimmed.split("=");
-    const key = parts[0].trim();
-    const val = parts.slice(1).join("=").trim().replace(/^['"]|['"]$/g, "");
-    process.env[key] = val;
-  }
-}
+loadEnv();
 
 const geminiKey = process.env.GEMINI_API_KEY;
 const dbUrl = process.env.DATABASE_URL;
@@ -42,19 +31,6 @@ const ai = new GoogleGenAI({ apiKey: geminiKey });
 const client = new pg.Client({ connectionString: dbUrl });
 
 // Identyczna implementacja jak EmbeddingService.cosineSimilarity.
-function cosineSimilarity(a, b) {
-  let dot = 0,
-    normA = 0,
-    normB = 0;
-  for (let i = 0; i < a.length; i++) {
-    dot += a[i] * b[i];
-    normA += a[i] * a[i];
-    normB += b[i] * b[i];
-  }
-  if (normA === 0 || normB === 0) return 0;
-  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
-}
-
 // Uproszczona normalizacja bez lematyzacji (małe litery, usunięcie
 // interpunkcji, podział na tokeny) - patrz zaktualizowany akapit w §7.3.1.
 function tokenize(text) {

@@ -57,7 +57,9 @@ export class ClaudeProvider implements LlmProvider {
     return block.text.trim();
   }
 
-  async classifySide(input: ClassifySideInput): Promise<'pro' | 'against' | null> {
+  async classifySide(
+    input: ClassifySideInput,
+  ): Promise<'pro' | 'against' | null> {
     const message = await this.client.messages.create({
       model: MODEL_ID,
       max_tokens: CLASSIFY_MAX_TOKENS,

@@ -50,8 +50,6 @@ interface AddArgumentFormProps {
   onCancel?: () => void;
 }
 
-type SideValue = "pro" | "against";
-
 export function AddArgumentForm({
   debateId,
   parent,
@@ -60,9 +58,7 @@ export function AddArgumentForm({
   onCreated,
   onCancel,
 }: AddArgumentFormProps) {
-  const [side, setSide] = useState<SideValue>(
-    (defaultSide as SideValue | undefined) ?? "pro",
-  );
+  const [side, setSide] = useState<ArgumentSide>(defaultSide ?? ArgumentSide.Pro);
   const [content, setContent] = useState("");
   const [contentError, setContentError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -115,25 +111,33 @@ export function AddArgumentForm({
   // No reset when `parent` is null: the whole preview is rendered inside a
   // `parent ?` branch, so a stale value is unobservable, and the next parent
   // re-measures synchronously below before it can be read.
+  const parentId = parent?.id ?? null;
+  const parentContent = parent?.content ?? null;
+
   useEffect(() => {
     const el = parentTextRef.current;
-    if (!parent || !el) return;
+    if (!parentId || !el) return;
     const measure = () =>
       setParentClamped(el.scrollHeight > el.clientHeight + 1);
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(el);
     return () => observer.disconnect();
-  }, [parent?.id, parent?.content]);
+  }, [parentId, parentContent]);
 
   useEffect(() => {
-    if (!aiMode || providers.length > 0) return;
+    if (!aiMode) return;
+    let cancelled = false;
     listProviders()
       .then((list) => {
+        if (cancelled) return;
         setProviders(list);
-        if (list.length > 0) setModelId(list[0]!.id);
+        setModelId((current) => current || (list[0]?.id ?? ""));
       })
       .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
   }, [aiMode]);
 
   function validate(): string | null {
@@ -152,7 +156,7 @@ export function AddArgumentForm({
     try {
       const result = await generateArgument({
         debateId,
-        side: side === "pro" ? ArgumentSide.Pro : ArgumentSide.Against,
+        side,
         modelId,
         parentContent: parent?.content,
       });
@@ -216,10 +220,8 @@ export function AddArgumentForm({
     setContentError(validationError);
     if (validationError) return;
 
-    const parentId = typeof parent?.id === "string" ? parent.id : null;
-
     const payload: CreateArgumentDto = {
-      side: side === "pro" ? ArgumentSide.Pro : ArgumentSide.Against,
+      side,
       content: content.trim(),
       parentArgumentId: parentId,
       isAiGenerated: fromModel,
@@ -251,7 +253,7 @@ export function AddArgumentForm({
 
   const charsLeft = ARGUMENT_MAX - content.length;
   const submitLabel =
-    side === "pro"
+    side === ArgumentSide.Pro
       ? ui.debates.argumentForm.submitPro
       : ui.debates.argumentForm.submitAgainst;
 
@@ -310,7 +312,7 @@ export function AddArgumentForm({
 
         <RadioGroup
           value={side}
-          onChange={(value) => setSide(value as SideValue)}
+          onChange={(value) => setSide(value as ArgumentSide)}
           isDisabled={submitting || generating}
           aria-label={ui.debates.argumentForm.sideLabel}
           className="space-y-2"
@@ -320,7 +322,7 @@ export function AddArgumentForm({
           </Label>
           <div className="grid grid-cols-2 gap-2">
             <Radio
-              value="pro"
+              value={ArgumentSide.Pro}
               className="group relative flex cursor-pointer items-center gap-2 rounded-2xl border border-default-100 bg-default-50/60 p-3 text-sm leading-none transition-colors hover:border-pro-300 data-[selected]:border-pro-400 data-[selected]:bg-pro-50/70 dark:border-zinc-700 dark:bg-zinc-800/60 dark:hover:border-pro-600 dark:data-[selected]:border-pro-500 dark:data-[selected]:bg-pro-900/30"
             >
               <RadioControl className="shrink-0 self-center">
@@ -335,7 +337,7 @@ export function AddArgumentForm({
               </RadioContent>
             </Radio>
             <Radio
-              value="against"
+              value={ArgumentSide.Against}
               className="group relative flex cursor-pointer items-center gap-2 rounded-2xl border border-default-100 bg-default-50/60 p-3 text-sm leading-none transition-colors hover:border-against-300 data-[selected]:border-against-400 data-[selected]:bg-against-50/70 dark:border-zinc-700 dark:bg-zinc-800/60 dark:hover:border-against-600 dark:data-[selected]:border-against-500 dark:data-[selected]:bg-against-900/30"
             >
               <RadioControl className="shrink-0 self-center">
@@ -463,7 +465,7 @@ export function AddArgumentForm({
             const switched = { ...pendingPayload, side: sideMismatch };
             setSideMismatch(null);
             setPendingPayload(null);
-            setSide(sideMismatch === ArgumentSide.Pro ? "pro" : "against");
+            setSide(sideMismatch);
             void submitWithPayload(switched);
           }}
           onKeepOriginal={() => {

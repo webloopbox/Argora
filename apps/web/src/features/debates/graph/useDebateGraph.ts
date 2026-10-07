@@ -3,6 +3,7 @@ import type { Edge, Node } from "@xyflow/react";
 import type { ArgumentDto, DebateDetailDto } from "@brainstorm/core";
 import { ArgumentSide } from "@brainstorm/core";
 import { listArgumentsForDebate } from "../../../api/arguments.api";
+import { THESIS_NODE_ID } from "./graph-metrics";
 
 export type ThesisNodeData = {
   thesis: string;
@@ -21,8 +22,6 @@ export interface DebateGraphState {
   edges: Edge[];
   arguments: ArgumentDto[];
 }
-
-const THESIS_NODE_ID = "thesis";
 
 function buildEdge(sourceId: string, target: ArgumentDto): Edge {
   return {

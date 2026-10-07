@@ -10,6 +10,7 @@ import {
   listMyInvitations,
 } from "../../api/invitations.api";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import { formatDate } from "../../lib/format";
 import { ui } from "../../texts/ui";
 import { useLanguage } from "../../app-config/language-context";
 
@@ -17,19 +18,6 @@ type LoadState =
   | { kind: "loading" }
   | { kind: "ready"; invitations: InvitationDto[] }
   | { kind: "error" };
-
-const dateFormatters: Record<string, Intl.DateTimeFormat> = {};
-function getDateTimeFormatter(lang: string) {
-  const locale = lang === "pl" ? "pl-PL" : "en-US";
-  if (!dateFormatters[locale]) {
-    dateFormatters[locale] = new Intl.DateTimeFormat(locale, {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-  }
-  return dateFormatters[locale];
-}
 
 export function InvitationsPage() {
   useDocumentTitle(ui.invitations.pageTitle);
@@ -188,7 +176,7 @@ function InvitationRow({
               </span>
               <span className="inline-flex items-center gap-1">
                 <Clock size={11} />
-                {getDateTimeFormatter(lang).format(new Date(invitation.createdAt))}
+                {formatDate(invitation.createdAt, lang)}
               </span>
             </p>
           </div>

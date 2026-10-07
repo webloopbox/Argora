@@ -24,10 +24,32 @@ import { Argument } from './argument.entity';
 // tuning is a single edit.
 const CONTROVERSY_MAX_RATIO = 0.2;
 
+interface VoteCounts {
+  for: number;
+  against: number;
+}
+
+// Frozen because it is handed to `toDto` as-is and `applyVoteRow` mutates
+// whatever accumulator it is given: folding into this shared constant would
+// corrupt every later response, so it must throw instead.
+const NO_VOTES: VoteCounts = Object.freeze({ for: 0, against: 0 });
+
 interface VoteCountRow {
   argumentId: string;
   value: number;
   count: number;
+}
+
+// `value` is +1 / -1, so a grouped count yields at most two rows per argument.
+// Both read paths fold them through here, which is what keeps a missing row
+// meaning "zero" in exactly one place.
+function applyVoteRow(
+  counts: VoteCounts,
+  row: { value: number; count: number },
+): VoteCounts {
+  if (row.value === 1) counts.for = row.count;
+  else if (row.value === -1) counts.against = row.count;
+  return counts;
 }
 
 @Injectable()
@@ -77,7 +99,7 @@ export class ArgumentsService {
     // HTTP response is not blocked. Failures are logged but not retried.
     this.embedAsync(saved.id, saved.content);
     // Fresh argument has no votes yet - skip the aggregate query.
-    return this.toDto(saved, author, { for: 0, against: 0 }, null);
+    return this.toDto(saved, author, NO_VOTES, null);
   }
 
   async listForDebate(debate: Debate, caller?: User): Promise<ArgumentDto[]> {
@@ -121,7 +143,7 @@ export class ArgumentsService {
       this.toDto(
         arg,
         authorMap.get(arg.authorId),
-        voteMap.get(arg.id) ?? { for: 0, against: 0 },
+        voteMap.get(arg.id) ?? NO_VOTES,
         userVoteMap.get(arg.id) ?? null,
       ),
     );
@@ -155,11 +177,7 @@ export class ArgumentsService {
         : Promise.resolve(null),
     ]);
 
-    const counts = { for: 0, against: 0 };
-    for (const row of voteRows) {
-      if (row.value === 1) counts.for = row.count;
-      else if (row.value === -1) counts.against = row.count;
-    }
+    const counts = voteRows.reduce(applyVoteRow, { for: 0, against: 0 });
 
     return this.toDto(
       arg,
@@ -191,15 +209,13 @@ export class ArgumentsService {
     await this.args.save(arg);
   }
 
-  private buildVoteMap(
-    rows: VoteCountRow[],
-  ): Map<string, { for: number; against: number }> {
-    const map = new Map<string, { for: number; against: number }>();
+  private buildVoteMap(rows: VoteCountRow[]): Map<string, VoteCounts> {
+    const map = new Map<string, VoteCounts>();
     for (const row of rows) {
-      const entry = map.get(row.argumentId) ?? { for: 0, against: 0 };
-      if (row.value === 1) entry.for = row.count;
-      else if (row.value === -1) entry.against = row.count;
-      map.set(row.argumentId, entry);
+      map.set(
+        row.argumentId,
+        applyVoteRow(map.get(row.argumentId) ?? { for: 0, against: 0 }, row),
+      );
     }
     return map;
   }
@@ -207,7 +223,7 @@ export class ArgumentsService {
   private toDto(
     arg: Argument,
     author: User | undefined,
-    counts: { for: number; against: number },
+    counts: VoteCounts,
     userVote: 1 | -1 | null,
   ): ArgumentDto {
     const weight = counts.for + counts.against;

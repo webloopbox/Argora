@@ -9,6 +9,7 @@ import { useTheme } from "../app-config/theme-context";
 import { useLanguage } from "../app-config/language-context";
 import { MobileDrawer } from "./MobileDrawer";
 import { ui } from "../texts/ui";
+import { initialsFor } from "../lib/format";
 
 export function TopBar() {
   const { isAuthenticated, displayName, signOut } = useAuth();
@@ -21,15 +22,6 @@ export function TopBar() {
     (item) => !item.requiresAuth || isAuthenticated,
   );
 
-  function initialsFor(name: string | null): string {
-    if (!name) return "";
-    return name
-      .split(/\s+/)
-      .filter(Boolean)
-      .map((p) => p[0]!.toUpperCase())
-      .slice(0, 2)
-      .join("");
-  }
 
   return (
     <>

@@ -8,6 +8,7 @@ import type { ArgumentNodeData } from "./useDebateGraph";
 import { useDebateGraphContext } from "./debate-graph-context";
 import { VoteControls } from "./VoteControls";
 import { ui } from "../../../texts/ui";
+import { ConfirmDialog } from "../../../components/ConfirmDialog";
 
 interface ArgumentNodeProps extends NodeProps {
   data: ArgumentNodeData;
@@ -106,15 +107,8 @@ function ArgumentNodeBase({ data, selected }: ArgumentNodeProps) {
   );
 }
 
-export function ProNode(props: ArgumentNodeProps) {
-  return <ArgumentNodeBase {...props} />;
-}
-
-export function AgainstNode(props: ArgumentNodeProps) {
-  return <ArgumentNodeBase {...props} />;
-}
-
-import { ConfirmDialog } from "../../../components/ConfirmDialog";
+export const ProNode = ArgumentNodeBase;
+export const AgainstNode = ArgumentNodeBase;
 
 // Author-only delete control with a CSS-only tooltip matching the weight
 // badge style (group/hover, dark pill, arrow below). When the argument has

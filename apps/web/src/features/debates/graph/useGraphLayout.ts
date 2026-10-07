@@ -1,24 +1,32 @@
 import { useMemo } from "react";
 import type { Edge, Node } from "@xyflow/react";
 import dagre from "dagre";
+import {
+  NODE_HEIGHT,
+  NODE_WIDTH,
+  THESIS_HEIGHT,
+  THESIS_NODE_ID,
+  THESIS_WIDTH,
+} from "./graph-metrics";
+import type { ArgumentNodeData } from "./useDebateGraph";
 
-interface LayoutOptions {
-  nodeWidth?: number;
-  nodeHeight?: number;
-  thesisWidth?: number;
-  thesisHeight?: number;
-  rankSep?: number;
-  nodeSep?: number;
+const RANK_SEP = 90;
+const NODE_SEP = 40;
+
+// The thesis node is the only one without an argument payload, so it sorts
+// first; every other node sorts by creation time.
+function createdAtOf(node: Node): number {
+  if (node.id === THESIS_NODE_ID) return 0;
+  const data = node.data as ArgumentNodeData | undefined;
+  const iso = data?.argument?.createdAt;
+  return iso ? new Date(iso).getTime() : 0;
 }
 
-const DEFAULTS = {
-  nodeWidth: 300,
-  nodeHeight: 150,
-  thesisWidth: 360,
-  thesisHeight: 160,
-  rankSep: 90,
-  nodeSep: 40,
-} as const;
+function boxOf(node: Node): { width: number; height: number } {
+  return node.type === "thesis"
+    ? { width: THESIS_WIDTH, height: THESIS_HEIGHT }
+    : { width: NODE_WIDTH, height: NODE_HEIGHT };
+}
 
 // Pure dagre wrapper. Sort the inputs deterministically before layout so
 // two clients with the same data render the same picture - dagre's order
@@ -26,50 +34,31 @@ const DEFAULTS = {
 export function useGraphLayout(
   nodes: Node[],
   edges: Edge[],
-  options: LayoutOptions = {},
 ): { nodes: Node[]; edges: Edge[] } {
-  const settings = { ...DEFAULTS, ...options };
-
   return useMemo(() => {
     if (nodes.length === 0) {
       return { nodes, edges };
     }
 
+    const nodeTimes = new Map(nodes.map((node) => [node.id, createdAtOf(node)]));
+    const byCreation = (a: string, b: string) =>
+      (nodeTimes.get(a) ?? 0) - (nodeTimes.get(b) ?? 0);
+
+    const sortedNodes = [...nodes].sort((a, b) => byCreation(a.id, b.id));
+    const sortedEdges = [...edges].sort((a, b) => byCreation(a.target, b.target));
+
     const g = new dagre.graphlib.Graph();
     g.setGraph({
       rankdir: "TB",
-      ranksep: settings.rankSep,
-      nodesep: settings.nodeSep,
+      ranksep: RANK_SEP,
+      nodesep: NODE_SEP,
       marginx: 16,
       marginy: 16,
     });
     g.setDefaultEdgeLabel(() => ({}));
 
-    // Create a map to quickly look up node timestamps
-    const nodeTimes = new Map<string, number>();
-    for (const node of nodes) {
-      if (node.id === "thesis") {
-        nodeTimes.set(node.id, 0);
-      } else {
-        nodeTimes.set(node.id, new Date((node.data as any).argument.createdAt).getTime());
-      }
-    }
-
-    const sortedNodes = [...nodes].sort((a, b) => {
-      return (nodeTimes.get(a.id) ?? 0) - (nodeTimes.get(b.id) ?? 0);
-    });
-    
-    // Sort edges by the creation time of their target node so Dagre processes them deterministically
-    const sortedEdges = [...edges].sort((a, b) => {
-      return (nodeTimes.get(a.target) ?? 0) - (nodeTimes.get(b.target) ?? 0);
-    });
-
     for (const node of sortedNodes) {
-      const isThesis = node.type === "thesis";
-      g.setNode(node.id, {
-        width: isThesis ? settings.thesisWidth : settings.nodeWidth,
-        height: isThesis ? settings.thesisHeight : settings.nodeHeight,
-      });
+      g.setNode(node.id, boxOf(node));
     }
     for (const edge of sortedEdges) {
       g.setEdge(edge.source, edge.target);
@@ -77,19 +66,18 @@ export function useGraphLayout(
 
     dagre.layout(g);
 
-    const thesisNodeDagre = g.node("thesis");
-    const offsetX = thesisNodeDagre ? thesisNodeDagre.x : 0;
+    // Everything is shifted so the thesis sits on x=0, which keeps the root
+    // centred no matter how lopsided the pro/against subtrees are.
+    const offsetX = g.node(THESIS_NODE_ID)?.x ?? 0;
 
     const positionedNodes = sortedNodes.map((node) => {
-      const dn = g.node(node.id);
-      const isThesis = node.type === "thesis";
-      const width = isThesis ? settings.thesisWidth : settings.nodeWidth;
-      const height = isThesis ? settings.thesisHeight : settings.nodeHeight;
+      const laidOut = g.node(node.id);
+      const { width, height } = boxOf(node);
       return {
         ...node,
         position: {
-          x: dn.x - offsetX - width / 2,
-          y: dn.y - height / 2,
+          x: laidOut.x - offsetX - width / 2,
+          y: laidOut.y - height / 2,
         },
         width,
         height,
@@ -97,14 +85,5 @@ export function useGraphLayout(
     });
 
     return { nodes: positionedNodes, edges: sortedEdges };
-  }, [
-    nodes,
-    edges,
-    settings.nodeWidth,
-    settings.nodeHeight,
-    settings.thesisWidth,
-    settings.thesisHeight,
-    settings.rankSep,
-    settings.nodeSep,
-  ]);
+  }, [nodes, edges]);
 }

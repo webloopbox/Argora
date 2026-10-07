@@ -1,17 +1,19 @@
-import { Injectable, ExecutionContext } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { Request } from 'express';
 
 @Injectable()
 export class AiThrottlerGuard extends ThrottlerGuard {
-  protected async getTracker(req: Request): Promise<string> {
+  // Rate limits are counted per account, falling back to the client address
+  // for a request that somehow reaches a throttled route unauthenticated.
+  protected getTracker(req: Request): Promise<string> {
     const user = req.user as { id?: string } | undefined;
-    return user?.id ?? req.ip ?? 'anonymous';
+    return Promise.resolve(user?.id ?? req.ip ?? 'anonymous');
   }
 
-  protected async getErrorMessage(
-    _context: ExecutionContext,
-  ): Promise<string> {
-    return 'Zbyt wiele zapytań do AI. Odczekaj chwilę i spróbuj ponownie.';
+  protected getErrorMessage(): Promise<string> {
+    return Promise.resolve(
+      'Zbyt wiele zapytań do AI. Odczekaj chwilę i spróbuj ponownie.',
+    );
   }
 }

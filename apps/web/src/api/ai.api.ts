@@ -11,9 +11,23 @@ import type {
 } from "@brainstorm/core";
 import { httpClient } from "./http-client";
 
-export async function listProviders(): Promise<LlmProviderDto[]> {
-  const { data } = await httpClient.get<LlmProviderDto[]>("/ai/providers");
-  return data;
+// The registry is built once at API boot from the configured credentials, so
+// the list cannot change inside a browser session. The in-flight promise is
+// cached (not just the result) because several panels ask for it at the same
+// moment - the drawer renders a desktop and a mobile copy of the form - and
+// would otherwise each fire their own request. A failed call drops the cache
+// so the next open retries.
+let providersPromise: Promise<LlmProviderDto[]> | null = null;
+
+export function listProviders(): Promise<LlmProviderDto[]> {
+  providersPromise ??= httpClient
+    .get<LlmProviderDto[]>("/ai/providers")
+    .then((response) => response.data)
+    .catch((err: unknown) => {
+      providersPromise = null;
+      throw err;
+    });
+  return providersPromise;
 }
 
 export async function generateArgument(

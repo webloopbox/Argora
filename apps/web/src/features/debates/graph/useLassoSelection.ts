@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from "react";
-import { useReactFlow, useViewport } from "@xyflow/react";
+import { useReactFlow } from "@xyflow/react";
+import { NODE_HEIGHT, NODE_WIDTH, THESIS_NODE_ID } from "./graph-metrics";
 
 interface Point {
   x: number;
@@ -34,21 +35,25 @@ export interface UseLassoSelection {
   reset: () => void;
 }
 
+const IDLE: LassoSelectionState = { drawing: false, polygon: [] };
+
+/**
+ * Freehand selection over the React Flow canvas.
+ *
+ * The gesture is accumulated in a ref and only mirrored into state for the
+ * overlay to draw: a pointer stream fires far more often than React can
+ * commit, and pointer-up must hit-test the points actually captured, not the
+ * ones that happened to be rendered. The viewport is read on demand through
+ * `getViewport()` rather than subscribed to with `useViewport()`, so panning
+ * and zooming do not re-render the whole graph while no lasso is in progress.
+ */
 export function useLassoSelection(
   containerRef: React.RefObject<HTMLDivElement | null>,
   onComplete: (argumentIds: string[]) => void,
 ): UseLassoSelection {
-  const { getNodes } = useReactFlow();
-  const viewport = useViewport();
-  const [lasso, setLasso] = useState<LassoSelectionState>({
-    drawing: false,
-    polygon: [],
-  });
-
-  // Latest viewport mirrored in a ref so the pointerUp callback can read it
-  // without forcing re-creation of the handler each viewport change.
-  const viewportRef = useRef(viewport);
-  viewportRef.current = viewport;
+  const { getNodes, getViewport } = useReactFlow();
+  const [lasso, setLasso] = useState<LassoSelectionState>(IDLE);
+  const gestureRef = useRef<LassoSelectionState>(IDLE);
 
   const getRelativePoint = useCallback(
     (e: React.PointerEvent<HTMLDivElement>): Point => {
@@ -64,28 +69,22 @@ export function useLassoSelection(
   const onPointerDown = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
-      const pt = getRelativePoint(e);
-      setLasso({ drawing: true, polygon: [pt] });
+      gestureRef.current = { drawing: true, polygon: [getRelativePoint(e)] };
+      setLasso(gestureRef.current);
     },
     [getRelativePoint],
   );
 
   const onPointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
-      setLasso((prev) => {
-        if (!prev.drawing) return prev;
-        const pt = {
-          x:
-            e.clientX -
-            (containerRef.current?.getBoundingClientRect().left ?? 0),
-          y:
-            e.clientY -
-            (containerRef.current?.getBoundingClientRect().top ?? 0),
-        };
-        return { ...prev, polygon: [...prev.polygon, pt] };
-      });
+      if (!gestureRef.current.drawing) return;
+      gestureRef.current = {
+        drawing: true,
+        polygon: [...gestureRef.current.polygon, getRelativePoint(e)],
+      };
+      setLasso(gestureRef.current);
     },
-    [containerRef],
+    [getRelativePoint],
   );
 
   const onPointerUp = useCallback(
@@ -96,38 +95,40 @@ export function useLassoSelection(
         /* ignore - capture may already be released */
       }
 
-      setLasso((prev) => {
-        if (!prev.drawing) return prev;
+      const gesture = gestureRef.current;
+      if (!gesture.drawing) return;
+      gestureRef.current = IDLE;
+      setLasso(IDLE);
 
-        const { x: vpX, y: vpY, zoom } = viewportRef.current;
-        const flowPolygon = prev.polygon.map((p) => ({
-          x: (p.x - vpX) / zoom,
-          y: (p.y - vpY) / zoom,
-        }));
+      // Screen points captured during the drag are mapped into canvas space in
+      // one pass, against the viewport in force when the gesture ended.
+      const { x: vpX, y: vpY, zoom } = getViewport();
+      const flowPolygon = gesture.polygon.map((p) => ({
+        x: (p.x - vpX) / zoom,
+        y: (p.y - vpY) / zoom,
+      }));
 
-        const NODE_W = 300;
-        const NODE_H = 150;
+      const selectedIds = getNodes()
+        .filter((n) => n.type !== THESIS_NODE_ID)
+        .filter((n) =>
+          pointInPolygon(
+            {
+              x: n.position.x + NODE_WIDTH / 2,
+              y: n.position.y + NODE_HEIGHT / 2,
+            },
+            flowPolygon,
+          ),
+        )
+        .map((n) => n.id);
 
-        const selectedIds = getNodes()
-          .filter((n) => n.type !== "thesis")
-          .filter((n) => {
-            const center = {
-              x: n.position.x + NODE_W / 2,
-              y: n.position.y + NODE_H / 2,
-            };
-            return pointInPolygon(center, flowPolygon);
-          })
-          .map((n) => n.id);
-
-        onComplete(selectedIds);
-        return { drawing: false, polygon: [] };
-      });
+      onComplete(selectedIds);
     },
-    [getNodes, onComplete],
+    [getNodes, getViewport, onComplete],
   );
 
   const reset = useCallback(() => {
-    setLasso({ drawing: false, polygon: [] });
+    gestureRef.current = IDLE;
+    setLasso(IDLE);
   }, []);
 
   return { lasso, onPointerDown, onPointerMove, onPointerUp, reset };

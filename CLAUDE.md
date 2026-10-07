@@ -62,6 +62,8 @@ brainstorm-monorepo/
 │       └── package.json
 ├── db/init.sql             # Schema, including the partial unique indexes
 ├── scripts/                # Seeding and evaluation scripts (Node, .mjs)
+│   └── lib/                # Helpers every script shares: .env reader, HTTP
+│                           # client, domain mirrors, synthesis prompt copy
 ├── pnpm-workspace.yaml
 └── package.json
 ```

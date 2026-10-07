@@ -5,6 +5,7 @@ import { Lock, MessageCircle, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import type { ArgumentDto } from "@brainstorm/core";
 import { ArgumentSide } from "@brainstorm/core";
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 import { AddArgumentForm } from "./AddArgumentForm";
 import { ui } from "../../../texts/ui";
 
@@ -22,6 +23,11 @@ interface AddArgumentPanelProps {
 // Floating drawer overlay: slides in from the right on desktop, from the
 // bottom on mobile. The graph beneath stays interactive only when the
 // drawer is closed; while open we trap pointer focus via the backdrop.
+//
+// One drawer, not one per breakpoint: the sheet differs by the axis it enters
+// on, which CSS cannot express, so the axis is read from a media query. Two
+// conditionally-hidden copies would mount two independent forms, each with its
+// own draft text, its own AI toggle and its own observers.
 export function AddArgumentPanel({
   debateId,
   isAuthenticated,
@@ -32,6 +38,8 @@ export function AddArgumentPanel({
   isOpen,
   onClose,
 }: AddArgumentPanelProps) {
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+
   // Scroll-lock the underlying page while the drawer is open so swipes on
   // mobile don't scroll the body underneath the sheet.
   useEffect(() => {
@@ -61,55 +69,33 @@ export function AddArgumentPanel({
 
       <AnimatePresence>
         {isOpen ? (
-          <>
-            <motion.aside
-              key="drawer-desktop"
-              role="dialog"
-              aria-label={ui.debates.argumentForm.panelTitle}
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 320, damping: 34 }}
-              className="fixed right-4 top-20 z-50 hidden h-[calc(100dvh-6rem)] w-[400px] overflow-hidden rounded-3xl border border-default-100 bg-white/95 shadow-2xl shadow-violet-500/10 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/95 lg:block"
-            >
-              <PanelBody
-                debateId={debateId}
-                isAuthenticated={isAuthenticated}
-                parent={parent}
-                defaultSide={defaultSide}
-                onClearParent={onClearParent}
-                onCreated={(created) => {
-                  onCreated(created);
-                  onClose();
-                }}
-                onClose={onClose}
-              />
-            </motion.aside>
-
-            <motion.aside
-              key="drawer-mobile"
-              role="dialog"
-              aria-label={ui.debates.argumentForm.panelTitle}
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
-              transition={{ type: "spring", stiffness: 320, damping: 34 }}
-              className="fixed inset-x-0 bottom-0 z-50 max-h-[88dvh] overflow-hidden rounded-t-3xl border border-default-100 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 lg:hidden"
-            >
-              <PanelBody
-                debateId={debateId}
-                isAuthenticated={isAuthenticated}
-                parent={parent}
-                defaultSide={defaultSide}
-                onClearParent={onClearParent}
-                onCreated={(created) => {
-                  onCreated(created);
-                  onClose();
-                }}
-                onClose={onClose}
-              />
-            </motion.aside>
-          </>
+          <motion.aside
+            key="drawer"
+            role="dialog"
+            aria-label={ui.debates.argumentForm.panelTitle}
+            initial={isDesktop ? { x: "100%" } : { y: "100%" }}
+            animate={isDesktop ? { x: 0 } : { y: 0 }}
+            exit={isDesktop ? { x: "100%" } : { y: "100%" }}
+            transition={{ type: "spring", stiffness: 320, damping: 34 }}
+            className={
+              isDesktop
+                ? "fixed right-4 top-20 z-50 h-[calc(100dvh-6rem)] w-[400px] overflow-hidden rounded-3xl border border-default-100 bg-white/95 shadow-2xl shadow-violet-500/10 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/95"
+                : "fixed inset-x-0 bottom-0 z-50 max-h-[88dvh] overflow-hidden rounded-t-3xl border border-default-100 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900"
+            }
+          >
+            <PanelBody
+              debateId={debateId}
+              isAuthenticated={isAuthenticated}
+              parent={parent}
+              defaultSide={defaultSide}
+              onClearParent={onClearParent}
+              onCreated={(created) => {
+                onCreated(created);
+                onClose();
+              }}
+              onClose={onClose}
+            />
+          </motion.aside>
         ) : null}
       </AnimatePresence>
     </>

@@ -11,12 +11,50 @@ import {
   DebatePreviewDto,
   DebateVisibility,
 } from '@brainstorm/core';
-import { DataSource, In, IsNull, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { Argument } from '../arguments/argument.entity';
 import { activeWhere } from '../common/repository/soft-delete';
 import { GroupMembership } from '../groups/group-membership.entity';
 import { User } from '../users/user.entity';
 import { Debate } from './debate.entity';
+
+interface SideCounts {
+  pro: number;
+  against: number;
+}
+
+// Frozen for the same reason as NO_VOTES in ArgumentsService: it is returned
+// to callers directly and `applySideRow` mutates its accumulator.
+const NO_ARGUMENTS: SideCounts = Object.freeze({ pro: 0, against: 0 });
+
+// `side` is a two-value enum, so a grouped count returns at most two rows per
+// debate. Reading them in one place keeps the list and the detail projection
+// from drifting apart on how a missing row is interpreted.
+function applySideRow(
+  counts: SideCounts,
+  row: { side: string; count: number },
+): SideCounts {
+  if (row.side === 'pro') counts.pro = row.count;
+  else if (row.side === 'against') counts.against = row.count;
+  return counts;
+}
+
+function sideCountsOf(rows: { side: string; count: number }[]): SideCounts {
+  return rows.reduce(applySideRow, { pro: 0, against: 0 });
+}
+
+function sideCountsByDebate(
+  rows: { debateId: string; side: string; count: number }[],
+): Map<string, SideCounts> {
+  const map = new Map<string, SideCounts>();
+  for (const row of rows) {
+    map.set(
+      row.debateId,
+      applySideRow(map.get(row.debateId) ?? { pro: 0, against: 0 }, row),
+    );
+  }
+  return map;
+}
 
 interface DebateWithAuthor {
   debate: Debate;
@@ -171,17 +209,11 @@ export class DebatesService {
     ]);
 
     const authorMap = new Map(authors.map((u) => [u.id, u]));
-    const countMap = new Map<string, { pro: number; against: number }>();
-    for (const row of counts) {
-      const entry = countMap.get(row.debateId) ?? { pro: 0, against: 0 };
-      if (row.side === 'pro') entry.pro = row.count;
-      else if (row.side === 'against') entry.against = row.count;
-      countMap.set(row.debateId, entry);
-    }
+    const countMap = sideCountsByDebate(counts);
 
     return debates.map((debate) => {
       const author = authorMap.get(debate.authorId);
-      const c = countMap.get(debate.id) ?? { pro: 0, against: 0 };
+      const c = countMap.get(debate.id) ?? NO_ARGUMENTS;
       return {
         id: debate.id,
         thesis: debate.thesis,
@@ -200,7 +232,7 @@ export class DebatesService {
   }
 
   private async toDetail(input: DebateWithAuthor): Promise<DebateDetailDto> {
-    const counts = await this.args
+    const rows = await this.args
       .createQueryBuilder('a')
       .select('a.side', 'side')
       .addSelect('COUNT(*)::int', 'count')
@@ -208,8 +240,7 @@ export class DebatesService {
       .andWhere('a.archived_on IS NULL')
       .groupBy('a.side')
       .getRawMany<{ side: string; count: number }>();
-    const pro = counts.find((c) => c.side === 'pro')?.count ?? 0;
-    const against = counts.find((c) => c.side === 'against')?.count ?? 0;
+    const { pro, against } = sideCountsOf(rows);
 
     return {
       id: input.debate.id,
@@ -223,11 +254,5 @@ export class DebatesService {
       againstCount: against,
       createdAt: input.debate.createdAt.toISOString(),
     };
-  }
-
-  // Re-export for guards that need the entity-level repository scope.
-  // Forced through the service so future callers stay consistent.
-  static activeFilter() {
-    return { archivedOn: IsNull() };
   }
 }

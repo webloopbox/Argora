@@ -350,6 +350,7 @@ export interface UiDict {
     clearSelection: string;
   };
   common: {
+    loading: string;
     comingSoon: string;
     cancel: string;
     close: string;
@@ -741,6 +742,7 @@ const pl: UiDict = {
     clearSelection: "Wyczyść wybór",
   },
   common: {
+    loading: "Wczytywanie...",
     comingSoon: "W przygotowaniu",
     cancel: "Anuluj",
     close: "Zamknij",
@@ -1133,6 +1135,7 @@ const en: UiDict = {
     clearSelection: "Clear selection",
   },
   common: {
+    loading: "Loading...",
     comingSoon: "Coming soon",
     cancel: "Cancel",
     close: "Close",

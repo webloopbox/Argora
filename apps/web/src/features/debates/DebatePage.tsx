@@ -24,6 +24,8 @@ import { fetchDebateDetail, deleteDebate } from "../../api/debates.api";
 import { useAuth } from "../../app-config/auth-context";
 import { useLanguage } from "../../app-config/language-context";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import { formatDate, initialsFor } from "../../lib/format";
+import { ConfirmDialog } from "../../components/ConfirmDialog";
 import { ui } from "../../texts/ui";
 import { AddArgumentPanel } from "./graph/AddArgumentPanel";
 import { ArgumentGraph } from "./graph/ArgumentGraph";
@@ -37,19 +39,6 @@ type LoadState =
   | { kind: "not-found" }
   | { kind: "forbidden" }
   | { kind: "error" };
-
-const dateFormatters: Record<string, Intl.DateTimeFormat> = {};
-function getDateTimeFormatter(lang: string) {
-  const locale = lang === "pl" ? "pl-PL" : "en-US";
-  if (!dateFormatters[locale]) {
-    dateFormatters[locale] = new Intl.DateTimeFormat(locale, {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-  }
-  return dateFormatters[locale];
-}
 
 // Wrapper keys the inner component by id so navigating between debates
 // remounts the body. That lets the inner useState lazy initializer
@@ -154,7 +143,8 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
   const [lassoIds, setLassoIds] = useState<string[]>([]);
   const [synthesisPanelOpen, setSynthesisPanelOpen] = useState(false);
   const [synthesisPanelMode, setSynthesisPanelMode] = useState<"lasso" | "full">("lasso");
-  const isOwner = user?.id === debate.author.id;
+  const userId = user?.id ?? null;
+  const isOwner = userId === debate.author.id;
 
   const handleDelete = async () => {
     try {
@@ -202,10 +192,10 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
 
   // Precompute child counts so each node knows whether it can be deleted
   // (only leaf arguments are deletable per backend invariant).
+  const argumentsList = graphState.arguments;
   const childCountByArgumentId = useMemo(() => {
     const map = new Map<string, number>();
-    if (graphState.status !== "ready") return map;
-    for (const arg of graphState.arguments) {
+    for (const arg of argumentsList) {
       if (arg.parentArgumentId) {
         map.set(
           arg.parentArgumentId,
@@ -214,12 +204,12 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
       }
     }
     return map;
-  }, [graphState]);
+  }, [argumentsList]);
 
   const graphCtx = useMemo(
     () => ({
       isAuthenticated,
-      currentUserId: user?.id ?? null,
+      currentUserId: userId,
       childCountByArgumentId,
       onArgumentUpdated: upsertArgument,
       onArgumentDeleted: removeArgument,
@@ -227,7 +217,7 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
     }),
     [
       isAuthenticated,
-      user,
+      userId,
       childCountByArgumentId,
       upsertArgument,
       removeArgument,
@@ -331,8 +321,6 @@ function DebateReady({ debate }: { debate: DebateDetailDto }) {
   );
 }
 
-import { ConfirmDialog } from "../../components/ConfirmDialog";
-
 function FloatingThesisCard({
   debate,
   onBack,
@@ -405,7 +393,7 @@ function FloatingThesisCard({
             </span>
             <span className="text-default-400 dark:text-zinc-600">·</span>
             <span className="text-default-500 dark:text-zinc-400">
-              {getDateTimeFormatter(lang).format(new Date(debate.createdAt))}
+              {formatDate(debate.createdAt, lang)}
             </span>
           </div>
         </div>
@@ -649,15 +637,6 @@ function FloatingEmptyHint({
       ) : null}
     </motion.div>
   );
-}
-
-function initialsFor(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((part) => part[0]!.toUpperCase())
-    .slice(0, 2)
-    .join("");
 }
 
 interface EmptyViewProps {

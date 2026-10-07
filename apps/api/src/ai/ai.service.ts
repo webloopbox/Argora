@@ -17,7 +17,6 @@ import { ArgumentsService } from '../arguments/arguments.service';
 import { effectiveStance } from '../arguments/effective-stance';
 import { Debate } from '../debates/debate.entity';
 import { User } from '../users/user.entity';
-import { activeWhere } from '../common/repository/soft-delete';
 import { EmbeddingService } from './embedding.service';
 import { LlmRegistry } from './llm-registry';
 import { describeError, upstreamAiException } from './upstream-error';
@@ -100,13 +99,26 @@ export class AiService {
       return { similarity: 0, threshold: DUPLICATE_THRESHOLD };
     }
 
-    const candidates = await this.args.find({
-      where: activeWhere<Argument>({ debateId: dto.debateId, side: dto.side }),
-    });
+    // Only the id and the vector are read, and only rows that can actually
+    // match: an argument with no embedding yet, and the parent the new
+    // argument replies to (a reply naturally echoes its parent), are excluded
+    // in SQL rather than fetched and skipped. The embeddings are multi-kilobyte
+    // JSONB blobs, so narrowing the projection is what keeps this cheap as a
+    // debate grows.
+    const query = this.args
+      .createQueryBuilder('a')
+      .select(['a.id', 'a.embedding'])
+      .where('a.debate_id = :debateId', { debateId: dto.debateId })
+      .andWhere('a.side = :side', { side: dto.side })
+      .andWhere('a.archived_on IS NULL')
+      .andWhere('a.embedding IS NOT NULL');
+    if (dto.parentArgumentId) {
+      query.andWhere('a.id != :parentId', { parentId: dto.parentArgumentId });
+    }
+    const candidates = await query.getMany();
 
     let best: { id: string; similarity: number } | null = null;
     for (const arg of candidates) {
-      if (dto.parentArgumentId && arg.id === dto.parentArgumentId) continue;
       if (!arg.embedding) continue;
       const sim = this.embedding.cosineSimilarity(newEmbedding, arg.embedding);
       if (!best || sim > best.similarity) {

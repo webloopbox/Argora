@@ -59,7 +59,9 @@ export class GeminiProvider implements LlmProvider {
     return response.embeddings?.[0]?.values ?? [];
   }
 
-  async classifySide(input: ClassifySideInput): Promise<'pro' | 'against' | null> {
+  async classifySide(
+    input: ClassifySideInput,
+  ): Promise<'pro' | 'against' | null> {
     const response = await this.client.models.generateContent({
       model: MODEL_ID,
       contents: buildClassifySidePrompt(input),

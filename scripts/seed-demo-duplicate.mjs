@@ -11,26 +11,10 @@
 
 import pg from "pg";
 import { GoogleGenAI } from "@google/genai";
-import * as fs from "fs";
-import * as path from "path";
+import { createApiClient } from "./lib/api-client.mjs";
+import { loadEnv } from "./lib/env.mjs";
 
-// Parse .env manually
-const envPath = path.resolve(".env");
-if (fs.existsSync(envPath)) {
-  const envContent = fs.readFileSync(envPath, "utf8");
-  for (const line of envContent.split("\n")) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) continue;
-    const parts = trimmed.split("=");
-    const key = parts[0].trim();
-    const val = parts
-      .slice(1)
-      .join("=")
-      .trim()
-      .replace(/^['"]|['"]$/g, "");
-    process.env[key] = val;
-  }
-}
+loadEnv();
 const API = process.env.API_URL ?? "http://localhost:3000";
 const WEB = process.env.WEB_URL ?? "http://localhost:5173";
 const PASSWORD = "haslo1234";
@@ -241,43 +225,10 @@ const tree = [
   },
 ];
 
-async function jsonFetch(path, opts = {}) {
-  const res = await fetch(`${API}${path}`, {
-    method: opts.method ?? "GET",
-    headers: {
-      "Content-Type": "application/json",
-      ...(opts.token ? { Authorization: `Bearer ${opts.token}` } : {}),
-    },
-    body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    const err = new Error(
-      `${opts.method ?? "GET"} ${path} → ${res.status}: ${text}`,
-    );
-    err.status = res.status;
-    throw err;
-  }
-  if (res.status === 204) return null;
-  return res.json();
-}
-
-async function registerOrLogin(user) {
-  try {
-    return await jsonFetch("/auth/register", {
-      method: "POST",
-      body: { ...user, password: PASSWORD },
-    });
-  } catch (err) {
-    if (err.status === 409) {
-      return jsonFetch("/auth/login", {
-        method: "POST",
-        body: { email: user.email, password: PASSWORD },
-      });
-    }
-    throw err;
-  }
-}
+const { jsonFetch, registerOrLogin } = createApiClient({
+  baseUrl: API,
+  password: PASSWORD,
+});
 
 async function main() {
   console.log(`→ API: ${API}\n`);

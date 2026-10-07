@@ -14,6 +14,5 @@ export function useDocumentTitle(title: string | null): void {
     return () => {
       document.title = previous;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, lang]);
 }
