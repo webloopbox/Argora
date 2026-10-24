@@ -4,9 +4,8 @@
 // of production code - `effectiveStance` of
 // apps/api/src/arguments/effective-stance.ts and `computeSentiment` of
 // ArgumentsService - extracted here so the scripts share one copy rather than
-// one per script. The behaviour is reproduced exactly as the scripts that
-// produced the measurements in praca_pisemna.md ran it; changing any of it
-// invalidates those numbers.
+// one per script. They match production as it stood when the recorded
+// measurements ran, so editing any of them invalidates those numbers.
 
 const CONTROVERSY_MAX_RATIO = 0.2;
 

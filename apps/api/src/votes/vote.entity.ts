@@ -6,11 +6,18 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-// At most one active vote per (argument, user) - enforced via partial
-// unique index in db/init.sql (TypeORM @Unique can't express WHERE clauses).
+// At most one active vote per (argument, user), declared below as a partial
+// unique @Index: the rule has to be scoped to `WHERE archived_on IS NULL`,
+// which a TypeORM @Unique cannot express but an @Index can. It belongs in the
+// entity rather than in raw SQL, because `synchronize` drops every index it
+// does not know about on each boot.
 // Retracting a vote soft-archives the row, so a fresh +1 after a -1 yields
 // an audit trail of two rows but only the active one counts.
 @Entity('votes')
+@Index('votes_one_active_per_pair', ['argumentId', 'userId'], {
+  unique: true,
+  where: 'archived_on IS NULL',
+})
 export class Vote {
   @PrimaryGeneratedColumn('uuid')
   id!: string;

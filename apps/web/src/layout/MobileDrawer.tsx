@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { Avatar, AvatarFallback, Button } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Languages, X } from "lucide-react";
+import { ArgoraMark } from "../components/ArgoraMark";
 import { ui } from "../texts/ui";
 import { navItems } from "./nav-items";
 import { useLanguage } from "../app-config/language-context";
@@ -69,7 +70,8 @@ export function MobileDrawer({
             className="fixed inset-y-0 left-0 z-50 flex w-[min(320px,85vw)] flex-col overflow-hidden bg-white shadow-2xl dark:bg-zinc-950 md:hidden"
           >
             <header className="flex items-center justify-between border-b border-default-100 px-5 py-4 dark:border-zinc-800">
-              <span className="text-lg font-semibold tracking-tight text-violet-700 dark:text-violet-500">
+              <span className="flex items-center gap-2 text-lg font-semibold tracking-tight text-violet-700 dark:text-violet-500">
+                <ArgoraMark size={24} className="text-violet-600 dark:text-violet-400" />
                 {ui.app.name}
               </span>
               <button

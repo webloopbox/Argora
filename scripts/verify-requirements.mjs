@@ -1,11 +1,11 @@
-// Requirement verification harness for praca_pisemna.md, §7.7 (Table 7.7).
+// Requirement verification harness.
 //
 // Drives the real HTTP endpoints of a running instance and reports, per
 // functional requirement WF1..WF12, whether the observable behaviour matches
-// the specification in §4.4. Requirements whose substance lives in the visual
-// layer (colour coding, sentiment badge, lasso gesture) cannot be settled
-// here; those rows are reported as "poza zakresem skryptu" so that the thesis
-// does not claim more than was measured.
+// the specification. Requirements whose substance lives in the visual layer
+// (colour coding, sentiment badge, lasso gesture) cannot be settled here;
+// those rows are reported as "poza zakresem skryptu" so the report does not
+// claim more than was measured.
 //
 // The script writes into the database it talks to, so point it at the test
 // database (brainstorm_test), never at the one holding the seeded demo
@@ -112,7 +112,7 @@ async function main() {
   const bob = await register("bob", "Bartosz Weryfikacja");
   const carol = await register("carol", "Cezary Weryfikacja");
 
-  // --- WF1: utworzenie debaty z tezą, widocznością i językiem ---
+  // --- WF1: create a debate carrying a thesis, visibility and language ---
   const thesis =
     "Zdalne nauczanie akademickie powinno pozostać stałym elementem oferty uczelni.";
   const debate = await must(
@@ -146,7 +146,7 @@ async function main() {
     `teza zgodna, widoczność ${fetched.visibility}, język ${fetched.language} oraz ${english.language} dla drugiej debaty; brak punktu końcowego zmieniającego język`,
   );
 
-  // --- WF2: dodanie argumentu ze wskazaniem strony i węzła nadrzędnego ---
+  // --- WF2: add an argument that names its side and its parent node ---
   const root = await must(
     "argument pod tezą",
     api(`/debates/${debate.id}/arguments`, {
@@ -200,7 +200,7 @@ async function main() {
     `drzewo trzech poziomów zbudowane poprawnie, strona spoza słownika odrzucona kodem ${badSide.status}`,
   );
 
-  // --- WF3: dane grafu (warstwa danych; kodowanie kolorem poza zakresem) ---
+  // --- WF3: the graph data; colour coding belongs to the client layer ---
   const list = await must(
     "lista argumentów",
     api(`/debates/${debate.id}/arguments`),
@@ -217,7 +217,7 @@ async function main() {
     `zasób zwraca ${list.length} węzłów z kompletnymi krawędziami i stroną sporu przy każdym; samo odwzorowanie na kolor rozstrzyga warstwa kliencka`,
   );
 
-  // --- WF4: głosy i waga jako suma bezwzględna ---
+  // --- WF4: votes, and weight as the absolute sum ---
   await must(
     "głos popierający",
     api(`/arguments/${root.id}/votes`, {
@@ -260,7 +260,7 @@ async function main() {
     `waga 1+1 = ${afterTwo.weight} mimo wyniku netto zero, po trzecim głosie ${afterThird.weight}, po wycofaniu ${afterRetract.weight}`,
   );
 
-  // --- WF5: wskaźnik sentymentu wraz ze stanem wysokiej kontrowersji ---
+  // --- WF5: the sentiment badge, including the high-controversy state ---
   const balanced = afterTwo.sentiment;
   const dominant = afterThird.sentiment;
   const singleVote = (
@@ -280,7 +280,7 @@ async function main() {
     `głosy 1:1 dają stan ${balanced}, przewaga 2:1 stan ${dominant}, pojedynczy głos popierający stan ${singleVote}; prezentacja odznaki należy do warstwy klienckiej`,
   );
 
-  // --- WF6: obowiązkowe porównanie semantyczne przed zapisem ---
+  // --- WF6: the mandatory semantic comparison before a write ---
   const paraphrase =
     "Osoby mieszkające daleko od uczelni mogą dzięki zajęciom online studiować bez zmiany miejsca zamieszkania.";
   const duplicate = await waitForEmbeddings(debate.id, carol.token, paraphrase);
@@ -308,7 +308,7 @@ async function main() {
       : "brak odpowiedzi z porównania semantycznego",
   );
 
-  // --- WF10: rejestr modeli (potrzebny do WF7..WF9) ---
+  // --- WF10: the model registry, which WF7..WF9 depend on ---
   const providers = await must("rejestr modeli", api("/ai/providers"));
   const modelIds = providers.map((p) => p.id);
   const unknownModel = await api("/ai/arguments/generate", {
@@ -321,7 +321,7 @@ async function main() {
     },
   });
 
-  // --- WF7: generowanie przesłanki w kontekście grafu ---
+  // --- WF7: generate a premise in the context of the graph ---
   const generated = [];
   for (const model of providers) {
     const res = await api("/ai/arguments/generate", {
@@ -358,7 +358,7 @@ async function main() {
     `rejestr zwraca ${modelIds.length} modeli (${modelIds.join(", ")}), każde wywołanie odpowiada identyfikatorem żądanego modelu, identyfikator nieznany odrzucony kodem ${unknownModel.status}`,
   );
 
-  // --- WF8: sygnalizowanie niezgodności ze stroną sporu ---
+  // --- WF8: flag an argument that contradicts its declared side ---
   const mismatch = await must(
     "niezgodna strona",
     api("/ai/arguments/check-side", {
@@ -392,7 +392,7 @@ async function main() {
     `treść przeciwna zgłoszona jako niezgodna z podpowiedzią strony ${mismatch.suggestedSide}, treść zgodna przepuszczona bez ostrzeżenia`,
   );
 
-  // --- WF9: synteza podgrafu oraz całej debaty ---
+  // --- WF9: synthesis of a subgraph, and of the whole debate ---
   const all = await must("argumenty do syntezy", api(`/debates/${debate.id}/arguments`));
   const subgraph = [child.id, grandchild.id];
   const synthSub = await must(
@@ -424,7 +424,7 @@ async function main() {
     `synteza dwuwęzłowego podgrafu ${synthSub.text.length} znaków, synteza ${all.length} węzłów ${synthAll.text.length} znaków, wyniki różne; sam gest lassa rozstrzyga warstwa kliencka`,
   );
 
-  // --- WF11: debaty publiczne i grupy prywatne z zaproszeniami ---
+  // --- WF11: public debates, and private groups with invitations ---
   const group = await must(
     "utworzenie grupy",
     api("/groups", {
@@ -485,7 +485,7 @@ async function main() {
     `zaproszony przed akceptacją ${beforeAccept.status}, po akceptacji ${afterAccept.status}, osoba spoza grupy ${outsider.status}, debata publiczna czytana anonimowo ${anonymousPublic.status}, zapis anonimowy ${anonymousWrite.status}`,
   );
 
-  // --- WF12: wycofanie z widoku bez usunięcia trwałego ---
+  // --- WF12: withdraw from the view without deleting the row ---
   const argsBefore = await must(
     "argumenty przed wycofaniem",
     api(`/debates/${debate.id}/arguments`),

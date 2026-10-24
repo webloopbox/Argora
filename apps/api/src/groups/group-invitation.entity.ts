@@ -7,11 +7,16 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-// One pending invite per (group, invitee) is enforced by a partial unique
-// index created in db/init.sql - TypeORM can't express partial unique
-// constraints declaratively, so the application-level check in
-// InvitationsService is the primary guard and the DB index is the safety net.
+// One pending invite per (group, invitee), declared below as a partial unique
+// @Index - a TypeORM @Unique cannot carry the WHERE clause, an @Index can, and
+// it belongs in the entity because `synchronize` drops every index it does not
+// know about on each boot. The application-level check in InvitationsService
+// is the primary guard and the DB index is the safety net.
 @Entity('group_invitations')
+@Index('group_invitations_one_pending_per_pair', ['groupId', 'inviteeId'], {
+  unique: true,
+  where: "status = 'pending' AND archived_on IS NULL",
+})
 @Index('group_invitations_group_invitee_status_idx', [
   'groupId',
   'inviteeId',

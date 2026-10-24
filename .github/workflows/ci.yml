@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+# Nothing here needs write access to the repository.
+permissions:
+  contents: read
+
+# A new push to the same branch supersedes an in-flight run.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: build, typecheck, lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Reads the pinned version from "packageManager" in package.json.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # Builds in topological order, so @argora/core is compiled before the two
+      # apps that import its dist/.
+      - name: Build
+        run: pnpm build
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      # The backend's own lint script passes --fix, which would rewrite files and
+      # exit 0 in CI. The root script runs ESLint in report-only mode instead.
+      - name: Lint
+        run: pnpm lint
+
+      # The Playwright suite is deliberately not run here. It needs PostgreSQL
+      # with pgvector plus a seeded test database, and on Windows its worker
+      # process fails to exit, so the run reports exit code 1 even when every
+      # test passes. See docs/DEVELOPMENT.md for running it locally.

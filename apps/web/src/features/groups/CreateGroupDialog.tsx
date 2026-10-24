@@ -98,7 +98,7 @@ function CreateGroupPanel({
       transition={{ duration: 0.2, ease: "easeOut" }}
       role="dialog"
       aria-label={ui.groups.create.title}
-      className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-3xl border border-default-100 bg-white shadow-2xl shadow-violet-500/10 dark:border-zinc-800 dark:bg-zinc-900"
+      className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-3xl border border-default-100 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900"
     >
       <header className="flex items-start justify-between gap-3 border-b border-default-100 px-5 py-4 dark:border-zinc-800">
         <div className="flex items-center gap-2">

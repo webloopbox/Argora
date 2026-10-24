@@ -16,19 +16,18 @@
   <rect x="0" y="0" width="1240" height="3" fill="#0f62fe"/>
 
   <text x="48" y="54" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" letter-spacing="3" fill="#78a9ff">AI-ASSISTED ENGINEERING</text>
-  <text x="48" y="92" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#f4f4f4">The architecture is written down, so the agent cannot drift</text>
+  <text x="48" y="92" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#f4f4f4">The architecture is written down, not remembered</text>
 
   <rect x="48" y="132" width="350" height="268" rx="12" fill="#111831" stroke="#2f3b6e"/>
   <rect x="48" y="132" width="350" height="4" rx="2" fill="#0f62fe"/>
-  <text x="72" y="170" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#78a9ff">01 &#183; THE CONSTITUTION</text>
-  <text x="72" y="200" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#f4f4f4">4 &#215; CLAUDE.md, 165 lines</text>
+  <text x="72" y="170" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#78a9ff">01 &#183; WHERE THE RULES LIVE</text>
+  <text x="72" y="200" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#f4f4f4">Four CLAUDE.md files</text>
   <text x="72" y="228" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">/CLAUDE.md&#8195;&#8195;&#8195;domain + guardrails</text>
   <text x="72" y="252" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">apps/api/&#8195;&#8195;&#8195;&#8195;strategy, guards, SQL</text>
   <text x="72" y="276" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">apps/web/&#8195;&#8195;&#8195;&#8195;i18n, visual coding</text>
   <text x="72" y="300" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">packages/core/&#8195;contract ownership</text>
   <rect x="72" y="320" width="302" height="62" rx="8" fill="#0d1428" stroke="#2a3463"/>
-  <text x="88" y="344" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">Every rule states the reason it exists, so</text>
-  <text x="88" y="364" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">a change can be argued with, not guessed at.</text>
+  <text x="88" y="356" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">Every rule states the reason it exists.</text>
 
   <rect x="446" y="132" width="350" height="268" rx="12" fill="#111831" stroke="#263056"/>
   <rect x="446" y="132" width="350" height="4" rx="2" fill="#be95ff"/>
@@ -57,5 +56,5 @@
   <line x1="400" y1="266" x2="442" y2="266" stroke="#4589ff" stroke-width="2.5" marker-end="url(#wArrow)"/>
   <line x1="798" y1="266" x2="840" y2="266" stroke="#4589ff" stroke-width="2.5" marker-end="url(#wArrow)"/>
   <path d="M1018 400 L1018 432 L223 432 L223 404" fill="none" stroke="#f1c21b" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#wArrowBack)"/>
-  <text x="520" y="426" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#f1c21b">what the work teaches goes back into the rules</text>
+  <text x="520" y="426" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#f1c21b">what the work uncovers updates the rules</text>
 </svg>

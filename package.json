@@ -1,11 +1,17 @@
 {
   "name": "argora",
   "private": true,
+  "packageManager": "pnpm@10.18.3",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev:web": "pnpm --filter \"./apps/web\" dev",
     "dev:api": "pnpm --filter \"./apps/api\" dev",
     "build:core": "pnpm --filter \"./packages/core\" build",
     "build": "pnpm -r build",
+    "typecheck": "pnpm --filter ./packages/core exec tsc --noEmit -p tsconfig.json && pnpm --filter ./apps/api exec tsc --noEmit && pnpm --filter ./apps/web exec tsc --noEmit && pnpm --filter ./apps/e2e exec tsc --noEmit",
+    "lint": "pnpm --filter ./apps/api exec eslint \"src/**/*.ts\" && pnpm --filter ./apps/web lint",
     "test:e2e": "pnpm --filter \"./apps/e2e\" test",
     "seed:demo": "node scripts/seed-demo-duplicate.mjs",
     "seed:seminar": "node scripts/seed-demo-seminar.mjs",

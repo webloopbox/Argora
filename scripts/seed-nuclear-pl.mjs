@@ -1,8 +1,8 @@
 // Seeds a public, Polish-language debate with a 4-level argument tree.
-// Topic: czy energia jądrowa jest niezbędna do osiągnięcia neutralności
-// klimatycznej Polski.
+// Topic: whether nuclear power is essential for Poland to reach climate
+// neutrality. The debate content itself stays Polish.
 //
-// Built for rozdział 7 (ocena modeli): each reply directly rebuts or
+// Built for the model evaluation: each reply directly rebuts or
 // supports its parent's specific claim, not just the thesis in general, so
 // that a "classify side" call on a deep node genuinely requires walking the
 // parent chain rather than pattern-matching keywords from the thesis.
@@ -52,10 +52,11 @@ const voters = [
   },
 ];
 
-// 4-poziomowe drzewo, 22 węzły. Jak w seed-remote-work-pl.mjs, każda gałąź
-// to spójny ciąg zarzut -> obrona -> kontra, nie luźne stwierdzenia wobec tezy.
+// Four-level tree, 22 nodes. As in seed-remote-work-pl.mjs, every branch runs
+// as a coherent chain of objection -> defence -> counter, rather than loose
+// statements aimed at the thesis.
 const tree = [
-  // ─── L1 (bezpośrednio pod tezą) ──────────────────────────────────────────
+  // ─── L1 (straight under the thesis) ──────────────────────────────────────
   {
     key: "MAIN",
     parent: null,
@@ -352,7 +353,7 @@ async function main() {
         });
         cast++;
       } catch {
-        // ignore - np. konflikt głosów przy ponownym seedzie
+        // ignore, e.g. a vote conflict when seeding a second time
       }
     }
     process.stdout.write(`    ${node.key.padEnd(24)} → ${cast} głosów\n`);

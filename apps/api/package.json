@@ -18,6 +18,7 @@
     "@anthropic-ai/sdk": "^0.97.1",
     "@argora/core": "workspace:*",
     "@google/genai": "^2.6.0",
+    "@huggingface/transformers": "^4.3.1",
     "@ibm-cloud/watsonx-ai": "^1.7.15",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.0",

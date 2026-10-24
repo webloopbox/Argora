@@ -1,98 +1,76 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# apps/api - Argora backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS 11 application. It owns the PostgreSQL schema, the LLM and embedding
+integrations, and the server half of every API contract. The contract shapes
+themselves live in [`@argora/core`](../../packages/core), so the frontend
+cannot drift away from them.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+For what Argora is and how its AI features work, see the
+[root README](../../README.md). For running, seeding and debugging the stack
+locally, see the [development guide](../../docs/DEVELOPMENT.md).
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Modules
 
-## Project setup
+| Path | Responsibility |
+| --- | --- |
+| `src/auth` | Registration, login, JWT strategy, the `@CurrentUser` decorator, optional-auth guard for public reads |
+| `src/users` | Account records and the directory search that group invitations target |
+| `src/debates` | Theses, visibility mode, and the immutable debate language |
+| `src/arguments` | Graph nodes, weight and sentiment, thesis-relative stance (`effective-stance.ts`) |
+| `src/votes` | Votes for and against, soft-archived so a retraction stays auditable |
+| `src/groups` | Private groups, memberships, and invitations awaiting acceptance |
+| `src/ai` | `LlmRegistry`, the per-vendor `LlmProvider` implementations, `EmbeddingService`, prompt builders |
+| `src/stats` | Dashboard aggregates |
+| `src/common` | `VisibilityGuard` and the soft-delete read helper |
+| `src/database` | TypeORM connection and entity registration |
 
-```bash
-$ pnpm install
-```
+---
 
-## Compile and run the project
+## Worth knowing before changing code here
 
-```bash
-# development
-$ pnpm run start
+- **Contracts belong to `@argora/core`.** A DTO declared locally is not a
+  shortcut, it is the mechanism by which the two apps stop agreeing.
+- **`VisibilityGuard` is the authorization check for every debate-scoped
+  route**, the AI and vote routes included. It resolves the debate from
+  `:debateId`, `:id`, `:argumentId` or the request body, then attaches the row
+  as `req.debate`. Read it from there rather than loading the debate again, and
+  never repeat the membership check inline.
+- **Deleting means `archivedOn = now()`, never `DELETE FROM`.** Every table
+  holding debate data carries the column, and reads go through `activeWhere`
+  in `src/common/repository/soft-delete.ts`.
+- **`synchronize` is enabled outside production**, and it drops any index
+  missing from entity metadata on every boot. That is why the two partial
+  unique indexes are declared as `@Index(..., { unique: true, where: ... })`
+  on `Vote` and `GroupInvitation` instead of in SQL.
+- **Vendors are pluggable and domain code stays vendor-agnostic.** Five
+  `LlmProvider` implementations exist; `LlmRegistry` instantiates only those
+  whose credentials are present, so an empty registry is a valid boot state
+  in which the app runs with its AI features unavailable.
+- **The duplicate threshold belongs to the embedding model**, not to the
+  domain. Read it from `EmbeddingService.duplicateThreshold`; the per-vendor
+  calibration differs enough that a copied constant fires the gate on every
+  submission.
+- **Exception messages are written in Polish** and reach the user verbatim.
+  They do not pass through the frontend dictionary, so they do not follow the
+  interface language switch.
 
-# watch mode
-$ pnpm run start:dev
+`CLAUDE.md` in this folder carries the full set of backend rules together with
+the measurements behind each one.
 
-# production mode
-$ pnpm run start:prod
-```
+---
 
-## Run tests
+## Commands
 
-```bash
-# unit tests
-$ pnpm run test
+Run from the repository root, where the workspace scripts live.
 
-# e2e tests
-$ pnpm run test:e2e
+| Command | What it does |
+| --- | --- |
+| `pnpm dev:api` | Start in watch mode on `PORT` (default 3000) |
+| `pnpm --filter ./apps/api build` | Compile to `dist/` |
+| `pnpm --filter ./apps/api lint` | ESLint and Prettier, auto-fixing |
+| `pnpm --filter ./apps/api start:prod` | Run the compiled output |
 
-# test coverage
-$ pnpm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+The shared package has to be built before the API starts (`pnpm build:core`),
+because the API imports its compiled `dist/`.

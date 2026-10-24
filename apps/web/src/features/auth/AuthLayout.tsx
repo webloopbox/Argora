@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { ArgoraMark } from "../../components/ArgoraMark";
 import { ui } from "../../texts/ui";
 
 // Standalone shell for /logowanie and /rejestracja - intentionally no
@@ -28,15 +28,13 @@ export function AuthLayout() {
           to="/"
           className="mb-8 flex items-center justify-center gap-2"
         >
-          <span className="relative grid h-10 w-10 place-items-center rounded-xl bg-violet-600 text-white shadow-md shadow-violet-500/30">
-            <Sparkles size={20} strokeWidth={2.5} />
-          </span>
+          <ArgoraMark size={30} className="text-violet-600 dark:text-violet-400" />
           <span className="text-xl font-semibold tracking-tight text-violet-700 dark:text-violet-500">
             {ui.app.name}
           </span>
         </NavLink>
 
-        <div className="rounded-3xl border border-default-100 bg-white/85 p-8 shadow-2xl shadow-violet-900/5 backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/90">
+        <div className="rounded-3xl border border-default-100 bg-white/85 p-8 shadow-2xl backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/90">
           <Outlet />
         </div>
       </motion.div>

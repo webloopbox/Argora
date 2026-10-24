@@ -87,7 +87,7 @@ const tree = [
   {
     key: "L2.C.rebut",
     parent: "L1.C",
-    side: "pro",
+    side: "against",
     author: 5,
     votes: 4,
     content:
@@ -96,7 +96,7 @@ const tree = [
   {
     key: "L2.D.rebut",
     parent: "L1.D",
-    side: "pro",
+    side: "against",
     author: 6,
     votes: 5,
     content:

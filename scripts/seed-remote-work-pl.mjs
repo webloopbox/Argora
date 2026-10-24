@@ -1,7 +1,8 @@
 // Seeds a public, Polish-language debate with a 4-level argument tree.
-// Topic: czy praca zdalna powinna być domyślnym modelem zatrudnienia w IT.
+// Topic: whether remote work should be the default employment model in IT.
+// The debate content itself stays Polish.
 //
-// Built for rozdział 7 (ocena modeli): each reply directly rebuts or
+// Built for the model evaluation: each reply directly rebuts or
 // supports its parent's specific claim, not just the thesis in general, so
 // that a "classify side" call on a deep node genuinely requires walking the
 // parent chain rather than pattern-matching keywords from the thesis.
@@ -51,11 +52,11 @@ const voters = [
   },
 ];
 
-// 4-poziomowe drzewo, 20 węzłów. Każda gałąź to spójny ciąg: teza -> zarzut
-// -> obrona -> kontra wobec obrony, więc odpowiedź na węźle L3/L4 ma sens
-// tylko w kontekście konkretnego rodzica, nie samej tezy.
+// Four-level tree, 20 nodes. Every branch runs as a coherent chain: thesis ->
+// objection -> defence -> counter to the defence, so a reply on an L3 or L4
+// node only makes sense against its particular parent, not against the thesis.
 const tree = [
-  // ─── L1 (bezpośrednio pod tezą) ──────────────────────────────────────────
+  // ─── L1 (straight under the thesis) ──────────────────────────────────────
   {
     key: "MAIN",
     parent: null,
@@ -334,7 +335,7 @@ async function main() {
         });
         cast++;
       } catch {
-        // ignore - np. konflikt głosów przy ponownym seedzie
+        // ignore, e.g. a vote conflict when seeding a second time
       }
     }
     process.stdout.write(`    ${node.key.padEnd(24)} → ${cast} głosów\n`);

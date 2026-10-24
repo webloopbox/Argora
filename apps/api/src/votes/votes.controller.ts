@@ -7,7 +7,12 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import type { ArgumentDto, CastVoteDto } from '@argora/core';
+// CastVoteDto must be a value import: `import type` erases the class, which
+// makes TypeScript emit `Function` as the parameter type. ValidationPipe
+// does not skip `Function`, so it would build the body with
+// plainToInstance(Function, body) and `whitelist` would then strip every
+// field - the vote would reach the service with no value at all.
+import { ArgumentDto, CastVoteDto } from '@argora/core';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { VisibilityGuard } from '../common/guards/visibility.guard';

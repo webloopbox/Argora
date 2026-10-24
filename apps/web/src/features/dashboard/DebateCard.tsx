@@ -28,7 +28,7 @@ export function DebateCard({ debate, canParticipate, onOpen }: DebateCardProps) 
       }}
       whileHover={{ y: -4 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-default-100 bg-white/80 p-5 shadow-sm backdrop-blur transition-shadow hover:shadow-xl hover:shadow-violet-500/5 dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:shadow-violet-500/10"
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-default-100 bg-white/80 p-5 shadow-sm backdrop-blur transition-shadow hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-900/80"
     >
       <div
         aria-hidden

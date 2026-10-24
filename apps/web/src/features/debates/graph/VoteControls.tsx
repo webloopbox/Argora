@@ -179,27 +179,25 @@ function VoteButton({
 // eye locks onto it as the "result"; non-interactive so it doesn't compete
 // with the cast/retract controls. Title carries the sentiment + weight
 // pair for hover discovery; aria-label exposes the same for screen readers.
-const SENTIMENT_STYLES: Record<
-  ArgumentSentiment,
-  { circle: string; label: string }
-> = {
-  pro: {
-    circle: "border-pro-300 bg-pro-50 text-pro-700",
-    label: ui.debates.graph.sentimentPro,
-  },
-  against: {
-    circle: "border-against-300 bg-against-50 text-against-700",
-    label: ui.debates.graph.sentimentAgainst,
-  },
-  controversy: {
-    circle: "border-orange-300 bg-orange-50 text-orange-700",
-    label: ui.debates.graph.sentimentControversy,
-  },
-  neutral: {
-    circle: "border-default-200 bg-default-50 text-default-500",
-    label: ui.debates.graph.sentimentNeutral,
-  },
+const SENTIMENT_CIRCLE: Record<ArgumentSentiment, string> = {
+  pro: "border-pro-300 bg-pro-50 text-pro-700",
+  against: "border-against-300 bg-against-50 text-against-700",
+  controversy: "border-orange-300 bg-orange-50 text-orange-700",
+  neutral: "border-default-200 bg-default-50 text-default-500",
 };
+
+// Read at call time, never cached at module scope: `ui` resolves the active
+// locale when a property is read, so a module-level copy would freeze whichever
+// language happened to be loaded first and survive every locale switch.
+function sentimentLabel(sentiment: ArgumentSentiment): string {
+  const labels: Record<ArgumentSentiment, string> = {
+    pro: ui.debates.graph.sentimentPro,
+    against: ui.debates.graph.sentimentAgainst,
+    controversy: ui.debates.graph.sentimentControversy,
+    neutral: ui.debates.graph.sentimentNeutral,
+  };
+  return labels[sentiment];
+}
 
 function WeightCenter({
   weight,
@@ -208,18 +206,18 @@ function WeightCenter({
   weight: number;
   sentiment: ArgumentSentiment;
 }) {
-  const style = SENTIMENT_STYLES[sentiment];
-  const ariaLabel = `${style.label} · ${ui.debates.graph.weightAriaLabel}: ${weight}`;
+  const label = sentimentLabel(sentiment);
+  const ariaLabel = `${label} · ${ui.debates.graph.weightAriaLabel}: ${weight}`;
   return (
     <span className="group/weight relative">
       <span
         aria-label={ariaLabel}
-        className={`grid h-6 min-w-6 cursor-default select-none place-items-center rounded-full border px-1.5 text-[11px] font-bold tabular-nums ${style.circle}`}
+        className={`grid h-6 min-w-6 cursor-default select-none place-items-center rounded-full border px-1.5 text-[11px] font-bold tabular-nums ${SENTIMENT_CIRCLE[sentiment]}`}
       >
         {weight}
       </span>
       <div className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 w-48 -translate-x-1/2 rounded-xl bg-gray-800 px-3 py-2 text-xs text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/weight:opacity-100">
-        <p className="mb-0.5 font-semibold">{style.label}</p>
+        <p className="mb-0.5 font-semibold">{label}</p>
         <p className="leading-snug text-gray-300">
           {ui.debates.graph.weightTooltip}
         </p>

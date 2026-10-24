@@ -12,7 +12,7 @@ const DUPLICATE_CONTENT =
 
 test.describe("Duplikat - dialog scalania", () => {
   test("identyczny argument → dialog merge → Połącz", async ({ page }) => {
-    // Seed danych przez API
+    // Seed the debate and the first argument through the API.
     const { accessToken } = await registerViaApi("Dup Tester", EMAIL, PASSWORD);
     const debate = await createDebateApi(accessToken, {
       thesis: "Praca zdalna to przyszłość.",
@@ -23,12 +23,12 @@ test.describe("Duplikat - dialog scalania", () => {
       side: "pro",
     });
 
-    // Zaloguj przez localStorage
+    // Sign in by writing the token into localStorage.
     await page.goto("/");
     await seedStorageState(page, accessToken);
 
-    // Podmień endpoint check-duplicate przez route interception - uniezależnia
-    // test od dostępności kluczy API do modeli językowych.
+    // Stub check-duplicate through route interception so the test runs without
+    // credentials for any language model.
     await page.route("**/ai/arguments/check-duplicate", async (route) => {
       await route.fulfill({
         status: 200,
@@ -37,18 +37,18 @@ test.describe("Duplikat - dialog scalania", () => {
       });
     });
 
-    // Przejdź na stronę dyskusji
+    // Open the debate page.
     await page.goto(`/dyskusje/${debate.id}`);
     await expect(page.locator(".react-flow__node").first()).toBeVisible({
       timeout: 10_000,
     });
 
-    // Graf: teza + 1 argument
+    // Graph holds the thesis plus one argument.
     await expect(page.locator(".react-flow__node")).toHaveCount(2, {
       timeout: 8_000,
     });
 
-    // Dodaj argument Za z treścią "duplikatu"
+    // Submit a For argument that repeats the stored one.
     await page
       .getByRole("button", { name: "Dodaj argument Za" })
       .first()
@@ -59,19 +59,19 @@ test.describe("Duplikat - dialog scalania", () => {
     await panel.getByRole("textbox").fill(DUPLICATE_CONTENT);
     await panel.getByRole("button", { name: "Dodaj argument Za" }).click();
 
-    // Dialog merge identyfikowany przez aria-labelledby="merge-dialog-title"
+    // The merge dialog is addressed through aria-labelledby="merge-dialog-title".
     const mergeDialog = page.getByRole("dialog", {
       name: "Podobny argument już istnieje",
     });
     await expect(mergeDialog).toBeVisible({ timeout: 10_000 });
 
-    // Kliknij "Połącz (dodaj głos)"
+    // Choose merge, which casts a vote on the stored argument.
     await mergeDialog
       .getByRole("button", { name: "Połącz (dodaj głos)" })
       .click();
     await expect(mergeDialog).not.toBeVisible({ timeout: 8_000 });
 
-    // Graf nadal ma 2 węzły (teza + original argument, brak nowego)
+    // The graph still holds two nodes: merging adds a vote, never a node.
     await expect(page.locator(".react-flow__node")).toHaveCount(2, {
       timeout: 8_000,
     });

@@ -60,7 +60,7 @@ export function HeroSection({
                 variant="primary"
                 size="lg"
                 onPress={onCreateDebate}
-                className="shadow-lg shadow-violet-500/20"
+                className="shadow-lg"
               >
                 <PlusCircle size={18} />
                 {ui.dashboard.startDebate}
@@ -70,7 +70,7 @@ export function HeroSection({
                 variant="primary"
                 size="lg"
                 onPress={onSignIn}
-                className="shadow-lg shadow-violet-500/20"
+                className="shadow-lg"
               >
                 {ui.auth.signInToParticipate}
                 <ArrowRight size={18} />

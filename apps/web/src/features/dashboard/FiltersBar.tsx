@@ -8,17 +8,20 @@ interface FiltersBarProps {
   onChange: (next: DebateFilter) => void;
 }
 
-const filters: { key: DebateFilter; label: string }[] = [
-  { key: "hottest", label: ui.dashboard.filters.hottest },
-  { key: "newest", label: ui.dashboard.filters.newest },
-  { key: "divisive", label: ui.dashboard.filters.mostDivisive },
-];
-
 export function FiltersBar({ value, onChange }: FiltersBarProps) {
+  // Built during render, not at module scope: `ui` resolves the active locale
+  // when a property is read, so a module-level array would capture whichever
+  // language happened to be loaded first and never update on a locale switch.
+  const filters: { key: DebateFilter; label: string }[] = [
+    { key: "hottest", label: ui.dashboard.filters.hottest },
+    { key: "newest", label: ui.dashboard.filters.newest },
+    { key: "divisive", label: ui.dashboard.filters.mostDivisive },
+  ];
+
   return (
     <div
       role="tablist"
-      aria-label="Filtry"
+      aria-label={ui.dashboard.filters.groupAriaLabel}
       className="inline-flex rounded-full border border-default-100 bg-white/70 p-1 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70"
     >
       {filters.map((filter) => {

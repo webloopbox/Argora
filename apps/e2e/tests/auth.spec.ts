@@ -6,33 +6,34 @@ const PASSWORD = "haslo1234";
 
 test.describe("Auth - rejestracja i logowanie", () => {
   test("rejestracja → wylogowanie → logowanie", async ({ page }) => {
-    // --- Rejestracja ---
+    // --- Sign-up ---
     await page.goto("/rejestracja");
 
     await page.getByLabel("Nazwa wyświetlana").fill(DISPLAY_NAME);
     await page.getByLabel("Adres e-mail").fill(EMAIL);
     await page.getByLabel("Hasło").fill(PASSWORD);
-    // Submit registracji - scope do <form>, bo TopBar też ma button "Załóż konto"? Nie, ale dla spójności.
+    // Scoped to <form> to match the sign-in step below, where TopBar carries a
+    // second button of the same name.
     await page
       .locator("form")
       .getByRole("button", { name: "Załóż konto" })
       .click();
 
-    // Po rejestracji redirect na dashboard
+    // Sign-up redirects to the dashboard.
     await page.waitForURL(/\/$/);
     await expect(page.getByRole("banner")).toContainText(DISPLAY_NAME);
 
-    // --- Wylogowanie ---
+    // --- Sign-out ---
     await page.getByRole("button", { name: "Wyloguj" }).click();
     await expect(
       page.getByRole("button", { name: "Zaloguj się" }).first(),
     ).toBeVisible();
 
-    // --- Logowanie ---
+    // --- Sign-in ---
     await page.goto("/logowanie");
     await page.getByLabel("Adres e-mail").fill(EMAIL);
     await page.getByLabel("Hasło").fill(PASSWORD);
-    // Scope do <form>, bo TopBar też ma button "Zaloguj się" (użytkownik wylogowany)
+    // Scoped to <form>: while signed out, TopBar shows a second "Zaloguj się" button.
     await page
       .locator("form")
       .getByRole("button", { name: "Zaloguj się" })

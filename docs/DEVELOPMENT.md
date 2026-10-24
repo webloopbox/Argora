@@ -23,8 +23,8 @@ pnpm install
 # defaults in .env.example work for local development
 cp .env.example .env
 
-# PostgreSQL on :5432, pgvector extension and the partial unique
-# indexes are applied by db/init.sql on first container start
+# PostgreSQL on :5432; db/init.sql enables pgvector on first container
+# start, and the partial unique indexes come from the entity definitions
 docker compose up -d
 
 # api and web import the compiled dist/ of the shared package,
@@ -56,9 +56,21 @@ every table on first boot. No migration step.
 | `IBM_CLOUD_API_KEY`, `WATSONX_PROJECT_ID`, `WATSONX_URL` | no | Enables the three watsonx.ai models and the Granite embedding provider. |
 | `TOGETHER_API_KEY` | no | Enables the three together.ai serverless models. |
 | `GEMINI_API_KEY` | no | Enables Gemini generation and the Gemini embedding provider. |
-| `EMBEDDING_PROVIDER` | no | `watsonx` or `gemini`. Defaults to Gemini when both are configured. |
+| `EMBEDDING_PROVIDER` | no | `watsonx`, `gemini` or `local`. Unset, it prefers Gemini, then watsonx, then `local`. A named vendor whose credentials are missing also falls back to `local`, with a warning - the stored vectors are then from another model and need a re-embed. |
 | `WATSONX_EMBEDDING_MODEL_ID` | no | Overrides the default `ibm/granite-embedding-278m-multilingual`. |
-| `DUPLICATE_THRESHOLD` | no | Cosine cut-off for the duplicate gate. Defaults to `0.80`. |
+| `LOCAL_EMBEDDING_MODEL` | no | Overrides the default `Xenova/multilingual-e5-small`. |
+| `LOCAL_EMBEDDING_CACHE_DIR` | no | Where the local weights are cached. Set it to an absolute path so the API (cwd `apps/api`) and the scripts (cwd repo root) share one copy. |
+| `DUPLICATE_THRESHOLD` | no | Cosine cut-off for the duplicate gate. Overrides the per-provider calibrated default (`0.80` gemini/watsonx, `0.91` local) - leave unset unless re-measuring. |
+
+`local` needs no credentials: it runs `multilingual-e5-small` in-process
+through ONNX Runtime, downloading ~120 MB of weights on first use and working
+offline afterwards. That is what keeps the mandatory duplicate gate functional
+on a fresh clone with an empty `.env`. It is measurably less discriminative
+than Gemini, which is why the threshold travels with the provider rather than
+being a single domain constant - see the calibration note in
+`apps/api/src/ai/embedding.service.ts`. Switching provider invalidates every
+stored vector: snapshot the old ones with `node scripts/embedding-snapshot.mjs
+save <label>`, then recompute with `node scripts/reembed-existing.mjs`.
 
 The LLM registry instantiates whatever has credentials and skips the rest, so
 an empty registry is a valid boot state: the app starts and the model picker is
@@ -82,13 +94,26 @@ node scripts/reembed-existing.mjs
 | `pnpm dev:api` | API in watch mode |
 | `pnpm dev:web` | Frontend (Vite dev server) |
 | `pnpm build` | Build every workspace package |
+| `pnpm typecheck` | `tsc --noEmit` over the shared package and all three apps |
 | `pnpm --filter @argora/core build` | Build only the shared contract package |
 | `pnpm --filter @argora/core dev` | Watch and recompile the shared package |
 | `pnpm --filter ./apps/web lint` | ESLint over the frontend |
 | `pnpm --filter ./apps/api lint` | ESLint + Prettier over the backend (auto-fixes) |
+| `pnpm lint` | Both of the above in report-only mode, which is what CI runs |
 | `pnpm test:e2e` | Playwright suite, headless |
 | `docker compose up -d` | Start PostgreSQL |
 | `docker compose down -v` | Stop the database **and wipe its volume** |
+
+### Continuous integration
+
+`.github/workflows/ci.yml` runs `pnpm build`, `pnpm typecheck` and `pnpm lint`
+on every push and pull request against `master`. Running those three locally
+reproduces CI exactly.
+
+The Playwright suite is not part of it: it needs PostgreSQL with pgvector and a
+seeded test database, and its worker process fails to exit on Windows, so the
+run reports exit code 1 even when every test passes. Run it locally instead,
+as described under [End-to-end tests](#end-to-end-tests).
 
 ---
 
@@ -218,7 +243,7 @@ extension is enabled by `db/init.sql` ahead of the migration to a native
 | `Cannot find module '@argora/core'` | Build the shared package: `pnpm --filter @argora/core build`. |
 | API builds but emits nothing | Stale incremental cache: delete `apps/api/tsconfig.build.tsbuildinfo` and rebuild. |
 | Model picker is empty | No vendor credentials in `.env`. The registry skips vendors whose keys are absent. |
-| Duplicate detection never fires | No embedding provider configured, or existing rows have no vectors yet - run `scripts/reembed-existing.mjs`. |
+| Duplicate detection never fires | Usually the stored vectors, not the provider - the local model always loads, so there is no unconfigured state. Either the rows have no vectors yet, or they were written by a different model after `EMBEDDING_PROVIDER` changed. Both are fixed by `node scripts/reembed-existing.mjs`. Check the boot line `Embedding provider: <vendor> (duplicate threshold <t>)` to see which model is live. |
 | AI call returns 429 | Per-route throttle, or the vendor's own rate limit mapped to 429. Wait and retry. |
 | Database in a strange state | `docker compose down -v` wipes the volume; the next `up -d` gives a clean database. This also deletes seeded demo data. |
 | E2E: `DATABASE_URL is not set` | `.env.test` is missing or does not define it. |

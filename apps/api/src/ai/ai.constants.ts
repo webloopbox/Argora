@@ -13,7 +13,7 @@ export const GENERATE_MAX_TOKENS = 2048;
 // `message.reasoning` and return an EMPTY `message.content` with
 // finish_reason=length. `parseSide` then reads that as "no opinion" and
 // `checkArgumentSide` silently skips the mismatch warning, so the feature is
-// dead for those vendors rather than visibly broken. Measured in
-// praca_pisemna.md §7.4: at 20 tokens both models answered nothing on 79 of 80
-// classifications; at 512 they answer correctly on the same prompts.
+// dead for those vendors rather than visibly broken. At 20 tokens both models
+// answered nothing on 79 of 80 classifications; at 512 they answer correctly
+// on the same prompts.
 export const CLASSIFY_MAX_TOKENS = 512;

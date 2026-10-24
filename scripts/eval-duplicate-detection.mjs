@@ -1,38 +1,36 @@
-// Wypełnia Tabelę 7.3 (praca_pisemna.md, §7.3.2): przemiatanie progu
-// podobieństwa kosinusowego (metoda semantyczna, Gemini) oraz punkt
-// odniesienia leksykalny (Jaccard na tokenach, bez lematyzacji - patrz
-// zaktualizowany akapit w §7.3.1).
+// Threshold sweep for duplicate detection: cosine similarity over embeddings,
+// measured against a lexical baseline (Jaccard over tokens, no lemmatisation).
 //
-// Definicje TP/FP/FN wg §7.3.1: TP = wskazanie poprawne, FP = wykrycie
-// fałszywe LUB wskazanie błędne, FN = przeoczenie.
+// How the counts work: TP = the gate fired and pointed at the right argument,
+// FP = it fired on a submission that has no duplicate, or pointed at the wrong
+// argument, FN = it stayed silent on a real duplicate.
 //
-// Wymagania:
-//   - GEMINI_API_KEY i DATABASE_URL w .env
-//   - Debaty z duplicate-eval-set.mjs muszą mieć już policzone embeddingi
-//     Gemini (patrz scripts/reembed-existing.mjs)
+// Requirements:
+//   - DATABASE_URL in .env, plus credentials for whichever provider
+//     EMBEDDING_PROVIDER names ("local" needs none)
+//   - the debates in duplicate-eval-set.mjs must already carry embeddings from
+//     THAT SAME provider (see scripts/reembed-existing.mjs); vectors from two
+//     models are not comparable and yield worthless similarities
 //
-// Uruchomienie:
+// Run:
 //   node scripts/eval-duplicate-detection.mjs
 
-import { GoogleGenAI } from "@google/genai";
 import pg from "pg";
 import { cosineSimilarity } from "./lib/debate-model.mjs";
 import { loadEnv } from "./lib/env.mjs";
+import { createEmbedder, SWEEP_POINTS } from "./lib/embedder.mjs";
 import { DEBATES, submissions } from "./duplicate-eval-set.mjs";
 
 loadEnv();
 
-const geminiKey = process.env.GEMINI_API_KEY;
 const dbUrl = process.env.DATABASE_URL;
-if (!geminiKey) throw new Error("GEMINI_API_KEY not set in .env");
 if (!dbUrl) throw new Error("DATABASE_URL not set in .env");
 
-const ai = new GoogleGenAI({ apiKey: geminiKey });
+const embedder = await createEmbedder();
 const client = new pg.Client({ connectionString: dbUrl });
 
-// Identyczna implementacja jak EmbeddingService.cosineSimilarity.
-// Uproszczona normalizacja bez lematyzacji (małe litery, usunięcie
-// interpunkcji, podział na tokeny) - patrz zaktualizowany akapit w §7.3.1.
+// Simplified normalisation, no lemmatisation: lowercase the text, drop
+// punctuation, split on whitespace.
 function tokenize(text) {
   return new Set(
     text
@@ -50,11 +48,11 @@ function jaccard(setA, setB) {
   return intersection / union;
 }
 
-const SEMANTIC_THRESHOLDS = [0.5, 0.6, 0.7, 0.75, 0.8, 0.9];
-// Jaccard operuje w innej skali niż cosinus (pokrywanie się słów jest
-// z natury niższe niż podobieństwo gęstych wektorów semantycznych) - żeby
-// porównanie z hipotezą H1 było uczciwe, dla metody leksykalnej szukamy jej
-// WŁASNEGO najlepszego progu zamiast oceniać ją przy 0,75.
+const SEMANTIC_THRESHOLDS = SWEEP_POINTS[embedder.vendor];
+// Jaccard sits on a different scale than cosine, because word overlap runs
+// lower than similarity between dense semantic vectors. To keep the comparison
+// fair, the lexical method gets its OWN best threshold instead of being judged
+// at the cosine one.
 const JACCARD_SWEEP = Array.from({ length: 19 }, (_, i) => 0.05 + i * 0.05);
 
 function classify(results, getScore, threshold) {
@@ -94,7 +92,7 @@ function classify(results, getScore, threshold) {
 }
 
 function fmt(v) {
-  return v === null ? "-" : v.toFixed(2).replace(".", ",");
+  return v === null ? "-" : v.toFixed(2);
 }
 
 async function main() {
@@ -110,13 +108,9 @@ async function main() {
       [debateId, sub.side],
     );
 
-    const embedRes = await ai.models.embedContent({
-      model: "gemini-embedding-001",
-      contents: sub.content,
-    });
-    const vector = embedRes.embeddings?.[0]?.values;
-    if (!vector) {
-      console.warn(`  Pominięto (brak embeddingu): ${sub.content.slice(0, 40)}...`);
+    const vector = await embedder.embed(sub.content);
+    if (!vector || vector.length === 0) {
+      console.warn(`  Skipped (no embedding): ${sub.content.slice(0, 40)}...`);
       continue;
     }
 
@@ -133,23 +127,23 @@ async function main() {
   }
 
   console.log("═══════════════════════════════════════════════════════════");
-  console.log("Tabela 7.3 - Skuteczność detekcji powtórzeń w funkcji progu");
+  console.log("Duplicate detection accuracy by threshold");
   console.log("═══════════════════════════════════════════════════════════\n");
   console.log(
-    "Próg".padEnd(24),
-    "Popr.".padEnd(7),
-    "Błęd.".padEnd(7),
-    "Fałsz.".padEnd(7),
-    "Przeocz.".padEnd(9),
-    "Precyzja".padEnd(10),
-    "Czułość".padEnd(10),
+    "Thresh.".padEnd(24),
+    "Right".padEnd(7),
+    "Wrong".padEnd(7),
+    "False".padEnd(7),
+    "Missed".padEnd(9),
+    "Precision".padEnd(10),
+    "Recall".padEnd(10),
     "F1",
   );
 
   for (const t of SEMANTIC_THRESHOLDS) {
     const r = classify(results, (m) => m.cosine, t);
     console.log(
-      String(t).replace(".", ",").padEnd(24),
+      String(t).padEnd(24),
       String(r.correctHit).padEnd(7),
       String(r.wrongHit).padEnd(7),
       String(r.falseHit).padEnd(7),
@@ -160,7 +154,7 @@ async function main() {
     );
   }
 
-  // Najlepszy próg dla baseline'u leksykalnego (max F1).
+  // Best threshold for the lexical baseline, chosen by F1.
   let bestJaccard = null;
   for (const t of JACCARD_SWEEP) {
     const r = classify(results, (m) => m.jaccard, t);
@@ -169,7 +163,7 @@ async function main() {
     }
   }
   console.log(
-    `Odniesienie leksykalne`.padEnd(24),
+    `Lexical baseline`.padEnd(24),
     String(bestJaccard.r.correctHit).padEnd(7),
     String(bestJaccard.r.wrongHit).padEnd(7),
     String(bestJaccard.r.falseHit).padEnd(7),
@@ -179,7 +173,7 @@ async function main() {
     fmt(bestJaccard.r.f1),
   );
   console.log(
-    `\n(Odniesienie leksykalne raportowane przy jego własnym najlepszym progu Jaccarda = ${bestJaccard.threshold.toFixed(2)}, wybranym przez przemiecenie 0,05-0,95 co 0,05 i maksymalizację F1 - progi kosinusowe i Jaccarda nie są bezpośrednio porównywalne liczbowo.)`,
+    `\n(The lexical baseline is reported at its own best Jaccard threshold = ${bestJaccard.threshold.toFixed(2)}, picked by sweeping 0.05-0.95 in steps of 0.05 and maximising F1. Cosine and Jaccard thresholds are not numerically comparable.)`,
   );
 
   await client.end();

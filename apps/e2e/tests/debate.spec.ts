@@ -8,7 +8,7 @@ test.describe("Dyskusja - tworzenie i dodawanie argumentów", () => {
   test("utwórz dyskusję → dodaj argument Za → dodaj argument Przeciw", async ({
     page,
   }) => {
-    // Seed użytkownika i wstrzyknij token (omijamy UI logowania)
+    // Register through the API and inject the token, which skips the sign-in UI.
     await page.goto("/");
     const { accessToken } = await registerViaApi(
       "Debater E2E",
@@ -17,30 +17,31 @@ test.describe("Dyskusja - tworzenie i dodawanie argumentów", () => {
     );
     await seedStorageState(page, accessToken);
 
-    // --- Tworzenie dyskusji ---
+    // --- Create the debate ---
     await page.goto("/dyskusje/utworz");
     await page
       .getByLabel("Teza")
       .fill(
         "Praca zdalna na stałe zwiększa produktywność zespołów inżynieryjnych.",
       );
-    // Domyślnie "Publiczna" jest zaznaczona
+    // "Publiczna" is selected by default.
     await page.getByRole("button", { name: "Utwórz dyskusję" }).click();
 
-    // Redirect na stronę dyskusji
+    // The form redirects to the debate page.
     await page.waitForURL(/\/dyskusje\/.+/);
-    // Poczekaj na węzły w grafie (teza)
+    // Wait for the thesis node to render.
     await expect(page.locator(".react-flow__node").first()).toBeVisible({
       timeout: 10_000,
     });
 
-    // --- Argument Za ---
+    // --- For argument ---
     await page
       .getByRole("button", { name: "Dodaj argument Za" })
       .first()
       .click();
 
-    // Panel drawer identyfikowany przez role=dialog + aria-label (desktop aside)
+    // The drawer exposes role=dialog plus an aria-label, rendered as an <aside>
+    // on desktop.
     const panel = page.getByRole("dialog", { name: "Dodaj argument" });
     await expect(panel).toBeVisible({ timeout: 5_000 });
     await panel
@@ -48,16 +49,17 @@ test.describe("Dyskusja - tworzenie i dodawanie argumentów", () => {
       .fill(
         "Elastyczny czas pracy pozwala pracować w godzinach największej koncentracji.",
       );
-    // Czekamy na submit; bez kluczy AI duplikat nie jest wykrywany i argument trafia od razu.
+    // Without AI keys the duplicate check finds nothing, so the argument lands
+    // on the first submit.
     await panel.getByRole("button", { name: "Dodaj argument Za" }).click();
     await expect(panel).not.toBeVisible({ timeout: 15_000 });
 
-    // Graf: teza + 1 argument
+    // Graph holds the thesis plus one argument.
     await expect(page.locator(".react-flow__node")).toHaveCount(2, {
       timeout: 10_000,
     });
 
-    // --- Argument Przeciw ---
+    // --- Against argument ---
     await page
       .getByRole("button", { name: "Dodaj argument Przeciw" })
       .first()
@@ -75,7 +77,7 @@ test.describe("Dyskusja - tworzenie i dodawanie argumentów", () => {
       .click();
     await expect(panel2).not.toBeVisible({ timeout: 15_000 });
 
-    // Graf końcowy: teza + Za + Przeciw = 3 węzły
+    // Final graph: thesis, For and Against make three nodes.
     await expect(page.locator(".react-flow__node")).toHaveCount(3, {
       timeout: 10_000,
     });

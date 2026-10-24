@@ -26,13 +26,6 @@ import type {
   SynthesizeInput,
 } from './llm-provider.interface';
 
-// 0.80, not the more common round default of 0.75 - raised per the threshold
-// sweep in praca_pisemna.md §7.3.2, which found 0.80 the lowest threshold
-// that keeps recall at 1.00 while cutting false-positive detections sharply.
-const DUPLICATE_THRESHOLD = parseFloat(
-  process.env['DUPLICATE_THRESHOLD'] ?? '0.80',
-);
-
 @Injectable()
 export class AiService {
   private readonly logger = new Logger(AiService.name);
@@ -96,7 +89,7 @@ export class AiService {
   ): Promise<DuplicateCheckResultDto> {
     const newEmbedding = await this.embedding.embed(dto.content);
     if (!newEmbedding) {
-      return { similarity: 0, threshold: DUPLICATE_THRESHOLD };
+      return { similarity: 0, threshold: this.embedding.duplicateThreshold };
     }
 
     // Only the id and the vector are read, and only rows that can actually
@@ -126,10 +119,10 @@ export class AiService {
       }
     }
 
-    if (!best || best.similarity < DUPLICATE_THRESHOLD) {
+    if (!best || best.similarity < this.embedding.duplicateThreshold) {
       return {
         similarity: best?.similarity ?? 0,
-        threshold: DUPLICATE_THRESHOLD,
+        threshold: this.embedding.duplicateThreshold,
       };
     }
 
@@ -137,7 +130,7 @@ export class AiService {
     return {
       duplicateOf,
       similarity: best.similarity,
-      threshold: DUPLICATE_THRESHOLD,
+      threshold: this.embedding.duplicateThreshold,
     };
   }
 

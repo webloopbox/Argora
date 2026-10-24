@@ -16,7 +16,7 @@ Shared library. Single source of truth for every API contract: DTOs, enums, and 
 - **Both apps consume the built output, not the sources.** There is no path alias to `packages/core/src`, so a change here is invisible to `apps/api` and `apps/web` until the package is rebuilt. A type error that makes no sense against the code you are looking at is usually a stale `dist`.
 - **Breaking changes hurt both apps at once.** When renaming or restructuring a shared type, update `apps/api` and `apps/web` in the same change.
 
-## Things to fill in as conventions emerge
+## Naming
 
-- Naming convention for DTOs: use `CreateDebateDto` suffix.
-- Enums must be string enums (e.g. `Pro = 'pro'`), not numeric. String values land directly in Postgres columns and remain readable in raw queries and analytics without needing the application code to interpret them.
+- **DTOs carry the `Dto` suffix.** Request payloads lead with the action (`CreateDebateDto`, `CastVoteDto`); responses name what they return (`ArgumentDto`, `DebateDetailDto`, `GeneratedArgumentDto`).
+- **Enums are string enums** (`Pro = 'pro'`), never numeric. The value lands directly in a Postgres column and stays readable in raw queries and analytics, without the application having to decode it.

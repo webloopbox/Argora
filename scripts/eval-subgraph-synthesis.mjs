@@ -1,30 +1,29 @@
-// Wypełnia Tabelę 7.5 (praca_pisemna.md, §7.5): porównanie syntezy podgrafu
-// z syntezą całej debaty, na trzech debatach polskojęzycznych.
+// Compares a subgraph synthesis against a whole-debate synthesis, across
+// three Polish-language debates.
 //
-// Skrypt sam nie rozstrzyga o wynikach. Wykonuje sześć wywołań syntezy
-// (podgraf i cała debata dla każdej z trzech debat), a następnie przygotowuje
-// propozycję oceny trzech wielkości z tabeli 7.5 (kompletność, skupienie,
-// zdania bez pokrycia w materiale), opartą na podobieństwie reprezentacji
-// wektorowych. Plik eval-subgraph-synthesis-review.md jest arkuszem
-// weryfikacyjnym: każdemu dopasowaniu towarzyszy w nim wartość podobieństwa
-// oraz pełna treść obu porównywanych fragmentów, dzięki czemu każdy wiersz da
-// się sprawdzić ręcznie. Tabela 7.5 podaje wartości automatyczne, a §7.5
-// omawia wprost ograniczenia takiego sposobu oceny.
+// The script does not settle the result on its own. It makes six synthesis
+// calls, a subgraph and a whole debate for each of the three debates, then
+// proposes a score for three quantities: coverage, focus, and sentences with
+// no support in the material, all based on similarity between vector
+// representations. eval-subgraph-synthesis-review.md is the review sheet:
+// every match there carries its similarity value and the full text of both
+// compared fragments, so a reader can check each row by hand.
 //
-// Materiał wyznaczany jest regułą deterministyczną: badaną gałęzią jest
-// poddrzewo tego argumentu podpiętego bezpośrednio pod tezę, które ma
-// najwięcej potomków (przy równej liczbie decyduje wcześniejszy czas
-// utworzenia). Powtórne uruchomienie operuje więc na tym samym materiale.
+// A deterministic rule picks the material. The branch under study is the
+// subtree of whichever argument hangs directly off the thesis and has the
+// most descendants, and a tie goes to the earlier creation time. A second run
+// therefore works on the same material.
 //
-// Polecenie kierowane do modelu jest kopią polskiego wariantu z
-// apps/api/src/ai/prompts/synthesis.prompt.ts, a wagi, sentyment i polaryzacja
-// efektywna liczone są tak jak w apps/api/src/arguments/arguments.service.ts
-// oraz effective-stance.ts. Skrypt omija warstwę HTTP aplikacji, żeby pomiar
-// czasu nie obejmował ograniczania częstotliwości z punktu 6.2.6.
+// The prompt copies the Polish variant from
+// apps/api/src/ai/prompts/synthesis.prompt.ts, and weight, sentiment and
+// effective stance are computed as in
+// apps/api/src/arguments/arguments.service.ts and effective-stance.ts. The
+// script skips the application's HTTP layer so the timing leaves out rate
+// limiting.
 //
-// Wymagania: TOGETHER_API_KEY, GEMINI_API_KEY i DATABASE_URL w .env.
+// Requirements: TOGETHER_API_KEY, GEMINI_API_KEY and DATABASE_URL in .env.
 //
-// Uruchomienie:
+// Run:
 //   node scripts/eval-subgraph-synthesis.mjs
 
 import { GoogleGenAI } from "@google/genai";
@@ -50,15 +49,15 @@ if (!togetherKey) throw new Error("TOGETHER_API_KEY not set in .env");
 if (!geminiKey) throw new Error("GEMINI_API_KEY not set in .env");
 if (!dbUrl) throw new Error("DATABASE_URL not set in .env");
 
-// Te same trzy debaty polskojęzyczne, co w §7.4.
+// The same three Polish-language debates the model comparison uses.
 const DEBATES = [
   { key: "energia", id: "8b8230e5-6b18-4b04-9c2b-39602b4bc77e" },
   { key: "praca", id: "70d2279c-4614-4bd8-b5ee-19d717a7f3bf" },
   { key: "studenci", id: "9d4f85f8-723c-4bc3-9506-e103f7a261ce" },
 ];
 
-// Obie syntezy w parze wykonuje ten sam model, żeby porównanie dotyczyło
-// zakresu wejścia, a nie doboru modelu.
+// One model handles both syntheses in a pair, so the comparison reflects the
+// scope of the input rather than the choice of model.
 const MODEL = {
   id: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
   name: "Meta Llama 3.3",
@@ -68,9 +67,9 @@ const SYNTHESIS_MAX_TOKENS = 8192; // apps/api/src/ai/ai.constants.ts
 const API_URL = "https://api.together.xyz/v1/chat/completions";
 const EMBED_MODEL = "gemini-embedding-001"; // jak w produkcji
 
-// Progi służą wyłącznie do zaproponowania oceny autorowi. Zdanie o podobieństwie
-// poniżej MATCH_LOW nie jest przypisywane do żadnego argumentu i trafia na listę
-// kandydatów na twierdzenia bez pokrycia w materiale.
+// The thresholds only propose a score for the author to confirm. A sentence
+// whose similarity falls below MATCH_LOW is attached to no argument and joins
+// the list of candidates for claims with no support in the material.
 const MATCH_COVERED = 0.6;
 const MATCH_LOW = 0.45;
 
@@ -92,11 +91,11 @@ function cacheSave() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Kopie logiki produkcyjnej
+// Copies of production logic
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Wywołania usług zewnętrznych
+// External service calls
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function chat(prompt, maxTokens) {
@@ -121,7 +120,7 @@ async function chat(prompt, maxTokens) {
   return {
     text: (json.choices?.[0]?.message?.content ?? "").trim(),
     finishReason: json.choices?.[0]?.finish_reason ?? null,
-    // Zbierane na potrzeby §7.6; implementacja produkcyjna pole to pomija.
+    // Collected for the latency measurement; production omits this field.
     usage: json.usage ?? null,
     latencyMs: Date.now() - started,
   };
@@ -169,7 +168,7 @@ async function embed(text) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Materiał pomiarowy
+// Measurement material
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function loadDebate({ key, id }) {
@@ -223,8 +222,9 @@ async function loadDebate({ key, id }) {
   return { key, id, thesis: dRows[0].thesis, args, byId };
 }
 
-// Badana gałąź: poddrzewo argumentu podpiętego pod tezę o największej liczbie
-// potomków. Reguła deterministyczna, przy remisie decyduje kolejność utworzenia.
+// The branch under study: the subtree of whichever argument hangs off the
+// thesis and has the most descendants. Deterministic, ties broken by creation
+// order.
 function selectBranch(debate) {
   const children = new Map();
   for (const a of debate.args) {
@@ -252,14 +252,14 @@ function selectBranch(debate) {
     const nodes = subtree(r);
     if (!best || nodes.length > best.nodes.length) best = { root: r, nodes };
   }
-  // Kolejność jak w produkcji: listForDebate sortuje rosnąco po czasie utworzenia.
+  // Same order as production: listForDebate sorts ascending by creation time.
   const order = new Map(debate.args.map((a, i) => [a.id, i]));
   best.nodes.sort((x, y) => order.get(x.id) - order.get(y.id));
   return best;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Rozbiór streszczenia i propozycja oceny
+// Parsing the summary and proposing a score
 // ─────────────────────────────────────────────────────────────────────────────
 
 function splitSentences(markdown) {
@@ -285,7 +285,7 @@ async function assess(summaryText, branchIds, allArgs) {
   const argVecs = new Map();
   for (const a of allArgs) argVecs.set(a.id, await embed(a.content));
 
-  // Pokrycie: dla każdego argumentu gałęzi najlepiej pasujące zdanie streszczenia.
+  // Coverage: for each argument of the branch, the best matching sentence.
   const coverage = [];
   for (const a of allArgs) {
     if (!branchIds.has(a.id)) continue;
@@ -304,10 +304,11 @@ async function assess(summaryText, branchIds, allArgs) {
     });
   }
 
-  // Skupienie i kandydaci na konfabulacje: dla każdego zdania najbliższy argument.
-  // Uwaga przy odczycie: w wariancie podgrafu model nie dostaje argumentów spoza
-  // gałęzi, więc wysokie skupienie jest przesądzone zakresem wejścia i służy jako
-  // kontrola implementacji. Porównanie niosą wartości dla całej debaty (§7.5).
+  // Focus and confabulation candidates: for each sentence, the nearest argument.
+  // Read this with care. In the subgraph variant the model never sees arguments
+  // from outside the branch, so high focus follows from the scope of the input
+  // and serves as an implementation check. The whole-debate values carry the
+  // comparison.
   const sentenceMap = sentences.map((s, i) => {
     let bestIn = { sim: -1, id: null },
       bestOut = { sim: -1, id: null };
@@ -326,9 +327,9 @@ async function assess(summaryText, branchIds, allArgs) {
       sentence: s,
       simInsideBranch: Number(bestIn.sim.toFixed(3)),
       simOutsideBranch: Number(bestOut.sim.toFixed(3)),
-      // Argumenty, które dały te dwie wartości. Bez nich wiersz arkusza nie
-      // daje się zweryfikować ręcznie: autor widzi liczbę, ale nie wie, z
-      // czym zdanie zostało porównane.
+      // The arguments behind those two values. Without them a row of the
+      // sheet cannot be checked by hand: the author sees a number but not
+      // what the sentence was compared against.
       nearestInsideBranch: describe(bestIn.id),
       nearestOutsideBranch: describe(bestOut.id),
       proposedOutsideBranch: bestOut.sim > bestIn.sim,
@@ -340,7 +341,7 @@ async function assess(summaryText, branchIds, allArgs) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Przebieg
+// Run
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -415,7 +416,7 @@ function pct(n, d) {
 function writeSummary(results) {
   console.log(
     "\n═══════════════════════════════════════════════════════════\n" +
-      "Propozycja do Tabeli 7.5 (wymaga weryfikacji autora)\n" +
+      "Propozycja oceny (wymaga weryfikacji autora)\n" +
       "═══════════════════════════════════════════════════════════\n",
   );
   const agg = { subgraph: [], whole: [] };
@@ -466,7 +467,7 @@ function writeSummary(results) {
 
 function writeReview(results) {
   const out = [];
-  out.push("# Arkusz weryfikacyjny do §7.5\n");
+  out.push("# Arkusz weryfikacyjny\n");
   out.push(
     "Wartości poniżej są **propozycją narzędzia**, nie wynikiem. Dla każdej pozycji " +
       "podano podobieństwo kosinusowe oraz oba porównywane fragmenty, żeby ocenę można " +

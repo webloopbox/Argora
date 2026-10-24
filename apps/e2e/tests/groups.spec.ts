@@ -20,7 +20,7 @@ test.describe("Grupy - zaproszenia i członkostwo", () => {
   test("Utwórz grupę → zaproś → przyjmij → weryfikuj członkostwo", async ({
     page,
   }) => {
-    // Seed obu użytkowników
+    // Register both users through the API.
     const { accessToken: tokenA } = await registerViaApi(
       USER_A.displayName,
       USER_A.email,
@@ -32,7 +32,7 @@ test.describe("Grupy - zaproszenia i członkostwo", () => {
       USER_B.password,
     );
 
-    // --- Jako User A: utwórz grupę ---
+    // --- User A creates the group ---
     await page.goto("/");
     await seedStorageState(page, tokenA);
     await page.goto("/grupy");
@@ -48,17 +48,17 @@ test.describe("Grupy - zaproszenia i członkostwo", () => {
     await createDialog.getByRole("button", { name: "Utwórz grupę" }).click();
     await expect(createDialog).not.toBeVisible({ timeout: 8_000 });
 
-    // Redirect lub wyświetlenie grupy
+    // The app either redirects to the group or renders it in place.
     await page.waitForURL(/\/grupy\/.+/, { timeout: 10_000 });
     const groupUrl = page.url();
     const groupId = groupUrl.split("/grupy/")[1]!;
 
-    // --- Jako User A: zaproś User B przez wyszukiwarkę ---
+    // --- User A invites User B through the directory search ---
     const searchInput = page.getByPlaceholder(/Szukaj po nazwie/);
     await searchInput.fill(USER_B.displayName.slice(0, 8));
 
-    // Picker renderuje wyniki jako <button>, nie role=option. Nazwa przycisku
-    // zawiera displayName + email; regex po displayName wystarczy.
+    // The picker renders each result as a <button> rather than role=option, and
+    // the accessible name carries displayName plus email, so match on displayName.
     const option = page.getByRole("button", {
       name: new RegExp(USER_B.displayName),
     });
@@ -67,10 +67,10 @@ test.describe("Grupy - zaproszenia i członkostwo", () => {
 
     await page.getByRole("button", { name: "Wyślij zaproszenie" }).click();
 
-    // Zaproszenie powinno pojawić się na liście "Wysłane zaproszenia"
+    // The invitation shows up under "Wysłane zaproszenia".
     await expect(page.getByText("Oczekuje")).toBeVisible({ timeout: 8_000 });
 
-    // --- Jako User B: przyjmij zaproszenie ---
+    // --- User B accepts the invitation ---
     await clearStorageState(page);
     await seedStorageState(page, tokenB);
     await page.goto("/zaproszenia");
@@ -80,15 +80,15 @@ test.describe("Grupy - zaproszenia i członkostwo", () => {
     });
     await page.getByRole("button", { name: "Przyjmij" }).click();
 
-    // Po przyjęciu redirect na stronę grupy
+    // Accepting redirects to the group page.
     await page.waitForURL(/\/grupy\/.+/, { timeout: 10_000 });
 
-    // --- Jako User A: zweryfikuj że B jest członkiem ---
+    // --- User A confirms that B now holds a membership ---
     await clearStorageState(page);
     await seedStorageState(page, tokenA);
     await page.goto(`/grupy/${groupId}`);
 
-    // Sekcja Członkowie jest <section aria-label="Członkowie"> → role=region
+    // The members list is a <section aria-label="Członkowie">, which exposes role=region.
     const membersSection = page.getByRole("region", { name: "Członkowie" });
     await expect(membersSection).toContainText(USER_B.displayName, {
       timeout: 8_000,

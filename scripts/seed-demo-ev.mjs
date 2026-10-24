@@ -1,5 +1,5 @@
-// Seeduje małą, publiczną debatę o samochodach elektrycznych.
-// Lżejszy wariant seedu - 7 argumentów, 2 poziomy, bez grupy prywatnej.
+// Seeds a small public debate about electric cars.
+// A lighter seed: 7 arguments, two levels, no private group.
 //
 // Wymagania:
 //   - API uruchomione (pnpm dev:api)
@@ -46,8 +46,8 @@ const voters = [
   },
 ];
 
-// Małe drzewo: 4 argumenty bezpośrednio pod tezą + 3 odpowiedzi (L2).
-// MAIN dostaje komplet 8 głosów Za (= liczba głosujących), reszta mniej.
+// Small tree: four arguments straight under the thesis plus three replies at
+// level 2. MAIN takes all 8 For votes, one per voter, and the rest take fewer.
 const tree = [
   // ─── L1 (direct children of thesis) ──────────────────────────────────────
   {
@@ -100,7 +100,7 @@ const tree = [
   {
     key: "L2.C.rebut",
     parent: "L1.C",
-    side: "pro",
+    side: "against",
     author: 5,
     votes: 4,
     content:
@@ -109,7 +109,7 @@ const tree = [
   {
     key: "L2.D.rebut",
     parent: "L1.D",
-    side: "pro",
+    side: "against",
     author: 6,
     votes: 5,
     content:
@@ -190,7 +190,7 @@ async function main() {
       .slice(0, node.votes);
     let cast = 0;
     for (const i of idxs) {
-      // MAIN dostaje wyłącznie Za; reszta - losowy mix dla organicznego looku.
+      // MAIN takes For votes only; the rest get a random mix to look organic.
       const value = node.key === "MAIN" ? 1 : Math.random() > 0.3 ? 1 : -1;
       try {
         await jsonFetch(`/arguments/${arg.id}/votes`, {
@@ -200,7 +200,7 @@ async function main() {
         });
         cast++;
       } catch {
-        /* ignore - np. konflikt głosów przy ponownym seedzie */
+        /* ignore, e.g. a vote conflict when seeding a second time */
       }
     }
     process.stdout.write(`    ${node.key.padEnd(20)} → ${cast} głosów\n`);

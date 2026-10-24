@@ -133,7 +133,7 @@ function SynthesisBody({
       animate={{ x: 0 }}
       exit={{ x: "100%" }}
       transition={{ type: "spring", stiffness: 320, damping: 34 }}
-      className="fixed right-4 top-20 z-50 flex h-[calc(100dvh-6rem)] w-[420px] flex-col overflow-hidden rounded-3xl border border-default-100 bg-white/95 shadow-2xl shadow-violet-500/10 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/95"
+      className="fixed right-4 top-20 z-50 flex h-[calc(100dvh-6rem)] w-[420px] flex-col overflow-hidden rounded-3xl border border-default-100 bg-white/95 shadow-2xl backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/95"
     >
       <header className="flex items-start justify-between gap-3 border-b border-default-100 px-5 py-4 dark:border-zinc-800">
         <div>

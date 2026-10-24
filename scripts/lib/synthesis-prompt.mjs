@@ -1,8 +1,8 @@
 // The Polish variant of apps/api/src/ai/prompts/synthesis.prompt.ts, kept as a
 // standalone copy so an evaluation run can build exactly the prompt the API
-// would send without booting the API. It backs the measurements reported in
-// praca_pisemna.md 7.5 and 7.6, so it must not be reworded in place: a changed
-// prompt makes those runs unreproducible.
+// would send without booting the API. It backs the recorded synthesis and
+// latency measurements, so leave the wording alone: a reworded prompt makes
+// those runs unreproducible.
 import { truncate } from "./debate-model.mjs";
 
 const PARENT_PREVIEW_MAX = 140; // apps/api/src/ai/prompts/synthesis.prompt.ts
@@ -15,7 +15,8 @@ const SENTIMENT_LABEL = {
   neutral: "brak głosów",
 };
 
-// Kopia polskiego wariantu buildSynthesisPrompt, identyczna z użytą w §7.5.
+// Copy of the Polish buildSynthesisPrompt variant, byte-identical to the one
+// the recorded measurements used.
 export function buildSynthesisPrompt(thesis, args) {
   const entries = args
     .map((arg, idx) => {

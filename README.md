@@ -3,12 +3,10 @@
 </p>
 
 <p align="center">
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat-square&logo=typescript&logoColor=white">
   <img alt="NestJS" src="https://img.shields.io/badge/NestJS-11-E0234E?style=flat-square&logo=nestjs&logoColor=white">
   <img alt="React" src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black">
   <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-16%20%2B%20pgvector-4169E1?style=flat-square&logo=postgresql&logoColor=white">
-  <img alt="IBM watsonx.ai" src="https://img.shields.io/badge/IBM-watsonx.ai-0F62FE?style=flat-square&logo=ibm&logoColor=white">
-  <img alt="Built with Claude Code" src="https://img.shields.io/badge/built%20with-Claude%20Code-D97757?style=flat-square&logo=anthropic&logoColor=white">
   <img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-6E7681?style=flat-square">
 </p>
 
@@ -16,7 +14,7 @@
   <a href="https://youtu.be/Fgw38GYoWFg"><b>Video walkthrough</b></a> &nbsp;·&nbsp;
   <a href="#how-the-ai-works"><b>How the AI works</b></a> &nbsp;·&nbsp;
   <a href="#architecture"><b>Architecture</b></a> &nbsp;·&nbsp;
-  <a href="#built-with-an-ai-pair-programmer"><b>AI-assisted engineering</b></a> &nbsp;·&nbsp;
+  <a href="#architecture-constraints"><b>Architecture constraints</b></a> &nbsp;·&nbsp;
   <a href="#run-it-locally"><b>Run it locally</b></a>
 </p>
 
@@ -28,26 +26,24 @@ A comment thread is a **timeline**. It rewards whoever posts loudest and most of
 
 Argora replaces the timeline with a **tree**. Every claim attaches to the claim it answers, so the shape of the discussion carries meaning: a deep branch marks the real axis of conflict, a missing child marks an objection nobody answered. On top of that structure sit three AI capabilities: semantic de-duplication, region-scoped synthesis, and context-aware generation.
 
-Generated text is always a proposal: a person edits, rejects or accepts it before anything is written to the graph.
-
-> Built as the engineering artefact of an MSc thesis, and presented at the **IBM Innovation Project - Country Challenge 2026**. A [video walkthrough](https://youtu.be/Fgw38GYoWFg) shows the running application end to end.
+> Built as the engineering artefact of an MSc thesis, and presented at the **IBM Innovation Project - Country Challenge 2026**. <br>A [video walkthrough](https://youtu.be/Fgw38GYoWFg) shows the running application end to end.
 
 ---
 
 ## See it
 
 <p align="center">
-  <img src="docs/assets/screens/02-argument-graph.png" alt="The argument graph: a thesis with pro and against branches, weights and sentiment badges" width="100%">
+  <img src="docs/assets/screens/00-argument-graph.webp" alt="Reading the thesis, lassoing one rebuttal chain and having a model summarise exactly those three arguments" width="100%">
 </p>
 
 <table>
 <tr>
-<td width="50%"><img src="docs/assets/screens/04-synthesis-result.png" alt="A lasso-selected region summarised by the chosen model"></td>
-<td width="50%"><img src="docs/assets/screens/05-duplicate-gate.png" alt="Near-duplicate detected: merge into the existing argument or add as a nuance"></td>
+<td width="50%"><img src="docs/assets/screens/01-ai-draft.webp" alt="Drafting an argument with model assistance: picking a side, choosing a model, and the proposal typing itself into the field"></td>
+<td width="50%"><img src="docs/assets/screens/02-duplicate-gate.webp" alt="Writing an argument that restates an existing one, and the gate catching it before it is saved: the two texts side by side, with the choice to merge or add as a nuance"></td>
 </tr>
 <tr>
-<td><b>Lasso &rarr; synthesis.</b> Circle any region of the graph; the model summarises exactly those nodes.</td>
-<td><b>Duplicate gate.</b> A near-identical claim is caught before it is written, and the author chooses what happens.</td>
+<td><b>Drafting with a model.</b> Pick a side, pick a vendor, and the generated text lands in the field as a proposal - nothing is published until a person accepts it.</td>
+<td><b>Duplicate gate.</b> A near-identical claim is caught before it is written - cosine 0.97 against the stored argument - and the author chooses what happens.</td>
 </tr>
 </table>
 
@@ -62,13 +58,15 @@ Two people routinely submit the same claim in different words, and keyword match
 Every argument is embedded into a multilingual vector, and closeness is measured as the **cosine of the angle** between vectors - magnitude tracks text length, which is not meaning, so it is divided out.
 
 <p align="center">
-  <img src="docs/assets/cosine-similarity.svg" alt="Cosine similarity between two argument embeddings and the 0.80 duplicate threshold" width="100%">
+  <img src="docs/assets/cosine-similarity.svg" alt="Cosine similarity between two argument embeddings and the duplicate threshold that separates a restatement from a distinct claim" width="100%">
 </p>
 
 ```ts
 // apps/api/src/ai/embedding.service.ts
 cosineSimilarity(a: number[], b: number[]): number {
-  let dot = 0, normA = 0, normB = 0;
+  let dot = 0;
+  let normA = 0;
+  let normB = 0;
   for (let i = 0; i < a.length; i++) {
     dot += a[i] * b[i];
     normA += a[i] * a[i];
@@ -79,7 +77,18 @@ cosineSimilarity(a: number[], b: number[]): number {
 }
 ```
 
-The threshold is **0.80**, not the rounder 0.75: a sweep reported in the thesis found 0.80 the lowest cut that keeps recall at 1.00 while sharply cutting false positives. It stays overridable through `DUPLICATE_THRESHOLD`, because the right value depends on the embedding model.
+The threshold is a property of the embedding model, not of the domain, so it travels with the provider instead of being one global constant. Measured on 924-994 pairs of distinct arguments that coexist in the same debate on the same side - known non-duplicates by construction - plus hand-written paraphrases of real arguments:
+
+| embedding model                 | dims | non-duplicates (median / p99 / max) | threshold | submissions falsely flagged |
+| ------------------------------- | ---- | ----------------------------------- | --------- | --------------------------- |
+| `gemini-embedding-001`          | 3072 | 0.618 / 0.786 / 0.868               | **0.80**  | 6.0%                        |
+| `multilingual-e5-small` (local) | 384  | 0.834 / 0.906 / 0.942               | **0.91**  | 4.6%                        |
+
+Gemini keeps unrelated arguments near 0.62 and tops out at 0.87, leaving the whole 0.87-1.0 band for real duplicates; the small local model compresses them up to 0.94 and leaves far less room.
+
+That last column, not the per-pair rate, is what sets each threshold: the gate takes the **maximum** over every candidate, so 0.6% of pairs at 0.91 becomes 4.6% of submissions. The two values are not interchangeable - Gemini's 0.80 under the local model flags **153 of 153** - so the default lives next to the provider choice and `DUPLICATE_THRESHOLD` only overrides it for sweeps.
+
+The local model is what keeps the gate alive on a clone with an empty `.env`: it runs in-process through ONNX Runtime and needs no key. It separates less cleanly, though - its non-duplicates reach 0.942 where Gemini's stop at 0.868 - leaving a paraphrase far less room to land in. `scripts/eval-duplicate-detection.mjs` replays the labelled set and reports both.
 
 <p align="center">
   <img src="docs/assets/duplicate-pipeline.svg" alt="Duplicate detection pipeline: submit, embed, narrow candidates, compare, human gate" width="100%">
@@ -87,7 +96,7 @@ The threshold is **0.80**, not the rounder 0.75: a sweep reported in the thesis 
 
 Beyond the formula:
 
-- **The comparison set is narrowed in SQL**, not in memory: same debate, same stored side, embedding present, and the parent excluded - a reply naturally echoes the wording of what it answers, so comparing against it would flag every rebuttal.
+- **The comparison set is narrowed in SQL**, so the database returns only the rows that can match instead of the API fetching every argument and filtering them in JavaScript: same debate, same stored side, embedding present, and the parent excluded - a reply naturally echoes the wording of what it answers, so comparing against it would flag every rebuttal.
 - **A dead embedding vendor must not block a user.** `EmbeddingService.embed` returns `null` on failure and the gate degrades to "no similarity found".
 - **The gate never decides.** Above the threshold the user is shown both texts and picks: _merge_ casts a vote that raises the existing argument's weight, _nuance_ publishes anyway.
 - **Embeddings are computed after the response.** The write path stays fast; the vector lands asynchronously.
@@ -108,8 +117,6 @@ Whole-debate summarisation is the same endpoint with every id passed in. One syn
 
 Generated text arrives as a **proposal in the textarea**, badged as model output only when it really came from a model, and that badge is cleared the moment the argument is sent. Before publishing, a second model call checks the argument against the side the author picked and offers a switch if they disagree - and when every provider fails, the submission proceeds rather than blocking.
 
-What "side" means here is not obvious:
-
 <p align="center">
   <img src="docs/assets/effective-stance.svg" alt="Stored side is relative to the parent; thesis-relative stance is derived by flipping polarity on every against link" width="100%">
 </p>
@@ -126,56 +133,29 @@ A node's stored `side` is relative to its **immediate parent**. Read it as a the
 
 ### Design decisions
 
-| Decision                                                | Why it is this way                                                                                                                                                                                                                                      |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Contracts live in `@argora/core`**                | Every DTO, enum and limit is declared once and imported by both sides. The argument length bounds are exported constants, so the form check, the server validator and the error copy cannot disagree.                                                   |
-| **One `VisibilityGuard` for every debate-scoped route** | It resolves the debate from the route param, from an `:argumentId`, or from the request body, then attaches the row. Services read `req.debate` instead of re-fetching and re-checking - a second copy of an access rule is how two copies drift apart. |
-| **Provider-agnostic AI layer**                          | One `LlmProvider` interface, one class per vendor. The registry instantiates whatever the environment has credentials for, so an empty registry is a valid boot state and the AI features simply go quiet.                                              |
-| **Embeddings are a single active vendor**               | Vectors from different models are not comparable, so this is a process-wide choice rather than a per-request one. Switching means re-embedding the corpus, and there is a script for exactly that.                                                      |
-| **Archive, never delete**                               | Every table carries `archivedOn`. Reads go through one `activeWhere` helper; archiving cascades to child rows inside one transaction. The full history stays queryable for analysis.                                                                    |
-| **Two partial unique indexes in raw SQL**               | "One pending invitation per pair" and "one active vote per pair" are conditional constraints. TypeORM cannot express them, so they live in `db/init.sql` where the database enforces them.                                                              |
-| **Per-route rate limits**                               | Each AI route owns one named throttle bucket and explicitly skips the other three, because a shared guard otherwise applies the strictest limit everywhere.                                                                                             |
-| **Vendor errors never surface raw**                     | Every provider call funnels through one wrapper that maps throttling to 429 and anything else to 503, with a user-facing message instead of an SDK string.                                                                                              |
-| **The debate's language, not the reader's**             | A generated premise is persisted as a node, so it must match the tree it joins. Prompt builders take the debate's language and a missing variant is a compile error, not a silent fallback.                                                             |
-
-### Interface, in two languages
-
-Every user-visible string - 286 keys - lives in one dictionary that declares the contract once and implements it for Polish and English independently, so a missing translation fails the type check instead of silently falling back. Pro/against/controversy colours are reserved tokens: green, red, and orange used for nothing else.
+| Decision                                                | Why it is this way                                                                                                                                                                                                                                             |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Contracts live in `@argora/core`**                    | Every DTO, enum and limit is declared once and imported by both sides. The argument length bounds are exported constants, so the form check, the server validator and the error copy cannot disagree.                                                          |
+| **One `VisibilityGuard` for every debate-scoped route** | It resolves the debate from the route param, from an `:argumentId`, or from the request body, then attaches the row. Services read `req.debate` instead of re-fetching and re-checking - a second copy of an access rule is how two copies drift apart.        |
+| **Provider-agnostic AI layer**                          | One `LlmProvider` interface, one class per vendor. The registry instantiates whatever the environment has credentials for, so an empty registry is a valid boot state and the AI features simply go quiet.                                                     |
+| **Embeddings are a single active vendor**               | Vectors from different models are not comparable, so this is a process-wide choice rather than a per-request one. Switching means re-embedding the corpus, and there is a script for exactly that.                                                             |
+| **Archive, never delete**                               | Every table carries `archivedOn`. Reads go through one `activeWhere` helper; archiving cascades to child rows inside one transaction. The full history stays queryable for analysis.                                                                           |
+| **Two partial unique indexes**                          | "One pending invitation per pair" and "one active vote per pair" are conditional constraints. A TypeORM `@Unique` cannot carry a `WHERE` clause, so both are declared as partial unique `@Index` definitions on their entities and the database enforces them. |
+| **Per-route rate limits**                               | Each AI route owns one named throttle bucket and explicitly skips the other three, because a shared guard otherwise applies the strictest limit everywhere.                                                                                                    |
+| **Vendor errors never surface raw**                     | Every provider call funnels through one wrapper that maps throttling to 429 and anything else to 503, with a user-facing message instead of an SDK string.                                                                                                     |
+| **The debate's language, not the reader's**             | A generated premise is persisted as a node, so it must match the tree it joins. Prompt builders take the debate's language and a missing variant is a compile error, not a silent fallback.                                                                    |
 
 ---
 
-## Built with an AI pair-programmer
+## Architecture constraints
 
 <p align="center">
   <img src="docs/assets/ai-workflow.svg" alt="CLAUDE.md files as machine-readable constraints, the invariants they protect, and how changes are proven" width="100%">
 </p>
 
-The code is written with [Claude Code](https://claude.com/claude-code). Four `CLAUDE.md` files act as a machine-readable architecture document: the root one owns the domain rules and guardrails, and each workspace adds its own. They are not style notes. They are the invariants that keep an agent - or a new contributor - from quietly re-implementing something that already exists:
+Four `CLAUDE.md` files act as a machine-readable architecture document: the root one owns the domain rules and guardrails, and each workspace adds its own.
 
-- contracts belong to `@argora/core`, never duplicated across apps;
-- one guard owns debate access, and no service re-checks membership inline;
-- the lasso and the whole-debate summary share one endpoint;
-- every user-visible string goes through the dictionary, in both locales;
-- orange means "controversy" and nothing else.
-
-Every rule records **why** it exists, so it can be challenged on its reason rather than followed blindly. The one deliberate duplication in the codebase - a sentiment constant mirrored on the client for optimistic UI - is documented as deliberate, in both places.
-
-The last refactor pass was accepted only after the new code was shown to behave like the code it replaced: property-based equivalence tests against the pre-refactor implementations, and a differential run of the refactored build against a build of `HEAD` comparing rendered layout and feature output side by side.
-
----
-
-## Evaluation
-
-The AI features are measured, not asserted. `scripts/` holds the evaluation harness used for the thesis chapter:
-
-| Script                         | What it measures                                                                                                |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| `eval-duplicate-detection.mjs` | Threshold sweep for cosine similarity against a labelled set, with a lexical (Jaccard) baseline for comparison. |
-| `eval-model-comparison.mjs`    | Generation quality and side-classification accuracy across registry models.                                     |
-| `eval-subgraph-synthesis.mjs`  | Whether a synthesis covers every selected argument and attributes it to the right author and side.              |
-| `eval-latency-cost.mjs`        | Median latency and billed tokens per task, per model, with pricing pulled at measurement time.                  |
-
-Shared helpers live in `scripts/lib/` - the prompt copy used by the evaluations is kept byte-identical to the production prompt, because a reworded prompt makes a published measurement unreproducible.
+The one deliberate duplication in the codebase - a sentiment constant mirrored on the client for optimistic UI - is documented as deliberate, in both places.
 
 ---
 
@@ -193,7 +173,7 @@ pnpm dev:api                    # http://localhost:3000
 pnpm dev:web                    # http://localhost:5173
 ```
 
-Tables are created on first boot. AI features activate per vendor: add `IBM_CLOUD_API_KEY` + `WATSONX_PROJECT_ID` + `WATSONX_URL`, `TOGETHER_API_KEY`, or `GEMINI_API_KEY` to `.env` and the registry picks up whatever is present. With no keys at all the app still runs - the model picker is simply empty.
+Tables are created on first boot. AI features activate per vendor: add `IBM_CLOUD_API_KEY` + `WATSONX_PROJECT_ID` + `WATSONX_URL`, `TOGETHER_API_KEY`, or `GEMINI_API_KEY` to `.env` and the registry picks up whatever is present. With no keys at all the app still runs: the model picker is simply empty, while duplicate detection keeps working on the local embedding model, which needs no credentials.
 
 ```bash
 pnpm seed:nuclear:pl            # a 4-level Polish debate
@@ -216,11 +196,10 @@ packages/
   core/         DTOs, enums, limits - the contract both apps import
 scripts/        Seeding + evaluation harness (plain Node, .mjs)
   lib/          Shared .env reader, HTTP client, domain mirrors, prompt copy
-db/init.sql     pgvector extension and the partial unique indexes
+db/init.sql     pgvector extension (the partial unique indexes are
+                declared on the entities)
 docs/assets/    Diagrams and screenshots used by this README
 ```
-
-Roughly 13k lines of TypeScript across the apps and the shared package, 28 HTTP endpoints, 5 LLM provider implementations plus 2 embedding providers.
 
 ---
 
@@ -228,13 +207,9 @@ Roughly 13k lines of TypeScript across the apps and the shared package, 28 HTTP 
 
 - **Richer relation language** beyond pro/against: _condition_, _example with a source_, _refinement of scope_.
 - **Real-time collaboration** - several people shaping one graph live.
-- **Retrieval-backed verification** of the factual claims inside a thesis.
+- **Retrieval-backed verification** of the factual claims made inside a debate.
 - **pgvector-native search** - the extension is already enabled and embeddings move from `jsonb` to a `vector` column when the corpus outgrows in-process comparison.
 
 ---
-
-## About this repository
-
-Argora is the engineering artefact of an MSc thesis in computer science, and the subject of a submission to the IBM Innovation Project - Country Challenge 2026. A [video walkthrough of the running application](https://youtu.be/Fgw38GYoWFg) is available.
 
 Screenshots show the real interface with seeded demo data. Released under the [MIT licence](LICENSE).

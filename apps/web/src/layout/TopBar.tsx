@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, Button } from "@heroui/react";
-import { Gavel, Languages, Menu, Moon, Sun } from "lucide-react";
+import { Languages, Menu, Moon, Sun } from "lucide-react";
 import { motion } from "framer-motion";
 import { navItems } from "./nav-items";
 import { useAuth } from "../app-config/auth-context";
 import { useTheme } from "../app-config/theme-context";
 import { useLanguage } from "../app-config/language-context";
 import { MobileDrawer } from "./MobileDrawer";
+import { ArgoraMark } from "../components/ArgoraMark";
 import { ui } from "../texts/ui";
 import { initialsFor } from "../lib/format";
 
@@ -41,9 +42,10 @@ export function TopBar() {
             </button>
 
             <NavLink to="/" className="group flex items-center gap-2">
-              <div className="relative grid h-9 w-9 place-items-center rounded-xl bg-violet-600 text-white shadow-md shadow-violet-500/20 transition-transform group-hover:scale-[1.04]">
-                <Gavel size={18} strokeWidth={2.5} />
-              </div>
+              <ArgoraMark
+                size={26}
+                className="text-violet-600 transition-transform group-hover:scale-[1.04] dark:text-violet-400"
+              />
               <span className="text-lg font-semibold tracking-tight text-violet-700 dark:text-violet-500">
                 {ui.app.name}
               </span>
@@ -92,7 +94,10 @@ export function TopBar() {
               className="flex h-9 items-center gap-1.5 rounded-xl px-2.5 text-default-600 transition-colors hover:bg-default-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
             >
               <Languages size={15} />
-              <span className="w-[1.5ch] text-center text-xs font-semibold uppercase tracking-widest">
+              {/* Two glyphs need two characters of room; `tracking-widest`
+                  also adds a trailing gap inside the box, which pushed the
+                  label off centre. */}
+              <span className="w-[2ch] text-center text-xs font-semibold uppercase">
                 {lang}
               </span>
             </button>

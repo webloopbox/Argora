@@ -45,7 +45,7 @@ export function ConfirmDialog({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 8 }}
             transition={{ type: "spring", stiffness: 340, damping: 30 }}
-            className="w-full max-w-sm overflow-hidden rounded-3xl border border-default-100 bg-white shadow-2xl shadow-violet-500/15 dark:border-zinc-800 dark:bg-zinc-900"
+            className="w-full max-w-sm overflow-hidden rounded-3xl border border-default-100 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"

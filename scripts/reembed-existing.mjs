@@ -5,28 +5,31 @@
 // old vectors in place would make duplicate detection silently compare
 // incompatible embeddings.
 //
+// The vendor is read from EMBEDDING_PROVIDER, the same variable the API uses,
+// so this script cannot write vectors the API would not understand.
+//
 // Execution:
 //   node scripts/reembed-existing.mjs [debateId]
 //
 // Without an argument, re-embeds every non-archived argument in the database.
+// Archived rows keep their old vectors: nothing compares against them, and
+// rewriting them would cost a full pass for no effect.
 
-import { GoogleGenAI } from "@google/genai";
 import pg from "pg";
 import { loadEnv } from "./lib/env.mjs";
+import { createEmbedder } from "./lib/embedder.mjs";
 
 loadEnv();
 
 const debateId = process.argv[2] ?? null;
-const geminiKey = process.env.GEMINI_API_KEY;
 const dbUrl = process.env.DATABASE_URL;
 
-if (!geminiKey) throw new Error("GEMINI_API_KEY not set in .env");
 if (!dbUrl) throw new Error("DATABASE_URL not set in .env");
 
 const client = new pg.Client({ connectionString: dbUrl });
-const ai = new GoogleGenAI({ apiKey: geminiKey });
 
 async function main() {
+  const embedder = await createEmbedder();
   await client.connect();
 
   const query = debateId
@@ -40,20 +43,20 @@ async function main() {
       };
 
   const { rows } = await client.query(query);
-  console.log(`Re-embedding ${rows.length} argument(s) with Gemini...`);
+  console.log(
+    `Re-embedding ${rows.length} argument(s) with ${embedder.vendor} (${embedder.model})...`,
+  );
 
   let ok = 0;
+  let dims = null;
   for (const row of rows) {
     try {
-      const response = await ai.models.embedContent({
-        model: "gemini-embedding-001",
-        contents: row.content,
-      });
-      const vector = response.embeddings?.[0]?.values;
+      const vector = await embedder.embed(row.content);
       if (!vector || vector.length === 0) {
         console.warn(`  ${row.id}: empty embedding returned, skipped`);
         continue;
       }
+      dims ??= vector.length;
       await client.query(`UPDATE arguments SET embedding = $1::jsonb WHERE id = $2`, [
         JSON.stringify(vector),
         row.id,
@@ -63,11 +66,18 @@ async function main() {
     } catch (err) {
       console.warn(`  ${row.id}: failed - ${err.message}`);
     }
-    // Stay well under Gemini's free-tier rate limit.
-    await new Promise((r) => setTimeout(r, 300));
+    if (embedder.delayMs) {
+      await new Promise((r) => setTimeout(r, embedder.delayMs));
+    }
   }
 
-  console.log(`\nDone: ${ok}/${rows.length} embeddings updated.`);
+  console.log(`\nDone: ${ok}/${rows.length} embeddings updated (${dims} dimensions).`);
+  if (ok < rows.length) {
+    console.warn(
+      `WARNING: ${rows.length - ok} argument(s) still carry a vector from another ` +
+        `model and will produce meaningless similarities. Re-run before relying on the gate.`,
+    );
+  }
   await client.end();
 }
 

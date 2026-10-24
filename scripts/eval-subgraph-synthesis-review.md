@@ -1,4 +1,4 @@
-# Arkusz weryfikacyjny do §7.5
+# Arkusz weryfikacyjny
 
 Wartości poniżej są **propozycją narzędzia**, nie wynikiem. Dla każdej pozycji podano podobieństwo kosinusowe oraz oba porównywane fragmenty, żeby ocenę można było potwierdzić albo skorygować ręcznie. Kolumna decyzji jest do wypełnienia przez autora pracy.
 

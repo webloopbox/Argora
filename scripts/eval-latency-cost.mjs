@@ -1,43 +1,42 @@
-// Wypełnia Tabelę 7.6 (praca_pisemna.md, §7.6): opóźnienie i koszt wywołania
-// dla trzech modeli językowych z rejestru dostawcy together.ai.
+// Latency and cost per call for the three language models in the together.ai
+// registry.
 //
-// Mierzone są dwa zadania produkcyjne o skrajnie różnym rozmiarze wejścia:
-// generowanie przesłanki oraz synteza całej debaty. Opóźnieniem jest czas od
-// wysłania żądania do odebrania pełnej odpowiedzi, liczony wokół samego
-// wywołania usługi. Skrypt omija warstwę HTTP aplikacji, żeby pomiar nie
-// obejmował ograniczania częstotliwości z punktu 6.2.6 ani czasu odczytu z
-// bazy, wspólnego dla wszystkich modeli.
+// Two production tasks are measured, with input sizes at opposite extremes:
+// premise generation, and synthesis of a whole debate. Latency is the time
+// from sending the request to receiving the complete response, timed around
+// the service call alone. The script skips the application's HTTP layer, which
+// keeps rate limiting and the database read, shared by every model, out of the
+// measurement.
 //
-// W odróżnieniu od pozostałych skryptów ewaluacyjnych ten nie korzysta z
-// pamięci podręcznej odpowiedzi: pomiar czasu wymaga rzeczywistego wywołania,
-// więc każda z zapisanych wartości pochodzi z osobnego żądania. Plik postępu
-// przechowuje jedynie pomiary już wykonane, dzięki czemu przebieg przerwany
-// (na przykład zerwanym połączeniem) wznawia się bez ponownego opłacania
-// wywołań zakończonych powodzeniem.
+// Unlike the other evaluation scripts this one keeps no response cache, since
+// timing a call demands a real call, so every stored value comes from its own
+// request. The progress file holds only measurements already taken, so a run
+// cut short, by a dropped connection for instance, resumes without paying
+// again for the calls that succeeded.
 //
-// Materiał jest deterministyczny i wspólny z wcześniejszymi podrozdziałami.
-// Punktem pomiarowym zadania generowania jest pierwszy punkt każdej z trzech
-// debat z §7.4 (przesłanka popierająca tezę, bez argumentu nadrzędnego),
-// a zadania syntezy - wariant "cała debata" z §7.5. Każde wywołanie powtarzane
-// jest trzykrotnie, co daje dziewięć pomiarów na model i zadanie; podawana jest
-// mediana, ponieważ pomiar obejmuje usługę zdalną o zmiennym obciążeniu,
-// a pojedyncze pierwsze wywołanie bywa wolniejsze od kolejnych.
+// The material is deterministic and shared with the other evaluations. For
+// generation the measurement point is the first point of each of the three
+// debates (a premise supporting the thesis, with no parent argument), and for
+// synthesis it is the "whole debate" variant. Each call runs three times,
+// which gives nine measurements per model and task. The median is reported,
+// because the measurement covers a remote service under varying load and a
+// single first call tends to run slower than the ones after it.
 //
-// Ograniczenie pomiaru: powtórzenia wysyłają to samo polecenie, więc ewentualne
-// buforowanie po stronie dostawcy zaniżyłoby czas drugiego i trzeciego
-// wywołania. Rozbicie na powtórzenia trafia do pliku wynikowego i do podsumowania
-// na wyjściu, dzięki czemu da się to sprawdzić.
+// One limit of the measurement: the repeats send the same prompt, so caching
+// on the provider's side would pull down the time of the second and third
+// call. The per-repeat breakdown goes into the result file and into the
+// summary on stdout, which makes that checkable.
 //
-// Liczba jednostek rozliczeniowych pochodzi z pola usage odpowiedzi, którego
-// implementacja produkcyjna (TogetherProvider) nie odczytuje. Cennik pobierany
-// jest z katalogu modeli dostawcy w dniu pomiaru i zapisywany w pliku wynikowym
-// razem ze znacznikiem czasu, żeby przeliczenie kosztu dało się odtworzyć.
-// Koszt tysiąca wywołań liczony jest ze średniej liczby jednostek wejścia
-// i wyjścia według stawek dla tych dwóch kierunków osobno.
+// Billed unit counts come from the usage field of the response, which
+// production (TogetherProvider) never reads. Pricing is pulled from the
+// provider's model catalogue on the day of the measurement and stored in the
+// result file together with a timestamp, so the cost arithmetic can be
+// reproduced. Cost per thousand calls uses the mean input and output units,
+// priced at the separate rates for those two directions.
 //
-// Wymagania: TOGETHER_API_KEY i DATABASE_URL w .env.
+// Requirements: TOGETHER_API_KEY and DATABASE_URL in .env.
 //
-// Uruchomienie:
+// Run:
 //   node scripts/eval-latency-cost.mjs
 
 import pg from "pg";
@@ -58,14 +57,14 @@ const dbUrl = process.env.DATABASE_URL;
 if (!togetherKey) throw new Error("TOGETHER_API_KEY not set in .env");
 if (!dbUrl) throw new Error("DATABASE_URL not set in .env");
 
-// Te same trzy debaty polskojęzyczne, co w §7.4 i §7.5.
+// The same three Polish-language debates the other evaluations use.
 const DEBATES = [
   { key: "energia", id: "8b8230e5-6b18-4b04-9c2b-39602b4bc77e" },
   { key: "praca", id: "70d2279c-4614-4bd8-b5ee-19d717a7f3bf" },
   { key: "studenci", id: "9d4f85f8-723c-4bc3-9506-e103f7a261ce" },
 ];
 
-// Identyfikatory jak w LlmRegistry (dostawca together.ai), nazwy jak w Tabeli 7.4.
+// Identifiers as used in LlmRegistry (the together.ai provider).
 const MODELS = [
   { id: "meta-llama/Llama-3.3-70B-Instruct-Turbo", name: "Meta Llama 3.3" },
   { id: "deepseek-ai/DeepSeek-V4-Flash-0731", name: "DeepSeek V4 Flash" },
@@ -82,8 +81,8 @@ const PAUSE_MS = 1500;
 const client = new pg.Client({ connectionString: dbUrl });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-// Plik postępu: wyłącznie pomiary zakończone powodzeniem, klucz jednoznacznie
-// wskazuje wywołanie. Usunięcie pliku wymusza pomiar od nowa.
+// Progress file: successful measurements only, keyed so each entry names one
+// call. Delete the file to force a fresh measurement.
 const PROGRESS_PATH = "scripts/.eval-latency-cost-progress.json";
 const progress = fs.existsSync(PROGRESS_PATH)
   ? JSON.parse(fs.readFileSync(PROGRESS_PATH, "utf8"))
@@ -94,10 +93,10 @@ function progressSave() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Kopie logiki produkcyjnej
+// Copies of production logic
 // ─────────────────────────────────────────────────────────────────────────────
 
-// apps/api/src/ai/prompts/generate.prompt.ts, wariant polski.
+// apps/api/src/ai/prompts/generate.prompt.ts, Polish variant.
 function buildGeneratePrompt({ thesis, side, parentContent }) {
   const stance = side === "pro" ? "popierający" : "obalający";
   const target = parentContent ? "powyższy argument" : "tę tezę";
@@ -115,7 +114,7 @@ function buildGeneratePrompt({ thesis, side, parentContent }) {
 
 // apps/api/src/arguments/effective-stance.ts
 // ─────────────────────────────────────────────────────────────────────────────
-// Wywołania usługi
+// Service calls
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function chat(modelId, prompt, maxTokens) {
@@ -146,9 +145,9 @@ async function chat(modelId, prompt, maxTokens) {
   };
 }
 
-// Ponawiane są wyłącznie błędy przejściowe (429, 5xx, awaria warstwy sieciowej).
-// Zapisywany jest czas próby zakończonej powodzeniem, bo tylko ona odpowiada
-// wywołaniu obsłużonemu przez usługę.
+// Only transient failures are retried (429, 5xx, a network fault). The time
+// recorded belongs to the attempt that succeeded, because that is the one the
+// service actually served.
 async function chatWithRetry(modelId, prompt, maxTokens) {
   let lastErr = null;
   for (let attempt = 0; attempt < 5; attempt++) {
@@ -164,8 +163,8 @@ async function chatWithRetry(modelId, prompt, maxTokens) {
   throw lastErr;
 }
 
-// Cennik z katalogu modeli dostawcy. Stawki podawane są w dolarach za milion
-// jednostek, osobno dla wejścia i wyjścia.
+// Pricing from the provider's model catalogue. Rates come in dollars per
+// million units, separately for input and output.
 async function fetchPricing() {
   const res = await fetch(CATALOG_URL, {
     headers: { Authorization: `Bearer ${togetherKey}` },
@@ -185,7 +184,7 @@ async function fetchPricing() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Materiał pomiarowy
+// Measurement material
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function loadDebate({ key, id }) {
@@ -231,7 +230,7 @@ async function loadDebate({ key, id }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Statystyki
+// Statistics
 // ─────────────────────────────────────────────────────────────────────────────
 
 function median(values) {
@@ -256,7 +255,7 @@ function integer(n) {
     .replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
 }
 
-// Koszt tysiąca wywołań ze średniego zużycia jednostek i stawek dla obu kierunków.
+// Cost per thousand calls, from mean unit use and the rates for both directions.
 function costPerThousand(pricing, promptTokens, completionTokens) {
   if (!pricing) return null;
   const input = Number(pricing.input);
@@ -267,7 +266,7 @@ function costPerThousand(pricing, promptTokens, completionTokens) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Przebieg
+// Run
 // ─────────────────────────────────────────────────────────────────────────────
 
 const TASKS = [
@@ -278,7 +277,7 @@ const TASKS = [
 async function main() {
   await client.connect();
 
-  // Polecenia budowane raz, wspólne dla wszystkich modeli i powtórzeń.
+  // Prompts built once, shared across every model and repeat.
   const material = [];
   for (const spec of DEBATES) {
     const debate = await loadDebate(spec);
@@ -287,14 +286,14 @@ async function main() {
       id: debate.id,
       arguments: debate.args.length,
       prompts: {
-        // Pierwszy punkt pomiarowy generowania z §7.4: przesłanka popierająca
-        // tezę, bez argumentu nadrzędnego.
+        // The first generation measurement point: a premise supporting the
+        // thesis, with no parent argument.
         generate: buildGeneratePrompt({
           thesis: debate.thesis,
           side: "pro",
           parentContent: null,
         }),
-        // Wariant "cała debata" z §7.5.
+        // The "whole debate" variant.
         synthesis: buildSynthesisPrompt(debate.thesis, debate.args),
       },
     });
@@ -352,10 +351,10 @@ async function main() {
             promptTokens: r.usage?.prompt_tokens ?? null,
             completionTokens: r.usage?.completion_tokens ?? null,
             totalTokens: r.usage?.total_tokens ?? null,
-            // Pole zapisywane w całości, bo cennik dostawcy przewiduje dla
-            // części modeli niższą stawkę za wejście obsłużone z bufora
-            // (cached_input); bez tego nie dałoby się sprawdzić, czy
-            // powtórzenia tego samego polecenia były tak rozliczane.
+            // The field is stored whole, because the provider's pricing
+            // gives some models a lower rate for input served from a cache
+            // (cached_input). Without it there is no way to check whether
+            // repeats of the same prompt were billed that way.
             usage: r.usage,
             finishReason: r.finishReason,
             chars: r.chars,
@@ -399,9 +398,9 @@ async function main() {
 function statsFor(calls, modelName, taskKey) {
   const group = calls.filter((c) => c.model === modelName && c.task === taskKey);
   const withUsage = group.filter((c) => c.totalTokens !== null);
-  // Wywołania, w których dostawca zgłosił obsługę części wejścia z bufora.
-  // Mediana liczona po ich wyłączeniu pokazuje, czy powtórzenia tego samego
-  // polecenia zaniżyły wynik.
+  // Calls where the provider reported serving part of the input from a cache.
+  // A median taken with those excluded shows whether repeats of the same
+  // prompt pulled the result down.
   const fresh = group.filter((c) => !(c.usage?.cached_tokens ?? 0));
   return {
     n: group.length,
@@ -410,8 +409,8 @@ function statsFor(calls, modelName, taskKey) {
     maxMs: Math.max(...group.map((c) => c.latencyMs)),
     cachedInput: group.length - fresh.length,
     medianFreshMs: fresh.length ? median(fresh.map((c) => c.latencyMs)) : null,
-    // Jednostki rozumowania nie trafiają do treści odpowiedzi, ale są
-    // rozliczane jak wyjście; dostawca wykazuje je tylko dla części modeli.
+    // Reasoning units never reach the response body, yet they bill as output;
+    // the provider reports them for some models only.
     meanReasoning: withUsage.length
       ? mean(
           withUsage.map(
@@ -419,9 +418,9 @@ function statsFor(calls, modelName, taskKey) {
           ),
         )
       : 0,
-    // Znaki dostarczonej odpowiedzi na jednostkę wyjścia. Wartość znacznie
-    // poniżej długości słowa oznacza, że rozliczane wyjście jest większe od
-    // tekstu, który zobaczył użytkownik.
+    // Characters of delivered response per output unit. A value well below
+    // the length of a word means the billed output exceeds the text the user
+    // saw.
     meanChars: group.length ? mean(group.map((c) => c.chars)) : 0,
     meanPrompt: withUsage.length
       ? mean(withUsage.map((c) => c.promptTokens))
@@ -438,7 +437,7 @@ function statsFor(calls, modelName, taskKey) {
 function writeSummary(calls, catalog) {
   console.log(
     "\n═══════════════════════════════════════════════════════════\n" +
-      "Tabela 7.6 - opóźnienie i koszt wywołania według modelu\n" +
+      "Opóźnienie i koszt wywołania według modelu\n" +
       "═══════════════════════════════════════════════════════════\n",
   );
 

@@ -105,6 +105,7 @@ export interface UiDict {
       votes: string;
     };
     filters: {
+      groupAriaLabel: string;
       hottest: string;
       newest: string;
       mostDivisive: string;
@@ -456,6 +457,7 @@ const pl: UiDict = {
       votes: "Oddane głosy",
     },
     filters: {
+      groupAriaLabel: "Sortowanie dyskusji",
       hottest: "Najbardziej dyskutowane",
       newest: "Najnowsze",
       mostDivisive: "Najbardziej sporne",
@@ -849,6 +851,7 @@ const en: UiDict = {
       votes: "Votes cast",
     },
     filters: {
+      groupAriaLabel: "Sort discussions",
       hottest: "Most debated",
       newest: "Newest",
       mostDivisive: "Most divisive",

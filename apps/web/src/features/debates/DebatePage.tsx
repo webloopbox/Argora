@@ -366,7 +366,7 @@ function FloatingThesisCard({
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="pointer-events-auto absolute left-4 top-4 z-30 w-[min(380px,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-default-100 bg-white/90 shadow-xl shadow-violet-500/10 backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/90"
+      className="pointer-events-auto absolute left-4 top-4 z-30 w-[min(380px,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-default-100 bg-white/90 shadow-xl backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/90"
     >
       <div className="flex items-start gap-2 px-4 pt-3.5">
         <button
@@ -471,7 +471,7 @@ function FloatingThesisCard({
                 <button
                   type="button"
                   onClick={onSummarizeAll}
-                  className="group inline-flex items-center gap-1.5 rounded-lg border border-violet-200 bg-violet-50/80 px-3 py-1.5 text-xs font-medium text-violet-700 transition-all hover:border-violet-300 hover:bg-violet-100 hover:shadow-sm hover:shadow-violet-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 active:scale-[0.97] dark:border-violet-700/40 dark:bg-violet-900/30 dark:text-violet-300 dark:hover:border-violet-600/60 dark:hover:bg-violet-900/50"
+                  className="group inline-flex items-center gap-1.5 rounded-lg border border-violet-200 bg-violet-50/80 px-3 py-1.5 text-xs font-medium text-violet-700 transition-all hover:border-violet-300 hover:bg-violet-100 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 active:scale-[0.97] dark:border-violet-700/40 dark:bg-violet-900/30 dark:text-violet-300 dark:hover:border-violet-600/60 dark:hover:bg-violet-900/50"
                 >
                   <Sparkles
                     size={12}
@@ -538,7 +538,7 @@ function FloatingActionToolbar({
         ) : null}
       </AnimatePresence>
 
-      <div className="flex items-center gap-2 rounded-full border border-default-100 bg-white/95 p-1.5 shadow-xl shadow-violet-500/10 backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/95">
+      <div className="flex items-center gap-2 rounded-full border border-default-100 bg-white/95 p-1.5 shadow-xl backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/95">
         {!lassoMode ? (
           <>
             <button
@@ -613,7 +613,7 @@ function FloatingEmptyHint({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.35, delay: 0.2, ease: "easeOut" }}
-      className="pointer-events-auto absolute bottom-24 left-1/2 z-20 w-[min(380px,calc(100vw-2rem))] -translate-x-1/2 rounded-3xl border border-default-100 bg-white/95 px-5 py-4 text-center shadow-xl shadow-violet-500/10 backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/95"
+      className="pointer-events-auto absolute bottom-24 left-1/2 z-20 w-[min(380px,calc(100vw-2rem))] -translate-x-1/2 rounded-3xl border border-default-100 bg-white/95 px-5 py-4 text-center shadow-xl backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/95"
     >
       <div className="mx-auto grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/15 text-violet-700">
         <Sparkles size={16} />

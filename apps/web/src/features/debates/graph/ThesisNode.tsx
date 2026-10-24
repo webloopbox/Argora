@@ -11,7 +11,7 @@ export function ThesisNode({
   return (
     <div
       tabIndex={0}
-      className={`group relative w-[360px] rounded-3xl border bg-white/95 p-5 shadow-lg shadow-violet-500/10 backdrop-blur transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:bg-zinc-900/95 ${
+      className={`group relative w-[360px] rounded-3xl border bg-white/95 p-5 shadow-lg backdrop-blur transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 dark:bg-zinc-900/95 ${
         selected
           ? "border-violet-400 ring-2 ring-violet-300/50"
           : "border-default-200 dark:border-zinc-700"

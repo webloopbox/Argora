@@ -43,7 +43,7 @@
   <text x="824" y="162" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#f1c21b">04 &#183; COMPARE</text>
   <text x="824" y="190" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#f4f4f4">Max cosine</text>
   <text x="824" y="214" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">best match wins</text>
-  <text x="824" y="232" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">compare &#8805; 0.80</text>
+  <text x="824" y="232" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">compare &#8805; threshold</text>
 
   <rect x="1048" y="134" width="144" height="112" rx="10" fill="#161029" stroke="#5b3a7a"/>
   <text x="1068" y="162" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#be95ff">05 &#183; GATE</text>
@@ -57,10 +57,10 @@
   <line x1="1018" y1="190" x2="1044" y2="190" stroke="#be95ff" stroke-width="2.5" marker-end="url(#dArrowP)"/>
 
   <path d="M910 246 L910 300 L372 300 L372 332" fill="none" stroke="#42be65" stroke-width="2.5" marker-end="url(#dArrowG)"/>
-  <text x="640" y="292" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#42be65">similarity &lt; 0.80</text>
+  <text x="640" y="292" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#42be65">similarity &lt; threshold</text>
 
   <path d="M1120 246 L1120 300 L900 300 L900 332" fill="none" stroke="#be95ff" stroke-width="2.5" marker-end="url(#dArrowP)"/>
-  <text x="1010" y="292" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#be95ff">&#8805; 0.80</text>
+  <text x="1010" y="292" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#be95ff">&#8805; threshold</text>
 
   <rect x="212" y="332" width="320" height="100" rx="10" fill="#0f2318" stroke="#2f7a4a"/>
   <text x="236" y="362" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#42be65">NO MATCH</text>

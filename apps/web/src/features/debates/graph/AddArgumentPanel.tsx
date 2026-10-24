@@ -79,7 +79,7 @@ export function AddArgumentPanel({
             transition={{ type: "spring", stiffness: 320, damping: 34 }}
             className={
               isDesktop
-                ? "fixed right-4 top-20 z-50 h-[calc(100dvh-6rem)] w-[400px] overflow-hidden rounded-3xl border border-default-100 bg-white/95 shadow-2xl shadow-violet-500/10 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/95"
+                ? "fixed right-4 top-20 z-50 h-[calc(100dvh-6rem)] w-[400px] overflow-hidden rounded-3xl border border-default-100 bg-white/95 shadow-2xl backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/95"
                 : "fixed inset-x-0 bottom-0 z-50 max-h-[88dvh] overflow-hidden rounded-t-3xl border border-default-100 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900"
             }
           >

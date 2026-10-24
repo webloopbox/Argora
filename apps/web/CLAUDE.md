@@ -34,12 +34,10 @@ React + TypeScript application. Consumes the backend through DTOs imported from 
 - **The interface locale is not the debate language.** A debate carries its own immutable `language` that drives AI output (see the root CLAUDE.md). Never pass the UI locale to an AI endpoint, and never assume a debate is in the language the reader is currently browsing in.
 - **Backend error messages are Polish regardless of locale.** They come from NestJS exceptions and do not pass through `ui.ts`, so an English interface still surfaces Polish API errors. Known limitation; do not paper over it by hard-coding English copies of those messages in the client.
 
-## Design bar
+## Visual design
 
-The product must read as a current, premium tool from the first frame. Hitting this bar is not optional polish - it is part of feature-complete.
-
-- **Modern UI** Visual language tracks current product trends: generous whitespace, balanced type scale, subtle depth (soft shadows, layered surfaces) over heavy borders, consistently rounded interactive surfaces, dark-mode-aware palette. Treat HeroUI defaults as a floor, not a ceiling - tune spacing, type, and contrast until the screen feels contemporary.
-- **Visual hierarchy is load-bearing.** One primary action per view (visually strongest); secondary actions quieter; destructive actions visibly distinct. A clear type scale (display / heading / body / caption) is used consistently. No two elements should compete for the same level of attention on the same screen.
-- **Micro-interactions matter.** Hover, focus, press, and enter/exit transitions must be present and feel smooth - never abrupt state flips. Use `framer-motion` (already installed) for non-trivial transitions: list items animating in, panels sliding, state changes, dialog open/close. Keep motion under ~250ms and respect `prefers-reduced-motion`.
-- **"Wow factor" is explicit.** First impression - landing on the public dashboard, opening a debate graph - must feel polished and prestigious: considered imagery or illustration where appropriate, elegant empty states (not bare "No data"), deliberate whitespace, crisp graph canvas background. Every new feature gets a first-impression review before being called done: would a decision-maker see this as a high-end product?
-- **Accessibility is part of the bar, not a trade-off.** Focus states are visible and styled (never the browser default ring on top of a custom button), color contrast meets WCAG AA, every interactive element is keyboard-reachable. A "pretty" UI that breaks keyboard flow does not meet the design bar.
+- **Surface style.** Generous whitespace, a consistent type scale, soft shadows and layered surfaces instead of heavy borders, rounded interactive surfaces, and a palette that works in both themes. HeroUI defaults are a starting point, not a constraint.
+- **Visual hierarchy.** One primary action per view, secondary actions quieter, destructive actions visibly distinct. No two elements compete for the same level of attention on one screen.
+- **Transitions, not flips.** Hover, focus, press and enter/exit states are animated. `framer-motion` handles the non-trivial ones: list items, sliding panels, dialogs. Durations stay in the 150-400 ms band the rest of the app already uses.
+- **Empty states carry copy**, never a bare "No data" - and that copy is a key in `ui.ts` like every other string.
+- **Accessibility is not a trade-off.** Focus states are visible and styled (never the browser default ring on top of a custom button), contrast meets WCAG AA, every interactive element is keyboard-reachable.

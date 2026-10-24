@@ -1,9 +1,10 @@
-// Seeduje "żywą" debatę pod prezentację seminaryjną na uczelni.
-// Temat: dopuszczalność generatywnej AI przy pisaniu prac dyplomowych -
-// dyskusja, którą sama publiczność seminarium prowadzi na co dzień.
+// Seeds a live-looking debate for a university seminar presentation.
+// Topic: whether generative AI is acceptable when writing a diploma thesis,
+// a discussion the seminar audience holds every day.
 //
-// Struktura: 4-poziomowe drzewo argumentów (replies-to-replies-to-replies),
-// 15 polskich kont głosujących, główny argument o wadze 15 jako cel duplikatu.
+// Structure: a four-level argument tree (replies to replies to replies), 15
+// Polish voter accounts, and one main argument at weight 15 as the duplicate
+// target.
 //
 // Wymagania:
 //   - API uruchomione (pnpm dev:api)
@@ -27,8 +28,8 @@ const owner = {
   email: "demo-owner@brainstorm.test",
 };
 
-// Prywatna grupa, w której toczy się debata. Owner zaprasza wszystkich
-// uczestników, a każdy zaproszony akceptuje zaproszenie ze swojego panelu.
+// The private group the debate runs in. The owner invites every participant,
+// and each invitee accepts from their own panel.
 const GROUP_NAME = "Seminarium Magisterskie 2026";
 
 const presenter = {
@@ -78,15 +79,15 @@ const voters = [
   },
 ];
 
-// 4-poziomowe drzewo argumentów. Każdy węzeł:
-//   key      - alias do referencji jako rodzic potomków
-//   parent   - alias rodzica (null = bezpośrednio pod tezą)
-//   side     - strona względem tezy ('pro' | 'against')
-//   author   - indeks w voters[] (kto napisał)
-//   votes    - liczba głosów Za do oddania (Przeciw głosy też się losowo dodają niżej)
-//   content  - treść argumentu
+// Four-level argument tree. Each node carries:
+//   key      - the alias other nodes use to name it as their parent
+//   parent   - the parent's alias (null means straight under the thesis)
+//   side     - side relative to the thesis ('pro' | 'against')
+//   author   - index into voters[], naming who wrote it
+//   votes    - how many For votes to cast (Against votes get added below too)
+//   content  - the argument text
 //
-// MAIN to nasz cel duplikatu - zawsze otrzymuje 15 głosów Za.
+// MAIN is the duplicate target, and always takes 15 For votes.
 const tree = [
   // ─── L1 (direct children of thesis) ─────────────────────────────────────
   {
@@ -237,14 +238,15 @@ const { jsonFetch, registerOrLogin } = createApiClient({
   password: PASSWORD,
 });
 
-// Auth zwraca tylko accessToken - id użytkownika bierzemy z /users/me.
+// Auth returns only an accessToken, so the user id comes from /users/me.
 async function getMyId(token) {
   const me = await jsonFetch("/users/me", { token });
   return me.id;
 }
 
-// Zaproś użytkownika do grupy i od razu zaakceptuj zaproszenie jego tokenem.
-// Idempotentne: ignoruje konflikt, gdy uczestnik jest już członkiem/zaproszony.
+// Invite a user to the group, then accept the invitation with their own token.
+// Idempotent: a conflict is ignored when the participant already holds a
+// membership or an invitation.
 async function inviteAndAccept(groupId, ownerToken, inviteeToken, inviteeId) {
   let invitation;
   try {
@@ -254,7 +256,7 @@ async function inviteAndAccept(groupId, ownerToken, inviteeToken, inviteeId) {
       body: { inviteeId },
     });
   } catch (err) {
-    // 409 = już zaproszony lub już członek - przy ponownym seedzie OK.
+    // 409 means already invited or already a member, which is fine on a re-seed.
     if (err.status === 409) return;
     throw err;
   }
@@ -382,14 +384,15 @@ async function main() {
   console.log(`\n🗳️   Oddaję głosy na drzewie...`);
   for (const node of tree) {
     const arg = created[node.key];
-    // Tasuj voterów dla każdego argumentu, weź pierwszych N
+    // Shuffle the voters for each argument and take the first N.
     const idxs = [...Array(voterAuths.length).keys()]
       .sort(() => Math.random() - 0.5)
       .slice(0, node.votes);
     let cast = 0;
     for (const i of idxs) {
-      // Mix in Przeciw głosy dla głębszych warstw - daje organiczny look,
-      // ale MAIN dostaje wyłącznie Za, żeby waga wyszła dokładnie 15.
+      // Mix Against votes into the deeper layers, which keeps the graph looking
+      // organic, while MAIN takes For votes only so its weight lands on
+      // exactly 15.
       const value = node.key === "MAIN" ? 1 : Math.random() > 0.25 ? 1 : -1;
       try {
         await jsonFetch(`/arguments/${arg.id}/votes`, {
@@ -399,7 +402,7 @@ async function main() {
         });
         cast++;
       } catch {
-        /* ignore - np. konflikt głosów przy ponownym seedzie */
+        /* ignore, e.g. a vote conflict when seeding a second time */
       }
     }
     process.stdout.write(`    ${node.key.padEnd(28)} → ${cast} głosów\n`);
@@ -423,7 +426,7 @@ async function main() {
     const client = new Client({ connectionString: dbUrl });
     await client.connect();
 
-    // Dajemy API 2 sekundy na przetworzenie własnych asynchronicznych zadań
+    // Give the API two seconds to finish its own asynchronous work.
     await new Promise((r) => setTimeout(r, 2000));
 
     const queryRes = await client.query(

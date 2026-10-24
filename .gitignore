@@ -46,3 +46,10 @@ Thumbs.db
 .claude/settings.local.json
 
 planning.md
+
+# Locally cached embedding model weights (~120 MB, re-downloaded on demand)
+.models/
+# Embedding snapshots - derived data, machine-local (see scripts/embedding-snapshot.mjs)
+db/backup/
+# transformers.js default cache, if LOCAL_EMBEDDING_CACHE_DIR is unset
+.cache/
