@@ -24,9 +24,9 @@
 
 A comment thread is a **timeline**. It rewards whoever posts loudest and most often, it forgets what was already said, and after two hundred replies nobody can tell you what the disagreement actually is.
 
-Argora replaces the timeline with a **tree**. Every claim attaches to the claim it answers, so the shape of the discussion carries meaning: a deep branch marks the real axis of conflict, a missing child marks an objection nobody answered. On top of that structure sit three AI capabilities: semantic de-duplication, region-scoped synthesis, and context-aware generation.
+Argora replaces the timeline with a **tree**. Every claim attaches to the claim it answers, so the shape of the discussion means something: a deep branch shows where the disagreement is sharpest, and a claim with no replies shows an objection nobody answered. Three AI features are built on that structure: semantic de-duplication, synthesis of a selected region, and context-aware generation.
 
-> Built as the engineering artefact of an MSc thesis, and presented at the **IBM Innovation Project - Country Challenge 2026**. <br>A [video walkthrough](https://youtu.be/Fgw38GYoWFg) shows the running application end to end.
+> Built as the practical part of an MSc thesis, and presented at the **IBM Innovation Project - Country Challenge 2026**. <br>A [video walkthrough](https://youtu.be/Fgw38GYoWFg) shows the running application end to end.
 
 ---
 
@@ -42,8 +42,8 @@ Argora replaces the timeline with a **tree**. Every claim attaches to the claim 
 <td width="50%"><img src="docs/assets/screens/02-duplicate-gate.webp" alt="Writing an argument that restates an existing one, and the gate catching it before it is saved: the two texts side by side, with the choice to merge or add as a nuance"></td>
 </tr>
 <tr>
-<td><b>Drafting with a model.</b> Pick a side, pick a vendor, and the generated text lands in the field as a proposal - nothing is published until a person accepts it.</td>
-<td><b>Duplicate gate.</b> A near-identical claim is caught before it is written - cosine 0.97 against the stored argument - and the author chooses what happens.</td>
+<td><b>Drafting with a model.</b> Pick a side, pick a vendor, and the generated text appears in the field as a proposal - nothing is published until a person accepts it.</td>
+<td><b>Duplicate gate.</b> A near-identical claim is caught before it is saved - cosine similarity 0.97 against the stored argument - and the author decides what happens next.</td>
 </tr>
 </table>
 
@@ -55,7 +55,7 @@ Argora replaces the timeline with a **tree**. Every claim attaches to the claim 
 
 Two people routinely submit the same claim in different words, and keyword matching cannot catch it: _"commuting eats hours of my week"_ and _"remote work gives people their time back"_ share no words and mean the same thing.
 
-Every argument is embedded into a multilingual vector, and closeness is measured as the **cosine of the angle** between vectors - magnitude tracks text length, which is not meaning, so it is divided out.
+Every argument is converted into a multilingual vector, and similarity is measured as the **cosine of the angle** between two vectors. The length of a vector reflects how long the text is, not what it means, so the formula divides that length out.
 
 <p align="center">
   <img src="docs/assets/cosine-similarity.svg" alt="Cosine similarity between two argument embeddings and the duplicate threshold that separates a restatement from a distinct claim" width="100%">
@@ -77,18 +77,18 @@ cosineSimilarity(a: number[], b: number[]): number {
 }
 ```
 
-The threshold is a property of the embedding model, not of the domain, so it travels with the provider instead of being one global constant. Measured on 924-994 pairs of distinct arguments that coexist in the same debate on the same side - known non-duplicates by construction - plus hand-written paraphrases of real arguments:
+The threshold belongs to the embedding model, not to the subject being debated, so each provider carries its own value instead of sharing one global constant. The numbers below were measured on 924-994 pairs of different arguments that sit in the same debate on the same side. Those pairs are known not to be duplicates, because each argument in them was written as a separate claim by a participant in the debate. Hand-written paraphrases of real arguments were added to measure how many true duplicates each threshold catches:
 
 | embedding model                 | dims | non-duplicates (median / p99 / max) | threshold | submissions falsely flagged |
 | ------------------------------- | ---- | ----------------------------------- | --------- | --------------------------- |
 | `gemini-embedding-001`          | 3072 | 0.618 / 0.786 / 0.868               | **0.80**  | 6.0%                        |
 | `multilingual-e5-small` (local) | 384  | 0.834 / 0.906 / 0.942               | **0.91**  | 4.6%                        |
 
-Gemini keeps unrelated arguments near 0.62 and tops out at 0.87, leaving the whole 0.87-1.0 band for real duplicates; the small local model compresses them up to 0.94 and leaves far less room.
+Gemini scores unrelated arguments around 0.62 and never above 0.87, which leaves the whole range from 0.87 to 1.0 for real duplicates. The small local model pushes those same unrelated pairs up to 0.94, so much less of the range is left.
 
-That last column, not the per-pair rate, is what sets each threshold: the gate takes the **maximum** over every candidate, so 0.6% of pairs at 0.91 becomes 4.6% of submissions. The two values are not interchangeable - Gemini's 0.80 under the local model flags **153 of 153** - so the default lives next to the provider choice and `DUPLICATE_THRESHOLD` only overrides it for sweeps.
+Each threshold is set from the last column, not from the per-pair rate. The gate compares a new argument against every candidate and keeps the **highest** score, so 0.6% of pairs at 0.91 turns into 4.6% of submissions. These thresholds cannot be swapped: using Gemini's 0.80 with the local model falsely flags all **153 of 153** submissions. Each provider therefore has its own default threshold, and `DUPLICATE_THRESHOLD` only overrides it during testing.
 
-The local model is what keeps the gate alive on a clone with an empty `.env`: it runs in-process through ONNX Runtime and needs no key. It separates less cleanly, though - its non-duplicates reach 0.942 where Gemini's stop at 0.868 - leaving a paraphrase far less room to land in. `scripts/eval-duplicate-detection.mjs` replays the labelled set and reports both.
+The local model is what keeps the gate working after a fresh clone with an empty `.env`: it runs inside the API process through ONNX Runtime and needs no API key. It does separate the two groups less clearly, though. Its non-duplicate pairs reach 0.942 while Gemini's stop at 0.868, which leaves a narrower range in which a real paraphrase can score. `scripts/eval-duplicate-detection.mjs` re-runs the labelled set and reports both models.
 
 <p align="center">
   <img src="docs/assets/duplicate-pipeline.svg" alt="Duplicate detection pipeline: submit, embed, narrow candidates, compare, human gate" width="100%">
@@ -96,32 +96,32 @@ The local model is what keeps the gate alive on a clone with an empty `.env`: it
 
 Beyond the formula:
 
-- **The comparison set is narrowed in SQL**, so the database returns only the rows that can match instead of the API fetching every argument and filtering them in JavaScript: same debate, same stored side, embedding present, and the parent excluded - a reply naturally echoes the wording of what it answers, so comparing against it would flag every rebuttal.
-- **A dead embedding vendor must not block a user.** `EmbeddingService.embed` returns `null` on failure and the gate degrades to "no similarity found".
-- **The gate never decides.** Above the threshold the user is shown both texts and picks: _merge_ casts a vote that raises the existing argument's weight, _nuance_ publishes anyway.
-- **Embeddings are computed after the response.** The write path stays fast; the vector lands asynchronously.
+- **The comparison set is narrowed in SQL**, so the database returns only the rows that can match, instead of the API loading every argument and filtering them in JavaScript. A row qualifies if it is in the same debate, on the same stored side, and already has an embedding. The parent of the new argument is excluded, because a reply repeats the wording of what it answers and would otherwise be flagged every time.
+- **A failing embedding provider must not block the user.** `EmbeddingService.embed` returns `null` when the call fails, the check reports no similarity, and the argument is saved.
+- **The gate never decides on its own.** Above the threshold the user sees both texts and chooses: _merge_ casts a vote that raises the existing argument's weight, _nuance_ publishes the new argument anyway.
+- **Embeddings are computed after the response is sent.** Saving stays fast, and the vector is written a moment later.
 
 ### 2. Lasso context extraction
 
-A whole-debate summary flattens every branch into one answer, and the question is often about a single branch.
+A summary of the whole debate merges every branch into one answer, but the question is often about a single branch.
 
 <p align="center">
   <img src="docs/assets/lasso-synthesis.svg" alt="A freehand lasso maps canvas coordinates to argument ids, which the API resolves into an enriched subgraph" width="100%">
 </p>
 
-The hit test runs on the client against React Flow canvas coordinates; the API receives **ids only** and intersects them with the debate's own arguments, dropping anything foreign. Each selected node is handed to the model with its author, vote counts, weight, sentiment, parent text and thesis-relative stance - so the parent-child relations survive without nesting the prompt.
+The client decides which nodes fall inside the lasso, using React Flow canvas coordinates. The API receives **ids only** and keeps the ones that belong to the debate, discarding anything else. Each selected node is passed to the model together with its author, vote counts, weight, sentiment, parent text and stance towards the thesis, so the model can see how the nodes relate without the prompt having to nest them.
 
-Whole-debate summarisation is the same endpoint with every id passed in. One synthesis path, no second implementation to drift.
+Summarising a whole debate calls the same endpoint with every id passed in. There is one synthesis path, so there is no second implementation that could drift away from it.
 
 ### 3. Generation, and the stance problem
 
-Generated text arrives as a **proposal in the textarea**, badged as model output only when it really came from a model, and that badge is cleared the moment the argument is sent. Before publishing, a second model call checks the argument against the side the author picked and offers a switch if they disagree - and when every provider fails, the submission proceeds rather than blocking.
+Generated text appears as a **proposal in the textarea**. It is marked as model output only when it really came from a model, and that mark is removed as soon as the argument is sent. Before publishing, a second model call checks the argument against the side the author picked, and offers to switch sides if the two disagree. If every provider fails, the argument is submitted anyway.
 
 <p align="center">
   <img src="docs/assets/effective-stance.svg" alt="Stored side is relative to the parent; thesis-relative stance is derived by flipping polarity on every against link" width="100%">
 </p>
 
-A node's stored `side` is relative to its **immediate parent**. Read it as a thesis label and an objection to an objection gets filed as opposition to the thesis - which would put speakers on the side they spent the whole thread arguing against. One helper walks the parent chain and flips polarity on every _against_ link; the synthesis prompt uses it and tells the model the resulting label is binding.
+A node's stored `side` is relative to its **immediate parent**. If it is read as a label relative to the thesis instead, an objection to an objection is recorded as opposition to the thesis, which puts speakers on the side they spent the whole thread arguing against. One helper walks up the chain of parents and reverses the stance on every _against_ link. The synthesis prompt uses that helper and tells the model to treat the resulting label as binding.
 
 ---
 
@@ -135,15 +135,15 @@ A node's stored `side` is relative to its **immediate parent**. Read it as a the
 
 | Decision                                                | Why it is this way                                                                                                                                                                                                                                             |
 | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Contracts live in `@argora/core`**                    | Every DTO, enum and limit is declared once and imported by both sides. The argument length bounds are exported constants, so the form check, the server validator and the error copy cannot disagree.                                                          |
-| **One `VisibilityGuard` for every debate-scoped route** | It resolves the debate from the route param, from an `:argumentId`, or from the request body, then attaches the row. Services read `req.debate` instead of re-fetching and re-checking - a second copy of an access rule is how two copies drift apart.        |
-| **Provider-agnostic AI layer**                          | One `LlmProvider` interface, one class per vendor. The registry instantiates whatever the environment has credentials for, so an empty registry is a valid boot state and the AI features simply go quiet.                                                     |
-| **Embeddings are a single active vendor**               | Vectors from different models are not comparable, so this is a process-wide choice rather than a per-request one. Switching means re-embedding the corpus, and there is a script for exactly that.                                                             |
-| **Archive, never delete**                               | Every table carries `archivedOn`. Reads go through one `activeWhere` helper; archiving cascades to child rows inside one transaction. The full history stays queryable for analysis.                                                                           |
+| **Contracts live in `@argora/core`**                    | Every DTO, enum and limit is declared once and imported by both sides. The minimum and maximum argument lengths are exported constants, so the form check, the server validator and the error message cannot disagree.                                                          |
+| **One `VisibilityGuard` for every debate-scoped route** | It resolves the debate from the route param, from an `:argumentId`, or from the request body, then attaches the row. Services read `req.debate` instead of loading the debate and checking access again, because a rule written in two places eventually disagrees with itself.        |
+| **Provider-agnostic AI layer**                          | One `LlmProvider` interface, one class per vendor. The registry creates a provider for every vendor the environment has credentials for. An empty registry is a valid state to start in, and the AI features are simply unavailable.                                                     |
+| **Embeddings are a single active vendor**               | Vectors from different models cannot be compared, so the vendor is chosen once for the whole process rather than per request. Switching vendors means re-computing every stored embedding, and there is a script for that.                                                             |
+| **Archive, never delete**                               | Every table carries `archivedOn`. Reads go through one `activeWhere` helper, and archiving a row also archives its children inside a single transaction. The full history stays available for analysis.                                                                           |
 | **Two partial unique indexes**                          | "One pending invitation per pair" and "one active vote per pair" are conditional constraints. A TypeORM `@Unique` cannot carry a `WHERE` clause, so both are declared as partial unique `@Index` definitions on their entities and the database enforces them. |
-| **Per-route rate limits**                               | Each AI route owns one named throttle bucket and explicitly skips the other three, because a shared guard otherwise applies the strictest limit everywhere.                                                                                                    |
-| **Vendor errors never surface raw**                     | Every provider call funnels through one wrapper that maps throttling to 429 and anything else to 503, with a user-facing message instead of an SDK string.                                                                                                     |
-| **The debate's language, not the reader's**             | A generated premise is persisted as a node, so it must match the tree it joins. Prompt builders take the debate's language and a missing variant is a compile error, not a silent fallback.                                                                    |
+| **Per-route rate limits**                               | Each AI route uses one named rate limit and explicitly skips the other three, because a single shared guard would otherwise apply the strictest limit to all of them.                                                                                                    |
+| **Vendor errors never surface raw**                     | Every provider call goes through one wrapper that turns rate-limit errors into 429 and everything else into 503, with a message written for the user instead of the text returned by the SDK.                                                                                                     |
+| **The debate's language, not the reader's**             | A generated argument is saved as a node, so it must be in the same language as the tree it joins. Prompt builders take the debate's language, and a missing translation is a compile error rather than a silent fallback.                                                                    |
 
 ---
 
@@ -155,7 +155,7 @@ A node's stored `side` is relative to its **immediate parent**. Read it as a the
 
 Four `CLAUDE.md` files act as a machine-readable architecture document: the root one owns the domain rules and guardrails, and each workspace adds its own.
 
-The one deliberate duplication in the codebase - a sentiment constant mirrored on the client for optimistic UI - is documented as deliberate, in both places.
+The codebase contains exactly one deliberate duplication: a sentiment constant copied to the client for optimistic UI. Both copies carry a comment saying so.
 
 ---
 
@@ -173,7 +173,7 @@ pnpm dev:api                    # http://localhost:3000
 pnpm dev:web                    # http://localhost:5173
 ```
 
-Tables are created on first boot. AI features activate per vendor: add `IBM_CLOUD_API_KEY` + `WATSONX_PROJECT_ID` + `WATSONX_URL`, `TOGETHER_API_KEY`, or `GEMINI_API_KEY` to `.env` and the registry picks up whatever is present. With no keys at all the app still runs: the model picker is simply empty, while duplicate detection keeps working on the local embedding model, which needs no credentials.
+Tables are created on first boot. AI features activate per vendor: add `IBM_CLOUD_API_KEY` + `WATSONX_PROJECT_ID` + `WATSONX_URL`, `TOGETHER_API_KEY`, or `GEMINI_API_KEY` to `.env` and the registry enables whichever of them are present. With no keys at all the app still runs: the model picker is simply empty, and duplicate detection keeps working on the local embedding model, which needs no credentials.
 
 ```bash
 pnpm seed:nuclear:pl            # a 4-level Polish debate
@@ -208,7 +208,7 @@ docs/assets/    Diagrams and screenshots used by this README
 - **Richer relation language** beyond pro/against: _condition_, _example with a source_, _refinement of scope_.
 - **Real-time collaboration** - several people shaping one graph live.
 - **Retrieval-backed verification** of the factual claims made inside a debate.
-- **pgvector-native search** - the extension is already enabled and embeddings move from `jsonb` to a `vector` column when the corpus outgrows in-process comparison.
+- **Search using pgvector directly** - the extension is already enabled, and embeddings will move from `jsonb` to a `vector` column once there are too many arguments to compare inside the API process.
 
 ---
 
