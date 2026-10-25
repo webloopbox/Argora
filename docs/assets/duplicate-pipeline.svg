@@ -30,7 +30,7 @@
   <rect x="292" y="134" width="212" height="112" rx="10" fill="#111831" stroke="#263056"/>
   <text x="312" y="162" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#3ddbd9">02 &#183; EMBED</text>
   <text x="312" y="190" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#f4f4f4">Text &#8594; vector</text>
-  <text x="312" y="214" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">768 floats, multilingual</text>
+  <text x="312" y="214" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">384 floats, multilingual</text>
   <text x="312" y="232" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">vendor down &#8594; null &#8594; pass</text>
 
   <rect x="536" y="134" width="236" height="112" rx="10" fill="#111831" stroke="#263056"/>

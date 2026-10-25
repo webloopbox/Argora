@@ -63,8 +63,8 @@
   <rect x="782" y="346" width="410" height="94" rx="12" fill="#111831" stroke="#263056"/>
   <rect x="782" y="346" width="410" height="4" rx="2" fill="#08bdba"/>
   <text x="806" y="382" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" letter-spacing="2" fill="#3ddbd9">EMBEDDINGS &#183; ONE ACTIVE VENDOR</text>
-  <text x="806" y="408" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">granite-embedding-278m-multilingual &#183; 768d</text>
-  <text x="806" y="428" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">or gemini-embedding-001 &#183; switch = re-embed</text>
+  <text x="806" y="408" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">multilingual-e5-small &#183; 384d &#183; no credentials</text>
+  <text x="806" y="428" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">or gemini-embedding-001 / granite &#183; re-embed</text>
 
   <rect x="782" y="470" width="410" height="88" rx="12" fill="#111831" stroke="#263056"/>
   <rect x="782" y="470" width="410" height="4" rx="2" fill="#42be65"/>

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 560" width="1240" height="560" role="img" aria-label="Cosine similarity between argument embeddings and the 0.80 duplicate threshold for gemini-embedding-001">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 560" width="1240" height="560" role="img" aria-label="Cosine similarity between argument embeddings and the 0.91 duplicate threshold of the local multilingual-e5-small model">
   <defs>
     <linearGradient id="cosBg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#0b1020"/>
@@ -6,8 +6,8 @@
     </linearGradient>
     <linearGradient id="thrBar" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#1f2947"/>
-      <stop offset="0.80" stop-color="#1f2947"/>
-      <stop offset="0.80" stop-color="#fa4d56"/>
+      <stop offset="0.91" stop-color="#1f2947"/>
+      <stop offset="0.91" stop-color="#fa4d56"/>
       <stop offset="1" stop-color="#ff8389"/>
     </linearGradient>
     <marker id="arrPro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -50,7 +50,7 @@
     <text x="356" y="243" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#4589ff">B &#183; stored argument</text>
     <text x="80" y="160" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#8d93a5">C &#183; unrelated</text>
 
-    <text x="48" y="498" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8d93a5">3072-dimensional space, drawn in 2D. Only the angle matters -</text>
+    <text x="48" y="498" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8d93a5">384-dimensional space, drawn in 2D. Only the angle matters -</text>
     <text x="48" y="518" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8d93a5">length encodes text length, not meaning, so it is divided out.</text>
   </g>
 
@@ -64,14 +64,14 @@
     <!-- threshold bar -->
     <text x="600" y="298" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" letter-spacing="2" fill="#6f7691">DECISION BAND</text>
     <rect x="600" y="326" width="596" height="22" rx="11" fill="url(#thrBar)"/>
-    <line x1="1077" y1="316" x2="1077" y2="372" stroke="#f1c21b" stroke-width="2"/>
-    <text x="1012" y="392" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" fill="#f1c21b">0.80 &#183; gemini</text>
+    <line x1="1142" y1="316" x2="1142" y2="372" stroke="#f1c21b" stroke-width="2"/>
+    <text x="1041" y="392" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" fill="#f1c21b">0.91 &#183; local</text>
     <text x="600" y="368" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#6f7691">0.00</text>
     <text x="1170" y="368" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#6f7691">1.00</text>
     <circle cx="737" cy="337" r="6" fill="#8d93a5" stroke="#0b1020" stroke-width="2"/>
     <text x="722" y="320" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#8d93a5">0.23</text>
     <circle cx="1160" cy="337" r="6" fill="#42be65" stroke="#0b1020" stroke-width="2"/>
-    <text x="1140" y="320" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#42be65">0.94</text>
+    <text x="1150" y="320" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#42be65">0.94</text>
 
     <!-- outcomes -->
     <rect x="600" y="412" width="288" height="112" rx="10" fill="#111831" stroke="#263056"/>

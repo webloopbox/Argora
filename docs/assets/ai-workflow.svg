@@ -27,7 +27,7 @@
   <text x="72" y="276" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">apps/web/&#8195;&#8195;&#8195;&#8195;i18n, visual coding</text>
   <text x="72" y="300" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">packages/core/&#8195;contract ownership</text>
   <rect x="72" y="320" width="302" height="62" rx="8" fill="#0d1428" stroke="#2a3463"/>
-  <text x="88" y="356" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">Every rule states the reason it exists.</text>
+  <text x="88" y="356" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">Load-bearing rules cite their measurement.</text>
 
   <rect x="446" y="132" width="350" height="268" rx="12" fill="#111831" stroke="#263056"/>
   <rect x="446" y="132" width="350" height="4" rx="2" fill="#be95ff"/>
@@ -39,19 +39,19 @@
   <text x="470" y="306" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">&#8226; prompts implement both languages</text>
   <text x="470" y="332" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">&#8226; green / red / orange are reserved</text>
   <text x="470" y="358" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">&#8226; archive, never DELETE</text>
-  <text x="470" y="384" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#6f7691">documented duplication is marked as deliberate</text>
+  <text x="470" y="384" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="#6f7691">documented duplication is deliberate</text>
 
   <rect x="844" y="132" width="348" height="268" rx="12" fill="#111831" stroke="#263056"/>
   <rect x="844" y="132" width="348" height="4" rx="2" fill="#f1c21b"/>
   <text x="868" y="170" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#f1c21b">03 &#183; HOW CHANGES ARE PROVEN</text>
   <text x="868" y="202" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">tsc + eslint, zero findings</text>
   <text x="868" y="228" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">Playwright smoke specs</text>
-  <text x="868" y="254" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">equivalence tests vs. the old code</text>
-  <text x="868" y="280" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">differential run: refactor vs. HEAD build</text>
-  <text x="868" y="306" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">evaluation scripts for every AI feature</text>
+  <text x="868" y="254" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">GitHub Actions: build, typecheck, lint</text>
+  <text x="868" y="280" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">evaluation scripts for the AI features</text>
+  <text x="868" y="306" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#a8b0c0">WF1..WF12 checked over the live API</text>
   <rect x="868" y="326" width="300" height="56" rx="8" fill="#0d1428" stroke="#2a3463"/>
-  <text x="884" y="350" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">A refactor ships only when the new code</text>
-  <text x="884" y="370" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">is shown to behave like the code it replaced.</text>
+  <text x="884" y="350" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">Thresholds are calibrated by replaying every</text>
+  <text x="884" y="370" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#a8b0c0">stored argument, not chosen by feel.</text>
 
   <line x1="400" y1="266" x2="442" y2="266" stroke="#4589ff" stroke-width="2.5" marker-end="url(#wArrow)"/>
   <line x1="798" y1="266" x2="840" y2="266" stroke="#4589ff" stroke-width="2.5" marker-end="url(#wArrow)"/>
