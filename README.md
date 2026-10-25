@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat-square&logo=typescript&logoColor=white">
+  <img alt="TypeScript" src="https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white">
   <img alt="NestJS" src="https://img.shields.io/badge/NestJS-11-E0234E?style=flat-square&logo=nestjs&logoColor=white">
   <img alt="React" src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black">
   <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-16%20%2B%20pgvector-4169E1?style=flat-square&logo=postgresql&logoColor=white">
@@ -43,7 +43,7 @@ Argora replaces the timeline with a **tree**. Every claim attaches to the claim 
 </tr>
 <tr>
 <td><b>Drafting with a model.</b> Pick a side, pick a vendor, and the generated text appears in the field as a proposal - nothing is published until a person accepts it.</td>
-<td><b>Duplicate gate.</b> A near-identical claim is caught before it is saved - cosine similarity 0.97 against the stored argument - and the author decides what happens next.</td>
+<td><b>Duplicate gate.</b> A near-identical claim is caught before it is saved, and the author decides what happens next.</td>
 </tr>
 </table>
 
@@ -77,18 +77,18 @@ cosineSimilarity(a: number[], b: number[]): number {
 }
 ```
 
-The threshold belongs to the embedding model, not to the subject being debated, so each provider carries its own value instead of sharing one global constant. The numbers below were measured on 924-994 pairs of different arguments that sit in the same debate on the same side. Those pairs are known not to be duplicates, because each argument in them was written as a separate claim by a participant in the debate. Hand-written paraphrases of real arguments were added to measure how many true duplicates each threshold catches:
+The threshold belongs to the embedding model, not to the subject being debated, so each provider carries its own value instead of sharing one global constant. Each value was calibrated by replaying every stored argument as if it were being submitted now, and counting how often the gate fired against arguments that are known not to be duplicates:
 
-| embedding model                 | dims | non-duplicates (median / p99 / max) | threshold | submissions falsely flagged |
-| ------------------------------- | ---- | ----------------------------------- | --------- | --------------------------- |
-| `gemini-embedding-001`          | 3072 | 0.618 / 0.786 / 0.868               | **0.80**  | 6.0%                        |
-| `multilingual-e5-small` (local) | 384  | 0.834 / 0.906 / 0.942               | **0.91**  | 4.6%                        |
+| embedding model                 | dims | non-duplicates (median) | threshold | submissions falsely flagged |
+| ------------------------------- | ---- | ----------------------- | --------- | --------------------------- |
+| `gemini-embedding-001`          | 3072 | 0.618                   | **0.80**  | 6.0%                        |
+| `multilingual-e5-small` (local) | 384  | 0.834                   | **0.91**  | 4.6%                        |
 
-Gemini scores unrelated arguments around 0.62 and never above 0.87, which leaves the whole range from 0.87 to 1.0 for real duplicates. The small local model pushes those same unrelated pairs up to 0.94, so much less of the range is left.
+Gemini places unrelated arguments around 0.618 and the small local model around 0.834. The local model therefore leaves much less of the range for real duplicates, which is why its threshold sits higher.
 
-Each threshold is set from the last column, not from the per-pair rate. The gate compares a new argument against every candidate and keeps the **highest** score, so 0.6% of pairs at 0.91 turns into 4.6% of submissions. These thresholds cannot be swapped: using Gemini's 0.80 with the local model falsely flags all **153 of 153** submissions. Each provider therefore has its own default threshold, and `DUPLICATE_THRESHOLD` only overrides it during testing.
+Each threshold is set from the last column, not from the per-pair rate. The gate compares a new argument against every candidate and keeps the **highest** score, so the rate measured per submission is several times higher than the rate measured per pair. These thresholds cannot be swapped: using Gemini's 0.80 with the local model falsely flags all **153 of 153** submissions. Each provider therefore has its own default threshold, and `DUPLICATE_THRESHOLD` only overrides it during testing.
 
-The local model is what keeps the gate working after a fresh clone with an empty `.env`: it runs inside the API process through ONNX Runtime and needs no API key. It does separate the two groups less clearly, though. Its non-duplicate pairs reach 0.942 while Gemini's stop at 0.868, which leaves a narrower range in which a real paraphrase can score. `scripts/eval-duplicate-detection.mjs` re-runs the labelled set and reports both models.
+The local model is what keeps the gate working after a fresh clone with an empty `.env`: it runs inside the API process through ONNX Runtime and needs no API key. `scripts/eval-duplicate-detection.mjs` re-runs the labelled set and reports both models.
 
 <p align="center">
   <img src="docs/assets/duplicate-pipeline.svg" alt="Duplicate detection pipeline: submit, embed, narrow candidates, compare, human gate" width="100%">
@@ -208,7 +208,7 @@ docs/assets/    Diagrams and screenshots used by this README
 - **Richer relation language** beyond pro/against: _condition_, _example with a source_, _refinement of scope_.
 - **Real-time collaboration** - several people shaping one graph live.
 - **Retrieval-backed verification** of the factual claims made inside a debate.
-- **Search using pgvector directly** - the extension is already enabled, and embeddings will move from `jsonb` to a `vector` column once there are too many arguments to compare inside the API process.
+- **Search using pgvector directly** - the extension is already enabled; moving embeddings from `jsonb` to a `vector` column would also fix one embedding dimension in the schema.
 
 ---
 
