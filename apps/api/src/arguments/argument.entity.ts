@@ -45,10 +45,10 @@ export class Argument {
   })
   isAiGenerated!: boolean;
 
-  // Reserved for Partia 7c (duplicate detection). Stored as jsonb until the
-  // semantic-search code lands, at which point this column is rewritten to
-  // `vector(1536)` via a migration. pgvector is already enabled in the
-  // database image so the migration is a single `ALTER COLUMN ... USING`.
+  // jsonb, not `vector`: the dimension follows the active embedding provider
+  // (384 for multilingual-e5-small, 768 for granite-278m), and a `vector(n)`
+  // column would write one of those numbers into the schema, making every
+  // provider switch a migration.
   @Column({ name: 'embedding', type: 'jsonb', nullable: true, default: null })
   embedding!: number[] | null;
 
