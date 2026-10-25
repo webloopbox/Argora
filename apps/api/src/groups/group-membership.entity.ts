@@ -7,10 +7,8 @@ import {
   Unique,
 } from 'typeorm';
 
-// Group + Invitation entities and the management endpoints land in
-// Partia 6. The membership table itself is created here so that
-// VisibilityGuard can already query it (empty == every private debate is
-// 403 until Partia 6 populates rows, which is the intended behaviour).
+// What VisibilityGuard reads to allow access to a private debate. A pending
+// invitation grants nothing: only acceptance writes a row here.
 @Entity('group_memberships')
 @Unique('group_memberships_group_user_uq', ['groupId', 'userId'])
 export class GroupMembership {

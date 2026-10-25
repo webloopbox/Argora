@@ -3,11 +3,11 @@
 // Polish voter accounts, and one main argument at weight 15 as the duplicate
 // target.
 //
-// Wymagania:
-//   - API uruchomione (pnpm dev:api)
-//   - Node 18+
+// Requires:
+//   - the API running (pnpm dev:api)
+//   - Node >= 22
 //
-// Uruchomienie:
+// Run with:
 //   pnpm seed:demo
 
 import pg from "pg";

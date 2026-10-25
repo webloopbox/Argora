@@ -1,11 +1,11 @@
 // Seeds a small public debate about electric cars.
 // A lighter seed: 7 arguments, two levels, no private group.
 //
-// Wymagania:
-//   - API uruchomione (pnpm dev:api)
-//   - Node 18+
+// Requires:
+//   - the API running (pnpm dev:api)
+//   - Node >= 22
 //
-// Uruchomienie:
+// Run with:
 //   pnpm seed:ev
 
 import pg from "pg";
