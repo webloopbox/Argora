@@ -12,19 +12,20 @@ const CONTROVERSY_MAX_RATIO = 0.2;
 /**
  * Stance toward the debate thesis. `side` alone is relative to the immediate
  * parent, so the parent chain is walked and the polarity flips on every
- * Against link. `byId` is a Map of argument id to argument; the hop cap guards
- * against a cycle in malformed input.
+ * Against link. `byId` is a Map of argument id to argument; the walk stops on
+ * the first node it has already visited, which guards against a cycle in
+ * malformed input without capping the depth.
  */
 export function effectiveStance(startId, byId) {
   let pro = true;
   let currentId = startId;
-  let hops = 0;
-  while (currentId && hops < 20) {
+  const visited = new Set();
+  while (currentId && !visited.has(currentId)) {
+    visited.add(currentId);
     const node = byId.get(currentId);
     if (!node) break;
     if (node.side === "against") pro = !pro;
     currentId = node.parentArgumentId;
-    hops++;
   }
   return pro ? "pro" : "against";
 }

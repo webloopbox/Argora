@@ -45,7 +45,7 @@
   <rect x="48" y="294" width="330" height="112" rx="10" fill="#111831" stroke="#263056"/>
   <text x="70" y="324" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="2" fill="#6f7691">THE RULE</text>
   <text x="70" y="352" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#78a9ff">walk to the root, flip on every</text>
-  <text x="70" y="372" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#78a9ff">&#8220;against&#8221; link, cap the hops</text>
+  <text x="70" y="372" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#78a9ff">&#8220;against&#8221; link, stop on a repeat</text>
   <text x="70" y="394" font-family="IBM Plex Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8d93a5">One helper, shared by the synthesis prompt.</text>
 
   <rect x="908" y="170" width="284" height="236" rx="10" fill="#0d1428" stroke="#2a3463"/>

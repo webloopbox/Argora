@@ -17,12 +17,13 @@ export interface StanceNode {
   parentArgumentId: string | null;
 }
 
-// Guards against a cycle introduced by corrupt data; real trees are far shallower.
-const MAX_HOPS = 20;
-
 /**
  * Effective (thesis-relative) stance of the node identified by `startId`.
  * A `null` start means "the thesis itself", which supports itself by definition.
+ *
+ * The walk records every node it visits and stops on the first repeat, so a
+ * cycle introduced by corrupt data cannot loop forever, while a legitimate
+ * chain of any depth is followed all the way to the root.
  */
 export function effectiveStance(
   startId: string | null,
@@ -30,14 +31,14 @@ export function effectiveStance(
 ): ArgumentSide {
   let pro = true;
   let currentId: string | null = startId;
-  let hops = 0;
+  const visited = new Set<string>();
 
-  while (currentId && hops < MAX_HOPS) {
+  while (currentId && !visited.has(currentId)) {
+    visited.add(currentId);
     const node = lookup(currentId);
     if (!node) break;
     if (node.side === ArgumentSide.Against) pro = !pro;
     currentId = node.parentArgumentId;
-    hops++;
   }
 
   return pro ? ArgumentSide.Pro : ArgumentSide.Against;
